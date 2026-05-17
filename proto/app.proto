@@ -1,0 +1,265 @@
+syntax = "proto3";
+
+package app;
+
+message Empty {
+}
+
+service AuthService {
+  rpc Login (LoginRequest) returns (AuthResponse);
+  rpc GetProfile (Empty) returns (UserProfile);
+  rpc Logout (Empty) returns (LogoutResponse);
+}
+
+message LoginRequest { string email = 1; string password = 2; }
+
+message UserProfile {
+  int32 id = 1;
+  string email = 2;
+  string name = 3;
+  string role = 4;
+  int32 tenantId = 5;
+  string tenantName = 6;
+  Membership membership = 7;
+  string createdAt = 8;
+  string midtransClientKey = 9;
+}
+
+message AuthResponse { string token = 1;}
+
+message LogoutResponse {
+  bool success = 1;
+}
+
+
+
+service MemberService {
+  rpc RegisterMember (RegisterMemberRequest) returns (MemberResponse);
+  rpc UpdateMember (UpdateMemberRequest) returns (MemberResponse);
+  rpc DeleteMember (GetMemberProfileRequest) returns (Empty);
+  rpc GetMembers (Empty) returns (stream UserProfile);
+  rpc GetMemberProfile (GetMemberProfileRequest) returns (UserProfile);
+}
+
+message RegisterMemberRequest {
+  string email = 1;
+  string name = 2;
+  string password = 3;
+}
+
+message UpdateMemberRequest {
+  int32 id = 1;
+  string email = 2;
+  string name = 3;
+  string password = 4;
+}
+
+message MemberResponse { string memberId = 1; }
+
+message GetMemberProfileRequest { int32 memberId = 1; }
+
+message MembershipStatus {
+  bool isActive = 1;
+  string expiryDate = 2;
+}
+
+
+service TenantService {
+  rpc AddTenant (AddTenantRequest) returns (TenantResponse);
+  rpc UpdateTenant (UpdateTenantRequest) returns (TenantResponse);
+  rpc DeleteTenant (GetTenantRequest) returns (Empty);
+  rpc GetTenants (Empty) returns (stream Tenant);
+  rpc GetTenant (GetTenantRequest) returns (Tenant);
+}
+
+message AddTenantRequest {
+  string name = 1;
+  string slug = 2;
+  string address = 3;
+  bool isActive = 4;
+}
+
+message UpdateTenantRequest {
+  int32 id = 1;
+  string name = 2;
+  string slug = 3;
+  string address = 4;
+  bool isActive = 5;
+}
+
+message TenantResponse { string tenantId = 1; }
+
+message GetTenantRequest { int32 tenantId = 1; }
+
+message Tenant {
+  int32 id = 1;
+  string name = 2;
+  string slug = 3;
+  string address = 4;
+  bool isActive = 5;
+  string createdAt = 6;
+}
+
+
+service PlanService {
+  rpc AddPlan (AddPlanRequest) returns (PlanResponse);
+  rpc UpdatePlan (UpdatePlanRequest) returns (PlanResponse);
+  rpc DeletePlan (GetPlanRequest) returns (Empty);
+  rpc GetPlans (Empty) returns (stream Plan);
+  rpc GetPlan (GetPlanRequest) returns (Plan);
+}
+
+message AddPlanRequest {
+  string name = 1;
+  int64 price = 2;
+  int32 duration = 3; // days
+  int32 tenantId = 4;
+}
+
+message UpdatePlanRequest {
+  int32 id = 1;
+  string name = 2;
+  int64 price = 3;
+  int32 duration = 4; // days
+}
+
+message PlanResponse { string planId = 1; }
+
+message GetPlanRequest { int32 planId = 1; }
+
+message Plan {
+  int32 id = 1;
+  string name = 2;
+  int64 price = 3;
+  int32 duration = 4; // days
+  int32 tenantId = 5;
+  Tenant tenant = 6;
+}
+
+message Membership {
+  int32 id = 1;
+  int32 userId = 2;
+  Plan plan = 3;
+  string status = 4; // ACTIVE, EXPIRED, PENDING
+  string startDate = 5;
+  string endDate = 6;
+  Offering offering = 7;
+  int32 planId = 8;
+  int32 offeringId = 9;
+}
+
+
+
+service TransactionService {
+  rpc CreateTransaction (CreateTransactionRequest) returns (Transaction);
+  rpc GetTransactions (GetTransactionsRequest) returns (stream Transaction);
+  rpc CheckTransactionStatus (GetTransactionRequest) returns (Transaction);
+  rpc GetMemberTransactions (GetMemberProfileRequest) returns (stream Transaction);
+  rpc GetFinanceSummary (GetTransactionsRequest) returns (FinanceSummary);
+}
+
+message CreateTransactionRequest {
+  int32 memberId = 1;
+  optional int32 planId = 2;
+  optional int32 offeringId = 3;
+  string method = 4; // "CASH" or "QRIS"
+}
+
+message GetTransactionsRequest {
+  optional int32 tenantId = 1; 
+  optional string startDate = 2; 
+  optional string endDate = 3;
+}
+
+message GetTransactionRequest {
+  string transactionId = 1;
+}
+
+message FinanceSummary {
+  int64 totalRevenue = 1;
+  int32 totalTransactions = 2;
+  int32 activeMemberships = 3;
+}
+
+message Transaction {
+  string id = 1;
+  int32 memberId = 2;
+  optional int32 planId = 3;
+  int64 amount = 4;
+  string method = 5;
+  string status = 6; // PENDING, SETTLEMENT, CANCELLED, EXPIRED
+  string qrisUrl = 7; // only if Midtrans
+  string createdAt = 8;
+  optional string memberName = 9;
+  optional string planName = 10;
+
+  optional int32 offeringId = 11;
+  optional string offeringName = 12;
+}
+
+
+
+service OfferingService {
+  rpc AddOffering (AddOfferingRequest) returns (OfferingResponse);
+  rpc UpdateOffering (UpdateOfferingRequest) returns (OfferingResponse);
+  rpc DeleteOffering (GetOfferingRequest) returns (Empty);
+  rpc GetOfferings (Empty) returns (stream Offering);
+  rpc GetOffering (GetOfferingRequest) returns (Offering);
+}
+
+message AddOfferingRequest {
+  string name = 1;
+  int64 price = 2;
+  string type = 3; // "MEMBERSHIP", "PRODUCT", "SERVICE"
+  int32 duration = 4; // for MEMBERSHIP
+  int32 stock = 5; // for PRODUCT
+  int32 quota = 6; // for SERVICE
+  int32 tenantId = 7;
+}
+
+message UpdateOfferingRequest {
+  int32 id = 1;
+  string name = 2;
+  int64 price = 3;
+  string type = 4; // "MEMBERSHIP", "PRODUCT", "SERVICE"
+  int32 duration = 5; // for MEMBERSHIP
+  int32 stock = 6; // for PRODUCT
+  int32 quota = 7; // for SERVICE
+}
+
+message OfferingResponse { string offeringId = 1; }
+
+message GetOfferingRequest { int32 offeringId = 1; }
+
+message Offering {
+  int32 id = 1;
+  string name = 2;
+  int64 price = 3;
+  string type = 4; // "MEMBERSHIP", "PRODUCT", "SERVICE"
+  int32 duration = 5; // for MEMBERSHIP
+  int32 stock = 6; // for PRODUCT
+  int32 quota = 7; // for SERVICE
+  int32 tenantId = 8;
+}
+
+
+
+service AttendanceService {
+  rpc CheckIn (CheckInRequest) returns (CheckInResponse);
+  rpc GetAttendanceHistory (GetAttendanceHistoryRequest) returns (AttendanceHistory);
+}
+
+message CheckInRequest { string memberId = 1; }
+
+message CheckInResponse { string checkInId = 1; string timestamp = 2; }
+
+message GetAttendanceHistoryRequest { string memberId = 1; }
+
+message AttendanceRecord {
+  string checkInId = 1;
+  string timestamp = 2;
+}
+
+message AttendanceHistory {
+  repeated AttendanceRecord records = 1;
+}

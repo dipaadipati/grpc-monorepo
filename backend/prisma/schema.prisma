@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  address   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  users User[]
+  plans MembershipPlan[]
+  offerings Offering[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(MEMBER)
+  tenantId  Int
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  membership   Membership?
+  sessions     Attendance[]
+  transactions Transaction[]
+}
+
+model MembershipPlan {
+  id       Int     @id @default(autoincrement())
+  name     String
+  price    Decimal
+  duration Int // days
+  tenantId Int
+  tenant   Tenant  @relation(fields: [tenantId], references: [id])
+
+  memberships  Membership[]
+  transactions Transaction[]
+}
+
+enum Role {
+  SUPER_ADMIN
+  OWNER
+  ADMIN_STAFF
+  TRAINER
+  MEMBER
+}
+
+model Membership {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  planId Int?
+  plan   MembershipPlan? @relation(fields: [planId], references: [id])
+
+  offeringId Int?
+  offering   Offering? @relation(fields: [offeringId], references: [id])
+
+  status    String // ACTIVE, EXPIRED, PENDING
+  startDate DateTime @default(now())
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id     String         @id
+  userId Int
+  user   User           @relation(fields: [userId], references: [id])
+  planId Int?
+  plan   MembershipPlan? @relation(fields: [planId], references: [id])
+
+  amount Decimal
+  method String // CASH, QRIS
+  status String // PENDING, SETTLEMENT, EXPIRED, CANCELLED
+
+  qrisUrl             String?
+  midtransResponse    Json? // Midtrans log
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  offeringId Int?
+  offering   Offering? @relation(fields: [offeringId], references: [id])
+}
+
+enum OfferingType {
+  MEMBERSHIP
+  PRODUCT   
+  SERVICE    // Personal Trainer
+}
+
+model Offering {
+  id          Int          @id @default(autoincrement())
+  tenantId    Int
+  name        String
+  price       Decimal
+  type        OfferingType @default(MEMBERSHIP)
+  duration    Int?        
+  stock       Int?         
+  quota       Int?        
+  
+  tenant      Tenant       @relation(fields: [tenantId], references: [id])
+  transactions Transaction[]
+  memberships   Membership[]
+}
+
+model Attendance {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  user    User     @relation(fields: [userId], references: [id])
+  checkIn DateTime @default(now())
+}
