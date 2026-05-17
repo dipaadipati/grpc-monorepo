@@ -2,14 +2,19 @@ version: '3.8'
 
 services:
   backend:
-    image: ghcr.io/dipaadipati/grpc-monorepo/gym-backend:latest
+    container_name: gym-backend-container
+    build:
+      context: ./backend    
+      dockerfile: Dockerfile 
     ports:
       - "50051:50051"
     env_file:
-      - ./backend/.env
+      - ./backend/.env   
     depends_on:
       - postgres
       - redis
+    networks:
+      - gym-network
 
   postgres:
     image: postgres:15-alpine
