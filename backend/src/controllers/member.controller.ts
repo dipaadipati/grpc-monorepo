@@ -119,7 +119,17 @@ export class MemberController {
             orderBy: { createdAt: 'desc' }
         });
 
-        const safeDbMembers = serializeBigInt(members);
+        const safeDbMembers = serializeBigInt(members.map((m, i) => {
+            return sanitizeNull({
+                ...m,
+                membership: m.membership ? {
+                    ...m.membership,
+                    startDate: timestampFromDate(new Date(m.membership.startDate)),
+                    endDate: timestampFromDate(new Date(m.membership.endDate)),
+                } : undefined,
+                createdAt: timestampFromDate(new Date(m.createdAt)),
+            })
+        }));
         await this.redis.set(cacheKey, JSON.stringify(safeDbMembers), 'EX', 300);
 
         for (const m of members) {
