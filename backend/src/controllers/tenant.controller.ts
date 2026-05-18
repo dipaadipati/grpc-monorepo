@@ -15,6 +15,7 @@ import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 import { sanitizeNull } from '@/utils/prisma-sanitize';
+import { serializeBigInt } from '@/utils/common';
 
 @Controller()
 export class TenantController {
@@ -133,7 +134,8 @@ export class TenantController {
             orderBy: { createdAt: 'desc' },
         });
 
-        await this.redis.set(this.CACHE_KEY, JSON.stringify(tenants), 'EX', 3600);
+        const safeDbTenants = serializeBigInt(tenants);
+        await this.redis.set(this.CACHE_KEY, JSON.stringify(safeDbTenants), 'EX', 3600);
 
         for (const t of tenants) {
             yield create(TenantSchema, sanitizeNull({

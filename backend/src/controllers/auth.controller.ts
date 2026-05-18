@@ -21,6 +21,7 @@ export class AuthController {
 
     async login(data: LoginRequest) {
         const { email, password } = data;
+        console.log(data)
 
         const user = await this.prisma.user.findUnique({
             where: { email },

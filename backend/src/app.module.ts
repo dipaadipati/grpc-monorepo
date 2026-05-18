@@ -21,17 +21,14 @@ import { OfferingController } from './controllers/offering.controller';
       imports: [ConfigModule, ScheduleModule.forRoot()],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const host = configService.get<string>('REDIS_HOST') || 'gym-redis-container';
-        const port = configService.get<number>('REDIS_PORT') || 6379;
+        const REDIS_URL = configService.get<string>('REDIS_URL');
 
-        console.log(`[Redis Debug] Mencoba connect ke Host: ${host}, Port: ${port}`);
+        console.log(`[Redis Debug] Mencoba connect ke ${REDIS_URL}`);
 
         return {
           type: 'single',
-          url: `redis://${host}:${port}`,
+          url: `${REDIS_URL}`,
           options: {
-            host: host,
-            port: Number(port),
             retryStrategy(times) {
               const delay = Math.min(times * 50, 2000);
               return delay;

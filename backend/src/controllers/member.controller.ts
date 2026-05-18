@@ -14,6 +14,7 @@ import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 import { sanitizeNull } from "@/utils/prisma-sanitize.js";
+import { serializeBigInt } from "@/utils/common.js";
 
 @Controller()
 export class MemberController {
@@ -118,17 +119,18 @@ export class MemberController {
             orderBy: { createdAt: 'desc' }
         });
 
-        await this.redis.set(cacheKey, JSON.stringify(members), 'EX', 300);
+        const safeDbMembers = serializeBigInt(members);
+        await this.redis.set(cacheKey, JSON.stringify(safeDbMembers), 'EX', 300);
 
         for (const m of members) {
             yield create(UserProfileSchema, sanitizeNull({
                 ...m,
                 membership: m.membership ? {
                     ...m.membership,
-                    startDate: timestampFromDate(new Date(m.membership.startDate)),
-                    endDate: timestampFromDate(new Date(m.membership.endDate)),
+                    startDate: m.membership.startDate,
+                    endDate: m.membership.endDate,
                 } : undefined,
-                createdAt: timestampFromDate(new Date(m.createdAt)),
+                createdAt: m.createdAt,
             }));
         }
     }

@@ -16,6 +16,7 @@ import { kUser } from '../auth/auth.interceptor';
 import { Prisma } from '../../generated/prisma/client';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 import { sanitizeNull } from '@/utils/prisma-sanitize';
+import { serializeBigInt } from '@/utils/common';
 
 @Controller()
 export class PlanController {
@@ -168,7 +169,8 @@ export class PlanController {
             }
         }));
 
-        await this.redis.set(cacheKey, JSON.stringify(mappedPlans), 'EX', 3600);
+        const safeDbPlans = serializeBigInt(mappedPlans);
+        await this.redis.set(cacheKey, JSON.stringify(safeDbPlans), 'EX', 3600);
 
         for (const p of mappedPlans) {
             yield create(PlanSchema, p);

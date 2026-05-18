@@ -13,7 +13,8 @@ const clientAuthInterceptor: Interceptor = (next) => async (req) => {
 };
 
 const transport = createConnectTransport({
-    baseUrl: "https://grpc-api.moora.web.id",
+    // baseUrl: "https://grpc-api.moora.web.id",
+    baseUrl: "http://127.0.0.1:50051",
     useBinaryFormat: true,
     interceptors: [clientAuthInterceptor]
 });
@@ -27,7 +28,8 @@ export function createAuthenticatedClients(token: string) {
     };
 
     const serverTransport = createConnectTransport({
-        baseUrl: "https://grpc-api.moora.web.id",
+        // baseUrl: "https://grpc-api.moora.web.id",
+        baseUrl: "http://127.0.0.1:50051",
         useBinaryFormat: true,
         interceptors: [serverAuthInterceptor]
     });
