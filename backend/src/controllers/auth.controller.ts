@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { InjectRedis } from "@nestjs-modules/ioredis";
 import Redis from "ioredis";
 import { kUser } from "../auth/auth.interceptor.js";
+import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 
 @Controller()
 export class AuthController {
@@ -96,8 +97,12 @@ export class AuthController {
             tenantId: user.tenantId,
             tenantName: user.tenant.name,
             tenantIsActive: user.tenant.isActive,
-            membership: user.membership,
-            createdAt: user.createdAt.toISOString(),
+            membership: user.membership ? {
+                ...user.membership,
+                startDate: timestampFromDate(user.membership.startDate),
+                endDate: timestampFromDate(user.membership.endDate),
+            } : undefined,
+            createdAt: timestampFromDate(user.createdAt),
             midtransClientKey: process.env.MIDTRANS_CLIENT_KEY || ''
         });
     }

@@ -9,7 +9,7 @@ import { MembershipService } from '../services/membership.service';
 import Redis from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { kUser } from '../auth/auth.interceptor';
-import { off } from 'process';
+import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 
 const midtransClient = require('midtrans-client');
 
@@ -95,7 +95,7 @@ export class TransactionController {
             return create(TransactionSchema, {
                 ...trx,
                 amount: BigInt(trx.amount.toString()),
-                createdAt: trx.createdAt.toISOString(),
+                createdAt: timestampFromDate(trx.createdAt),
             });
         } else if (req.offeringId) {
             const offering = await this.prisma.offering.findUnique({
@@ -148,7 +148,7 @@ export class TransactionController {
             return create(TransactionSchema, {
                 ...trx,
                 amount: BigInt(trx.amount.toString()),
-                createdAt: trx.createdAt.toISOString(),
+                createdAt: timestampFromDate(trx.createdAt),
             });
         }
     }
@@ -199,7 +199,7 @@ export class TransactionController {
                 method: trx.method,
                 status: trx.status,
                 qrisUrl: trx.qrisUrl ?? "",
-                createdAt: trx.createdAt.toISOString(),
+                createdAt: timestampFromDate(trx.createdAt),
             });
         }
     }

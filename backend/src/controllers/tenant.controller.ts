@@ -13,6 +13,7 @@ import { create } from '@bufbuild/protobuf';
 import { RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
+import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 
 @Controller()
 export class TenantController {
@@ -136,7 +137,7 @@ export class TenantController {
         for (const t of tenants) {
             yield create(TenantSchema, {
                 ...t,
-                createdAt: t.createdAt.toISOString(),
+                createdAt: timestampFromDate(t.createdAt),
             });
         }
     }
@@ -155,7 +156,7 @@ export class TenantController {
 
         return create(TenantSchema, {
             ...tenant,
-            createdAt: tenant.createdAt.toISOString(),
+            createdAt: timestampFromDate(tenant.createdAt),
         });
     }
 }
