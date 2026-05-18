@@ -7,7 +7,7 @@ COPY backend/bun.lock ./backend/
 COPY backend/prisma ./backend/prisma/
 
 WORKDIR /app/backend
-RUN bun install @bufbuild/protobuf@1
+RUN bun install @bufbuild/protobuf@2
 RUN bun install
 
 WORKDIR /app
