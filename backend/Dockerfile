@@ -33,4 +33,4 @@ COPY --from=builder /app/gen /app/gen
 
 EXPOSE 50051
 
-CMD ["bun", "run", "/app/backend/dist/backend/src/main.js"]
+CMD ["bun", "run", "-r", "tsconfig-paths/register", "/app/backend/dist/backend/src/main.js"]
