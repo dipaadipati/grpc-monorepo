@@ -21,10 +21,22 @@ import { OfferingController } from './controllers/offering.controller';
     RedisModule.forRootAsync({
       imports: [ConfigModule, ScheduleModule.forRoot()],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'single',
-        url: configService.get<string>('REDIS_URL'),
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const host = configService.get<string>('REDIS_HOST') || 'gym-redis-container';
+        const port = configService.get<number>('REDIS_PORT') || 6379;
+
+        return {
+          type: 'single',
+          options: {
+            host: host,
+            port: Number(port),
+            retryStrategy(times) {
+              const delay = Math.min(times * 50, 2000);
+              return delay;
+            },
+          },
+        };
+      },
     }),
   ],
   controllers: [
