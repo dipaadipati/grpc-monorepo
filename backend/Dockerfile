@@ -1,28 +1,29 @@
-FROM node:20-alpine AS builder
+FROM oven/bun:1.1-alpine AS builder
 
 WORKDIR /app
 
 COPY backend/package*.json ./backend/
+COPY backend/bun.lock ./backend/
 COPY backend/prisma ./backend/prisma/
 
 WORKDIR /app/backend
-RUN npm install @bufbuild/protobuf
-RUN npm install
+RUN bun install @bufbuild/protobuf@1
+RUN bun install
 
 WORKDIR /app
 COPY gen/ ./gen/
-
 COPY backend/ ./backend/
 
 WORKDIR /app/backend
-RUN npx prisma generate
-RUN npm run build
+RUN bunx prisma generate
+RUN bun run build
 
-FROM node:20-alpine AS runner
+FROM oven/bun:1.1-alpine AS runner
 WORKDIR /app/backend
 
 COPY backend/package*.json ./
-RUN npm install --production
+COPY backend/bun.lock ./
+RUN bun install --production
 
 COPY --from=builder /app/backend/dist ./dist
 COPY --from=builder /app/backend/prisma ./prisma
@@ -30,4 +31,4 @@ COPY --from=builder /app/gen /app/gen
 
 EXPOSE 50051
 
-CMD ["node", "dist/main.js"]
+CMD ["bun", "run", "dist/main.js"]
