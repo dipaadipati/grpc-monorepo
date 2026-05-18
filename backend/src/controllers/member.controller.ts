@@ -169,13 +169,6 @@ export class MemberController {
             });
         }
 
-        if (req.password == '') {
-            throw new RpcException({
-                code: grpc.status.INVALID_ARGUMENT,
-                message: 'Mohon isi password dengan benar.'
-            });
-        }
-
         const cacheKey = `gym:${user.tenantId}:members`;
 
         if (user.tenantId !== user.tenantId || (user.role !== 'OWNER' && user.role !== 'ADMIN_STAFF' && user.role !== 'SUPER_ADMIN' && user.sub !== req.id)) {
