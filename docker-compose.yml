@@ -2,7 +2,12 @@ version: '3.8'
 
 services:
   backend:
-    image: ghcr.io/dipaadipati/grpc-monorepo/gym-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    
+    container_name: gym-backend
+    restart: always
     ports:
       - "50051:50051"
     env_file:
