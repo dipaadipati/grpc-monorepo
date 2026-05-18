@@ -96,7 +96,7 @@ export class TransactionController {
             return create(TransactionSchema, sanitizeNull({
                 ...trx,
                 amount: BigInt(trx.amount.toString()),
-                createdAt: timestampFromDate(trx.createdAt),
+                createdAt: timestampFromDate(new Date(trx.createdAt)),
             }));
         } else if (req.offeringId) {
             const offering = await this.prisma.offering.findUnique({
@@ -149,7 +149,7 @@ export class TransactionController {
             return create(TransactionSchema, sanitizeNull({
                 ...trx,
                 amount: BigInt(trx.amount.toString()),
-                createdAt: timestampFromDate(trx.createdAt),
+                createdAt: timestampFromDate(new Date(trx.createdAt)),
             }));
         }
     }
@@ -198,7 +198,7 @@ export class TransactionController {
                 method: trx.method,
                 status: trx.status,
                 qrisUrl: trx.qrisUrl ?? "",
-                createdAt: timestampFromDate(trx.createdAt),
+                createdAt: timestampFromDate(new Date(trx.createdAt)),
             }));
         }
     }

@@ -100,10 +100,10 @@ export class AuthController {
             tenantIsActive: user.tenant.isActive,
             membership: user.membership ? sanitizeNull({
                 ...user.membership,
-                startDate: timestampFromDate(user.membership.startDate),
-                endDate: timestampFromDate(user.membership.endDate),
+                startDate: timestampFromDate(new Date(user.membership.startDate)),
+                endDate: timestampFromDate(new Date(user.membership.endDate)),
             }) : undefined,
-            createdAt: timestampFromDate(user.createdAt),
+            createdAt: timestampFromDate(new Date(user.createdAt)),
             midtransClientKey: process.env.MIDTRANS_CLIENT_KEY || ''
         });
     }

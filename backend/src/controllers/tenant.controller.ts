@@ -138,7 +138,7 @@ export class TenantController {
         for (const t of tenants) {
             yield create(TenantSchema, sanitizeNull({
                 ...t,
-                createdAt: timestampFromDate(t.createdAt),
+                createdAt: timestampFromDate(new Date(t.createdAt)),
             }));
         }
     }
@@ -157,7 +157,7 @@ export class TenantController {
 
         return create(TenantSchema, sanitizeNull({
             ...tenant,
-            createdAt: timestampFromDate(tenant.createdAt),
+            createdAt: timestampFromDate(new Date(tenant.createdAt)),
         }));
     }
 }

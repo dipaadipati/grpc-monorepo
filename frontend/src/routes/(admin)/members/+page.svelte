@@ -116,14 +116,12 @@
 				return matchSearch && m.membership?.status === 'ACTIVE';
 			} else if (selectedStatus === 'Expired') {
 				return (
-					matchSearch &&
-					m.membership?.endDate &&
-					new Date(timestampDate(m.membership.endDate)) < new Date()
+					matchSearch && m.membership?.endDate && timestampDate(m.membership.endDate) < new Date()
 				);
 			} else if (selectedStatus === 'Pending') {
 				return (
 					matchSearch &&
-					(!m.membership?.endDate || new Date(timestampDate(m.membership.endDate)) >= new Date()) &&
+					(!m.membership?.endDate || timestampDate(m.membership.endDate) >= new Date()) &&
 					m.membership?.status !== 'ACTIVE'
 				);
 			}

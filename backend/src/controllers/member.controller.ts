@@ -125,10 +125,10 @@ export class MemberController {
                 ...m,
                 membership: m.membership ? {
                     ...m.membership,
-                    startDate: timestampFromDate(m.membership.startDate),
-                    endDate: timestampFromDate(m.membership.endDate),
+                    startDate: timestampFromDate(new Date(m.membership.startDate)),
+                    endDate: timestampFromDate(new Date(m.membership.endDate)),
                 } : undefined,
-                createdAt: timestampFromDate(m.createdAt),
+                createdAt: timestampFromDate(new Date(m.createdAt)),
             }));
         }
     }
@@ -190,7 +190,7 @@ export class MemberController {
 
         return create(UserProfileSchema, {
             ...updated,
-            createdAt: timestampFromDate(updated.createdAt),
+            createdAt: timestampFromDate(new Date(updated.createdAt)),
         });
     }
 

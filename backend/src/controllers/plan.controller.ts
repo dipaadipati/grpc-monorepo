@@ -191,7 +191,7 @@ export class PlanController {
             tenantId: p.tenantId,
             tenant: sanitizeNull({
                 ...p.tenant,
-                createdAt: timestampFromDate(p.tenant.createdAt)
+                createdAt: timestampFromDate(new Date(p.tenant.createdAt))
             })
         });
     }
