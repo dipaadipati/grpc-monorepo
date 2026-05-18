@@ -17,6 +17,7 @@ import Redis from 'ioredis';
 import { OfferingType } from "../../generated/prisma/enums.js";
 import { Prisma } from "../../generated/prisma/client.js";
 import { sanitizeNull } from "@/utils/prisma-sanitize.js";
+import { serializeBigInt } from "@/utils/common.js";
 
 @Controller()
 export class OfferingController {
@@ -106,7 +107,13 @@ export class OfferingController {
             orderBy: { name: 'asc' }
         });
 
-        await this.redis.set(cacheKey, JSON.stringify(offerings), 'EX', 300);
+        const safeDbOfferings = serializeBigInt(offerings.map((o, i) => {
+            return sanitizeNull({
+                ...o,
+                price: BigInt(Math.round(Number(o.price)))
+            })
+        }));
+        await this.redis.set(cacheKey, JSON.stringify(safeDbOfferings), 'EX', 300);
 
         for (const o of offerings) {
             yield create(OfferingSchema, sanitizeNull({
