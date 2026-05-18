@@ -2,29 +2,30 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY backend/package*.json ./
-COPY backend/prisma ./prisma/
+COPY backend/package*.json ./backend/
+COPY backend/prisma ./backend/prisma/
 
+WORKDIR /app/backend
 RUN npm install
 
+WORKDIR /app
 COPY gen/ ./gen/
 
-COPY backend/ .
+COPY backend/ ./backend/
 
-RUN mkdir -p gen && cp -r /app/gen/* ./gen/
-
+WORKDIR /app/backend
 RUN npx prisma generate
 RUN npm run build
 
 FROM node:20-alpine AS runner
-WORKDIR /app
+WORKDIR /app/backend
 
 COPY backend/package*.json ./
 RUN npm install --production
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/gen ./gen 
+COPY --from=builder /app/backend/dist ./dist
+COPY --from=builder /app/backend/prisma ./prisma
+COPY --from=builder /app/gen /app/gen
 
 EXPOSE 50051
 
