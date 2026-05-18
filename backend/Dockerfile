@@ -1,4 +1,4 @@
-FROM oven/bun:1.1-alpine AS builder
+FROM oven/bun:alpine AS builder
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ WORKDIR /app/backend
 RUN bunx prisma generate
 RUN bun run build
 
-FROM oven/bun:1.1-alpine AS runner
+FROM oven/bun:alpine AS runner
 WORKDIR /app/backend
 
 COPY backend/package*.json ./
