@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createAuthenticatedClients } from '$lib/grpc-client';
+	import { timestampDate } from '@bufbuild/protobuf/wkt';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
@@ -187,7 +188,7 @@
 							<td class="px-8 py-5">
 								<p class="font-bold text-gray-900">{trx.memberName}</p>
 								<p class="text-[10px] tracking-tighter text-gray-400 uppercase">
-									{new Date(trx.createdAt).toLocaleString('id-ID')}
+									{timestampDate(trx.createdAt).toLocaleString('id-ID')}
 								</p>
 							</td>
 							<td class="px-8 py-5">

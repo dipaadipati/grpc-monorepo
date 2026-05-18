@@ -168,7 +168,6 @@ export class TransactionController {
             tenantFilter = { user: { tenantId: adminTenantId } };
         }
 
-
         const transactions = await this.prisma.transaction.findMany({
             where: {
                 ...tenantFilter,
@@ -192,7 +191,9 @@ export class TransactionController {
                 id: trx.id,
                 memberId: trx.userId,
                 memberName: trx.user.name,
+                planId: trx.plan?.id,
                 planName: trx.plan?.name,
+                offeringId: trx.offering?.id,
                 offeringName: trx.offering?.name,
                 amount: BigInt(trx.amount.toString()),
                 method: trx.method,
