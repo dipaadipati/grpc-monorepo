@@ -5,6 +5,12 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
+	optimizeDeps: {
+		include: ['estree-walker']
+	},
+	ssr: {
+		noExternal: ['estree-walker']
+	},
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
