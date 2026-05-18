@@ -14,6 +14,8 @@ WORKDIR /app
 COPY gen/ ./gen/
 COPY backend/ ./backend/
 
+RUN ln -s /app/backend/node_modules /app/node_modules
+
 WORKDIR /app/backend
 RUN bunx prisma generate
 RUN bun run build
@@ -28,6 +30,7 @@ RUN bun install --production
 COPY --from=builder /app/backend/dist ./dist
 COPY --from=builder /app/backend/prisma ./prisma
 COPY --from=builder /app/gen /app/gen
+COPY --from=builder /app/node_modules /app/node_modules
 
 EXPOSE 50051
 
