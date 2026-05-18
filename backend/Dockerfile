@@ -11,6 +11,8 @@ COPY gen/ ./gen/
 
 COPY backend/ .
 
+RUN mkdir -p gen && cp -r /app/gen/* ./gen/
+
 RUN npx prisma generate
 RUN npm run build
 
