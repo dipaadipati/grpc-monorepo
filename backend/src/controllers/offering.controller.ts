@@ -10,7 +10,7 @@ import {
     OfferingResponseSchema,
     OfferingSchema,
     UpdateOfferingRequest,
-} from "@/gen/app_pb.js";
+} from "@/gen/app_pb";
 import { kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';

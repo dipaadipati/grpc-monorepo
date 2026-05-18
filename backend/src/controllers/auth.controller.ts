@@ -3,7 +3,7 @@ import { RpcException } from "@nestjs/microservices";
 import * as grpc from "@grpc/grpc-js";
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from "../prisma.service.js";
-import { LoginRequest, AuthResponseSchema, UserProfileSchema } from "@/gen/app_pb.js";
+import { LoginRequest, AuthResponseSchema, UserProfileSchema } from "@/gen/app_pb";
 import { create } from "@bufbuild/protobuf";
 import { v4 as uuidv4 } from 'uuid';
 import { InjectRedis } from "@nestjs-modules/ioredis";

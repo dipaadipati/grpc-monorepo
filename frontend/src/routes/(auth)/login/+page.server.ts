@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { authClient } from '$lib/grpc-client';
 import { create } from '@bufbuild/protobuf';
-import { LoginRequestSchema } from '@/gen/app_pb.js';
+import { LoginRequestSchema } from '@/gen/app_pb';
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const token = cookies.get('token');

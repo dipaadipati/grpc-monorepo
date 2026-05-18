@@ -11,7 +11,7 @@ import {
     AddOfferingRequest,
     UpdateOfferingRequest,
     GetOfferingRequest
-} from "@/gen/app_pb.js";
+} from "@/gen/app_pb";
 import { MemberController } from "./controllers/member.controller.js";
 import { TenantController } from "./controllers/tenant.controller.js";
 import { PlanController } from "./controllers/plan.controller.js";

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Offering, UserProfile } from '@/gen/app_pb.js';
+	import type { Offering, UserProfile } from '@/gen/app_pb';
 	import { createAuthenticatedClients } from '$lib/grpc-client';
 	import { timestampDate } from '@bufbuild/protobuf/wkt';
 

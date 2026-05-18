@@ -8,7 +8,7 @@ import {
     GetPlanRequest,
     PlanResponseSchema,
     PlanSchema
-} from '@/gen/app_pb.js';
+} from '@/gen/app_pb';
 import { create } from '@bufbuild/protobuf';
 import { RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';

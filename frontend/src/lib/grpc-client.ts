@@ -1,6 +1,6 @@
 import { createClient, type Interceptor } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
-import { AuthService, MemberService, OfferingService, PlanService, TenantService, TransactionService } from "@/gen/app_pb.js";
+import { AuthService, MemberService, OfferingService, PlanService, TenantService, TransactionService } from "@/gen/app_pb";
 
 const clientAuthInterceptor: Interceptor = (next) => async (req) => {
     if (typeof document !== 'undefined') {
