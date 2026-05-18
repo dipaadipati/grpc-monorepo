@@ -25,8 +25,11 @@ import { OfferingController } from './controllers/offering.controller';
         const host = configService.get<string>('REDIS_HOST') || 'gym-redis-container';
         const port = configService.get<number>('REDIS_PORT') || 6379;
 
+        console.log(`[Redis Debug] Mencoba connect ke Host: ${host}, Port: ${port}`);
+
         return {
           type: 'single',
+          url: `redis://${host}:${port}`,
           options: {
             host: host,
             port: Number(port),
@@ -34,6 +37,20 @@ import { OfferingController } from './controllers/offering.controller';
               const delay = Math.min(times * 50, 2000);
               return delay;
             },
+          },
+          onClientReady: (client) => {
+            console.log('[Redis Debug] Jembatan onClientReady aktif.');
+
+            client.on('error', (err) => {
+              console.error('[Redis Debug] TERDETEKSI ERROR ASLI:', {
+                message: err.message,
+                stack: err.stack,
+              });
+            });
+
+            client.on('connect', () => {
+              console.log('[Redis Debug] Berhasil terkoneksi ke server Redis!');
+            });
           },
         };
       },
