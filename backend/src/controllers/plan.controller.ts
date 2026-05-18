@@ -14,6 +14,7 @@ import { RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
 import { Prisma } from '../../generated/prisma/client';
+import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 
 @Controller()
 export class PlanController {
@@ -187,7 +188,10 @@ export class PlanController {
             price: BigInt(Math.round(Number(p.price))),
             duration: p.duration,
             tenantId: p.tenantId,
-            tenant: p.tenant
+            tenant: {
+                ...p.tenant,
+                createdAt: timestampFromDate(p.tenant.createdAt)
+            }
         });
     }
 }

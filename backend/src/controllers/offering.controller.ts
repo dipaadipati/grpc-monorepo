@@ -108,7 +108,7 @@ export class OfferingController {
         await this.redis.set(cacheKey, JSON.stringify(offerings), 'EX', 300);
 
         for (const o of offerings) {
-            yield create(OfferingSchema, { ...o, price: new Prisma.Decimal(o.price.toString()) });
+            yield create(OfferingSchema, { ...o, price: BigInt(Math.round(Number(o.price))) });
         }
     }
 
