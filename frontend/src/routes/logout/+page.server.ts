@@ -1,4 +1,3 @@
-// src/routes/logout/+page.server.ts
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { createAuthenticatedClients } from '$lib/grpc-client';
