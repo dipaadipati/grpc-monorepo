@@ -14,7 +14,7 @@ async function bootstrap() {
   const port = configService.get('PORT') || 50051;
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: 'https://grpc-monorepo.vercel.app',
     methods: 'POST,OPTIONS',
     allowedHeaders: ['Connect-Protocol-Version', 'Content-Type', 'Authorization'],
     exposedHeaders: ['Connect-Content-Encoding', 'Connect-Accept-Encoding'],
