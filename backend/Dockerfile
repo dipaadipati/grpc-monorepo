@@ -2,12 +2,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
-COPY prisma ./prisma/
+COPY backend/package*.json ./
+COPY backend/prisma ./prisma/
 
 RUN npm install
 
-COPY . .
+COPY gen/ ./gen/
+
+COPY backend/ .
 
 RUN npx prisma generate
 RUN npm run build
@@ -15,11 +17,12 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-COPY package*.json ./
+COPY backend/package*.json ./
 RUN npm install --production
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/gen ./gen 
 
 EXPOSE 50051
 
