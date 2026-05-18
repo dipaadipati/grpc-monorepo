@@ -3,15 +3,18 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./
-      dockerfile: ./backend/Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     
     container_name: gym-backend
     restart: always
     ports:
       - "127.0.0.1:50051:50051"
     env_file:
-      - ./backend/.env
+      - .env
+    environment:
+      - REDIS_HOST=gym-redis-container
+      - REDIS_PORT=6379
     depends_on:
       - postgres
       - redis

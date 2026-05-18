@@ -16,7 +16,6 @@ import { OfferingController } from './controllers/offering.controller';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     RedisModule.forRootAsync({
       imports: [ConfigModule, ScheduleModule.forRoot()],

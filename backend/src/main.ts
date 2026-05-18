@@ -30,4 +30,3 @@ async function bootstrap() {
   console.log(`Backend gRPC/Connect ready on http://localhost:${port}`);
 }
 bootstrap();
-// 
