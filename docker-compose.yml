@@ -11,13 +11,15 @@ services:
     ports:
       - "127.0.0.1:50051:50051"
     env_file:
-      - .env
+      - ./backend/.env
     environment:
       - REDIS_HOST=gym-redis-container
       - REDIS_PORT=6379
     depends_on:
       - postgres
       - redis
+    networks:
+      - gym-network
     deploy:
       resources:
         limits:

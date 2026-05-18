@@ -32,6 +32,6 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /var/www/grpc-monorepo
-          echo "${{ secrets.ENV_FILE_CONTENT }}" > ./.env
+          echo "${{ secrets.ENV_FILE_CONTENT }}" > ./backend/.env
           docker compose up -d --build backend
           docker image prune -f

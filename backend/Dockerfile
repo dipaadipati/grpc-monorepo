@@ -28,6 +28,8 @@ RUN bun install --production
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
+COPY backend/.env ./ .env
+
 RUN mkdir -p /app/node_modules \
     && ln -s /app/dist/app/src /app/node_modules/@
 
