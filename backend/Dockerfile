@@ -6,6 +6,7 @@ COPY backend/package*.json ./backend/
 COPY backend/prisma ./backend/prisma/
 
 WORKDIR /app/backend
+RUN npm install @bufbuild/protobuf
 RUN npm install
 
 WORKDIR /app
