@@ -39,3 +39,4 @@ import { OfferingController } from './controllers/offering.controller';
   providers: [PrismaService, MembershipService]
 })
 export class AppModule { }
+// 
