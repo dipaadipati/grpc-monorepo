@@ -31,6 +31,8 @@ COPY --from=builder /app/backend/dist /app/backend/dist
 COPY --from=builder /app/backend/prisma /app/backend/prisma
 COPY --from=builder /app/gen /app/gen
 
+RUN ln -s /app/gen /app/backend/node_modules/@shared
+
 EXPOSE 50051
 
-CMD ["bun", "run", "-r", "tsconfig-paths/register", "/app/backend/dist/backend/src/main.js"]
+CMD ["bun", "run", "/app/backend/dist/backend/src/main.js"]
