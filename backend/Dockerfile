@@ -14,6 +14,8 @@ RUN bunx prisma generate
 
 RUN bun run build
 
+
+
 FROM oven/bun:alpine AS runner
 
 WORKDIR /app
@@ -26,6 +28,9 @@ RUN bun install --production
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
+RUN mkdir -p /app/node_modules \
+    && ln -s /app/dist/app/src /app/node_modules/@
+
 EXPOSE 50051
 
-CMD ["bun", "run", "/app/backend/dist/backend/src/main.js"]
+CMD ["bun", "run", "/app/dist/app/src/main.js"]
