@@ -1,0 +1,37 @@
+name: Deploy Monorepo via Docker Compose (Build on VPS)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Copy Code to VPS via SCP
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "./"
+        target: "/var/www/grpc-monorepo"
+
+    - name: Executing Remote SSH Commands (Docker Compose Build & Up)
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /var/www/grpc-monorepo
+          echo "${{ secrets.ENV_FILE_CONTENT }}" > ./backend/.env
+          docker compose up -d --build backend
+          docker image prune -f
