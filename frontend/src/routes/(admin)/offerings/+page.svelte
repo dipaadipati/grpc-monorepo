@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createAuthenticatedClients } from '$lib/grpc-client';
 	import { onMount } from 'svelte';
-	import { type Offering } from '$gen/app_pb';
+	import { type Offering } from '@/gen/app_pb';
 
 	let { data } = $props();
 	const { user, sessionId } = $derived(data);

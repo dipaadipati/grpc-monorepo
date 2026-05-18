@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { create } from '@bufbuild/protobuf';
-import { CreateTransactionRequest, GetTransactionsRequest, TransactionSchema } from '@shared/app_pb';
+import { CreateTransactionRequest, GetTransactionsRequest, TransactionSchema } from '@/gen/app_pb';
 import { RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +10,7 @@ import Redis from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { kUser } from '../auth/auth.interceptor';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
+import { sanitizeNull } from '@/utils/prisma-sanitize';
 
 const midtransClient = require('midtrans-client');
 
@@ -92,11 +93,11 @@ export class TransactionController {
                 await this.redis.del(`gym:${user.tenantId}:members`);
             }
 
-            return create(TransactionSchema, {
+            return create(TransactionSchema, sanitizeNull({
                 ...trx,
                 amount: BigInt(trx.amount.toString()),
                 createdAt: timestampFromDate(trx.createdAt),
-            });
+            }));
         } else if (req.offeringId) {
             const offering = await this.prisma.offering.findUnique({
                 where: { id: req.offeringId }
@@ -145,11 +146,11 @@ export class TransactionController {
                 await this.redis.del(`gym:${user.tenantId}:offerings`);
             }
 
-            return create(TransactionSchema, {
+            return create(TransactionSchema, sanitizeNull({
                 ...trx,
                 amount: BigInt(trx.amount.toString()),
                 createdAt: timestampFromDate(trx.createdAt),
-            });
+            }));
         }
     }
 
@@ -187,20 +188,18 @@ export class TransactionController {
         });
 
         for (const trx of transactions) {
-            yield create(TransactionSchema, {
+            yield create(TransactionSchema, sanitizeNull({
                 id: trx.id,
                 memberId: trx.userId,
                 memberName: trx.user.name,
-                planId: trx.planId,
                 planName: trx.plan?.name,
-                offeringId: trx.offeringId,
                 offeringName: trx.offering?.name,
                 amount: BigInt(trx.amount.toString()),
                 method: trx.method,
                 status: trx.status,
                 qrisUrl: trx.qrisUrl ?? "",
                 createdAt: timestampFromDate(trx.createdAt),
-            });
+            }));
         }
     }
 

@@ -10,12 +10,13 @@ import {
     OfferingResponseSchema,
     OfferingSchema,
     UpdateOfferingRequest,
-} from "@shared/app_pb.js";
+} from "@/gen/app_pb.js";
 import { kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { OfferingType } from "../../generated/prisma/enums.js";
 import { Prisma } from "../../generated/prisma/client.js";
+import { sanitizeNull } from "@/utils/prisma-sanitize.js";
 
 @Controller()
 export class OfferingController {
@@ -79,10 +80,10 @@ export class OfferingController {
 
         console.log(`🧹 [REDIS] Cache offerings dihapus untuk tenant: ${user.tenantId}`);
 
-        return create(OfferingSchema, {
+        return create(OfferingSchema, sanitizeNull({
             ...newOffering,
             price: BigInt(Math.round(Number(newOffering.price))),
-        });
+        }));
     }
 
     async *getOfferings(context: any) {
@@ -108,7 +109,10 @@ export class OfferingController {
         await this.redis.set(cacheKey, JSON.stringify(offerings), 'EX', 300);
 
         for (const o of offerings) {
-            yield create(OfferingSchema, { ...o, price: BigInt(Math.round(Number(o.price))) });
+            yield create(OfferingSchema, sanitizeNull({
+                ...o,
+                price: BigInt(Math.round(Number(o.price)))
+            }));
         }
     }
 
@@ -229,6 +233,9 @@ export class OfferingController {
             });
         }
 
-        return create(OfferingSchema, { ...offering, price: BigInt(Math.round(Number(offering.price))) });
+        return create(OfferingSchema, sanitizeNull({
+            ...offering,
+            price: BigInt(Math.round(Number(offering.price)))
+        }));
     }
 }

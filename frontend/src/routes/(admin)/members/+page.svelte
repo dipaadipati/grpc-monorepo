@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { Offering, UserProfile } from '$gen/app_pb';
+	import type { Offering, UserProfile } from '@/gen/app_pb.js';
 	import { createAuthenticatedClients } from '$lib/grpc-client';
+	import { timestampDate } from '@bufbuild/protobuf/wkt';
 
 	const formatIDR = (amount: number) => {
 		return 'Rp ' + amount.toLocaleString('id-ID');
@@ -114,11 +115,15 @@
 			if (selectedStatus === 'Active') {
 				return matchSearch && m.membership?.status === 'ACTIVE';
 			} else if (selectedStatus === 'Expired') {
-				return matchSearch && m.membership?.endDate && new Date(m.membership.endDate) < new Date();
+				return (
+					matchSearch &&
+					m.membership?.endDate &&
+					new Date(timestampDate(m.membership.endDate)) < new Date()
+				);
 			} else if (selectedStatus === 'Pending') {
 				return (
 					matchSearch &&
-					(!m.membership?.endDate || new Date(m.membership.endDate) >= new Date()) &&
+					(!m.membership?.endDate || new Date(timestampDate(m.membership.endDate)) >= new Date()) &&
 					m.membership?.status !== 'ACTIVE'
 				);
 			}
@@ -337,12 +342,13 @@
 							<td class="px-6 py-4 text-sm text-gray-500">
 								{member.membership?.status === 'ACTIVE'
 									? 'Aktif'
-									: member.membership?.endDate && new Date(member.membership.endDate) < new Date()
+									: member.membership?.endDate &&
+										  timestampDate(member.membership.endDate) < new Date()
 										? 'Expired'
 										: 'Pending'}
 							</td>
 							<td class="px-6 py-4 text-sm text-gray-500">
-								{new Date(member.createdAt).toLocaleDateString('id-ID', {
+								{timestampDate(member.createdAt!).toLocaleDateString('id-ID', {
 									day: '2-digit',
 									month: 'short',
 									year: 'numeric'
@@ -350,7 +356,7 @@
 							</td>
 							<td class="px-6 py-4 text-sm text-gray-500">
 								{member.membership?.startDate
-									? new Date(member.membership.startDate).toLocaleDateString('id-ID', {
+									? timestampDate(member.membership.startDate).toLocaleDateString('id-ID', {
 											day: '2-digit',
 											month: 'short',
 											year: 'numeric'
@@ -359,7 +365,7 @@
 							</td>
 							<td class="px-6 py-4 text-sm text-gray-500">
 								{member.membership?.endDate
-									? new Date(member.membership.endDate).toLocaleDateString('id-ID', {
+									? timestampDate(member.membership.endDate).toLocaleDateString('id-ID', {
 											day: '2-digit',
 											month: 'short',
 											year: 'numeric'

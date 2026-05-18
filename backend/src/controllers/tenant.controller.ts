@@ -8,12 +8,13 @@ import {
     GetTenantRequest,
     TenantResponseSchema,
     TenantSchema
-} from '@shared/app_pb';
+} from '@/gen/app_pb';
 import { create } from '@bufbuild/protobuf';
 import { RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
+import { sanitizeNull } from '@/utils/prisma-sanitize';
 
 @Controller()
 export class TenantController {
@@ -135,10 +136,10 @@ export class TenantController {
         await this.redis.set(this.CACHE_KEY, JSON.stringify(tenants), 'EX', 3600);
 
         for (const t of tenants) {
-            yield create(TenantSchema, {
+            yield create(TenantSchema, sanitizeNull({
                 ...t,
                 createdAt: timestampFromDate(t.createdAt),
-            });
+            }));
         }
     }
 
@@ -154,9 +155,9 @@ export class TenantController {
             });
         }
 
-        return create(TenantSchema, {
+        return create(TenantSchema, sanitizeNull({
             ...tenant,
             createdAt: timestampFromDate(tenant.createdAt),
-        });
+        }));
     }
 }

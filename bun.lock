@@ -5,7 +5,7 @@
     "": {
       "name": "grpc-monorepo",
       "dependencies": {
-        "@bufbuild/protobuf": "^2.12.0",
+        "@bufbuild/protobuf": "2",
         "@connectrpc/connect": "^2.1.1",
         "@connectrpc/connect-node": "^2.1.1",
         "grpc-tools": "^1.13.1",

@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "paths": {
+      "@/*": ["./src/*"],
       "@shared/*": ["../gen/*"],
       "@bufbuild/protobuf": ["./node_modules/@bufbuild/protobuf"],
       "@connectrpc/connect": ["./node_modules/@connectrpc/connect"]

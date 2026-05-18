@@ -8,13 +8,14 @@ import {
     GetPlanRequest,
     PlanResponseSchema,
     PlanSchema
-} from '@shared/app_pb.js';
+} from '@/gen/app_pb.js';
 import { create } from '@bufbuild/protobuf';
 import { RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
 import { Prisma } from '../../generated/prisma/client';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
+import { sanitizeNull } from '@/utils/prisma-sanitize';
 
 @Controller()
 export class PlanController {
@@ -188,10 +189,10 @@ export class PlanController {
             price: BigInt(Math.round(Number(p.price))),
             duration: p.duration,
             tenantId: p.tenantId,
-            tenant: {
+            tenant: sanitizeNull({
                 ...p.tenant,
                 createdAt: timestampFromDate(p.tenant.createdAt)
-            }
+            })
         });
     }
 }

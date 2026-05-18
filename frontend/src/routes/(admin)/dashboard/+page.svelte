@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createAuthenticatedClients } from '$lib/grpc-client';
 	import { onMount } from 'svelte';
+	import { timestampDate } from '@bufbuild/protobuf/wkt';
 
 	let { data } = $props();
 	const user = $derived(data.user);
@@ -74,7 +75,7 @@
 					id: trx.id,
 					user: trx.memberName,
 					action: `Membeli ${trx.planId ? `paket ${trx.planName}` : `penawaran ${trx.offeringName}`} via ${trx.method === 'CASH' ? 'Cash' : 'QRIS'}`,
-					time: new Date(trx.createdAt).toLocaleTimeString('id-ID', {
+					time: timestampDate(trx.createdAt!).toLocaleTimeString('id-ID', {
 						hour: '2-digit',
 						minute: '2-digit'
 					}),

@@ -8,11 +8,12 @@ import {
     RegisterMemberRequest,
     UpdateMemberRequest,
     UserProfileSchema
-} from "@shared/app_pb.js";
+} from "@/gen/app_pb.js";
 import { kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
+import { sanitizeNull } from "@/utils/prisma-sanitize.js";
 
 @Controller()
 export class MemberController {
@@ -120,7 +121,7 @@ export class MemberController {
         await this.redis.set(cacheKey, JSON.stringify(members), 'EX', 300);
 
         for (const m of members) {
-            yield create(UserProfileSchema, {
+            yield create(UserProfileSchema, sanitizeNull({
                 ...m,
                 membership: m.membership ? {
                     ...m.membership,
@@ -128,7 +129,7 @@ export class MemberController {
                     endDate: timestampFromDate(m.membership.endDate),
                 } : undefined,
                 createdAt: timestampFromDate(m.createdAt),
-            });
+            }));
         }
     }
 

@@ -3,13 +3,14 @@ import { RpcException } from "@nestjs/microservices";
 import * as grpc from "@grpc/grpc-js";
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from "../prisma.service.js";
-import { LoginRequest, AuthResponseSchema, UserProfileSchema } from "@shared/app_pb.js";
+import { LoginRequest, AuthResponseSchema, UserProfileSchema } from "@/gen/app_pb.js";
 import { create } from "@bufbuild/protobuf";
 import { v4 as uuidv4 } from 'uuid';
 import { InjectRedis } from "@nestjs-modules/ioredis";
 import Redis from "ioredis";
 import { kUser } from "../auth/auth.interceptor.js";
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
+import { sanitizeNull } from "@/utils/prisma-sanitize.js";
 
 @Controller()
 export class AuthController {
@@ -97,11 +98,11 @@ export class AuthController {
             tenantId: user.tenantId,
             tenantName: user.tenant.name,
             tenantIsActive: user.tenant.isActive,
-            membership: user.membership ? {
+            membership: user.membership ? sanitizeNull({
                 ...user.membership,
                 startDate: timestampFromDate(user.membership.startDate),
                 endDate: timestampFromDate(user.membership.endDate),
-            } : undefined,
+            }) : undefined,
             createdAt: timestampFromDate(user.createdAt),
             midtransClientKey: process.env.MIDTRANS_CLIENT_KEY || ''
         });

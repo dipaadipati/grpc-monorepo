@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Plan } from '$gen/app_pb';
+	import type { Plan } from '@/gen/app_pb';
 	import { createAuthenticatedClients } from '$lib/grpc-client';
 	import { onMount } from 'svelte';
 
