@@ -14,15 +14,18 @@ async function bootstrap() {
   const port = configService.get('PORT') || 50051;
 
   app.enableCors({
-    origin: 'http://localhost:5173',
-    methods: 'POST,OPTIONS',
-    allowedHeaders: ['Connect-Protocol-Version', 'Content-Type', 'Authorization'],
-    exposedHeaders: ['Connect-Content-Encoding', 'Connect-Accept-Encoding'],
-    credentials: true, // Enable cookies
-  });
+    origin: (origin: any, callback: any) => {
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'https://grpc-monorepo.vercel.app'
+      ];
 
-  app.enableCors({
-    origin: 'https://grpc-monorepo.vercel.app',
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Blocked by CORS'));
+      }
+    },
     methods: 'POST,OPTIONS',
     allowedHeaders: ['Connect-Protocol-Version', 'Content-Type', 'Authorization'],
     exposedHeaders: ['Connect-Content-Encoding', 'Connect-Accept-Encoding'],
