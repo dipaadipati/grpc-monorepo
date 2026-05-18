@@ -4,12 +4,9 @@ WORKDIR /app
 
 COPY backend/package*.json ./
 COPY backend/bun.lock ./
-COPY backend/prisma ./prisma/
-
 RUN bun install
 
 COPY backend/ ./
-
 RUN bunx prisma generate
 
 RUN bun run build
@@ -22,11 +19,13 @@ WORKDIR /app
 
 COPY backend/package*.json ./
 COPY backend/bun.lock ./
-
 RUN bun install --production
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/generated ./generated
+
+COPY backend/prisma ./prisma
+COPY backend/prisma.config.ts ./prisma.config.ts
 
 RUN mkdir -p /app/node_modules \
     && ln -s /app/dist/app/src /app/node_modules/@
