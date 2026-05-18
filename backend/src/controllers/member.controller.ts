@@ -127,10 +127,10 @@ export class MemberController {
                 ...m,
                 membership: m.membership ? {
                     ...m.membership,
-                    startDate: m.membership.startDate,
-                    endDate: m.membership.endDate,
+                    startDate: timestampFromDate(new Date(m.membership.startDate)),
+                    endDate: timestampFromDate(new Date(m.membership.endDate)),
                 } : undefined,
-                createdAt: m.createdAt,
+                createdAt: timestampFromDate(new Date(m.createdAt)),
             }));
         }
     }
