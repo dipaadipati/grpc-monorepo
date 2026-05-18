@@ -105,7 +105,7 @@ export class PlanController {
             where: { id: req.id },
             data: {
                 name: req.name,
-                price: req.price.toString(),
+                price: new Prisma.Decimal(req.price.toString()),
                 duration: req.duration,
             },
         });
@@ -156,7 +156,7 @@ export class PlanController {
         const mappedPlans = plans.map(p => ({
             id: p.id,
             name: p.name,
-            price: Number(p.price),
+            price: BigInt(Math.round(Number(p.price))),
             duration: p.duration,
             tenantId: p.tenantId,
             tenant: {
@@ -184,7 +184,7 @@ export class PlanController {
         return create(PlanSchema, {
             id: p.id,
             name: p.name,
-            price: new Prisma.Decimal(p.price.toString()),
+            price: BigInt(Math.round(Number(p.price))),
             duration: p.duration,
             tenantId: p.tenantId,
             tenant: p.tenant

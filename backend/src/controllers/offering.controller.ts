@@ -79,7 +79,10 @@ export class OfferingController {
 
         console.log(`🧹 [REDIS] Cache offerings dihapus untuk tenant: ${user.tenantId}`);
 
-        return create(OfferingSchema, { ...newOffering });
+        return create(OfferingSchema, {
+            ...newOffering,
+            price: BigInt(Math.round(Number(newOffering.price))),
+        });
     }
 
     async *getOfferings(context: any) {
@@ -226,6 +229,6 @@ export class OfferingController {
             });
         }
 
-        return create(OfferingSchema, { ...offering, price: new Prisma.Decimal(offering.price.toString()) });
+        return create(OfferingSchema, { ...offering, price: BigInt(Math.round(Number(offering.price))) });
     }
 }

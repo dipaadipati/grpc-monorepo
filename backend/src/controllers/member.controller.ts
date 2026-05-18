@@ -12,6 +12,7 @@ import {
 import { kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
+import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 
 @Controller()
 export class MemberController {
@@ -119,7 +120,15 @@ export class MemberController {
         await this.redis.set(cacheKey, JSON.stringify(members), 'EX', 300);
 
         for (const m of members) {
-            yield create(UserProfileSchema, { ...m });
+            yield create(UserProfileSchema, {
+                ...m,
+                membership: m.membership ? {
+                    ...m.membership,
+                    startDate: timestampFromDate(m.membership.startDate),
+                    endDate: timestampFromDate(m.membership.endDate),
+                } : undefined,
+                createdAt: timestampFromDate(m.createdAt),
+            });
         }
     }
 
@@ -178,7 +187,10 @@ export class MemberController {
         await this.redis.del(cacheKey);
         console.log(`🧹 Cache dihapus setelah edit member: ${req.id}`);
 
-        return create(UserProfileSchema, { ...updated });
+        return create(UserProfileSchema, {
+            ...updated,
+            createdAt: timestampFromDate(updated.createdAt),
+        });
     }
 
     async deleteMember(req: any, context: any) {

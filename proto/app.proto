@@ -25,6 +25,7 @@ message UserProfile {
   Membership membership = 7;
   google.protobuf.Timestamp createdAt = 8;
   string midtransClientKey = 9;
+  bool tenantIsActive = 10;
 }
 
 message AuthResponse { string token = 1;}
