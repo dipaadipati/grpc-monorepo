@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package app;
 
+import "google/protobuf/timestamp.proto";
+
 message Empty {
 }
 
@@ -21,7 +23,7 @@ message UserProfile {
   int32 tenantId = 5;
   string tenantName = 6;
   Membership membership = 7;
-  string createdAt = 8;
+  google.protobuf.Timestamp createdAt = 8;
   string midtransClientKey = 9;
 }
 
@@ -97,7 +99,7 @@ message Tenant {
   string slug = 3;
   string address = 4;
   bool isActive = 5;
-  string createdAt = 6;
+  google.protobuf.Timestamp createdAt = 6;
 }
 
 
@@ -141,8 +143,8 @@ message Membership {
   int32 userId = 2;
   Plan plan = 3;
   string status = 4; // ACTIVE, EXPIRED, PENDING
-  string startDate = 5;
-  string endDate = 6;
+  google.protobuf.Timestamp startDate = 5;
+  google.protobuf.Timestamp endDate = 6;
   Offering offering = 7;
   int32 planId = 8;
   int32 offeringId = 9;
@@ -189,7 +191,7 @@ message Transaction {
   string method = 5;
   string status = 6; // PENDING, SETTLEMENT, CANCELLED, EXPIRED
   string qrisUrl = 7; // only if Midtrans
-  string createdAt = 8;
+  google.protobuf.Timestamp createdAt = 8;
   optional string memberName = 9;
   optional string planName = 10;
 
@@ -227,7 +229,7 @@ message UpdateOfferingRequest {
   int32 quota = 7; // for SERVICE
 }
 
-message OfferingResponse { string offeringId = 1; }
+message OfferingResponse { int32 offeringId = 1; }
 
 message GetOfferingRequest { int32 offeringId = 1; }
 

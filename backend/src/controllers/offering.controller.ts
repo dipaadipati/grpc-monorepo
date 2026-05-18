@@ -18,6 +18,7 @@ import { kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { OfferingType } from "../../generated/prisma/enums.js";
+import { Prisma } from "../../generated/prisma/client.js";
 
 @Controller()
 export class OfferingController {
@@ -67,7 +68,7 @@ export class OfferingController {
         const newOffering = await this.prisma.offering.create({
             data: {
                 name,
-                price: String(price),
+                price: new Prisma.Decimal(price.toString()),
                 type: type as OfferingType,
                 duration,
                 stock,
@@ -107,7 +108,7 @@ export class OfferingController {
         await this.redis.set(cacheKey, JSON.stringify(offerings), 'EX', 300);
 
         for (const o of offerings) {
-            yield create(OfferingSchema, { ...o });
+            yield create(OfferingSchema, { ...o, price: new Prisma.Decimal(o.price.toString()) });
         }
     }
 
@@ -228,6 +229,6 @@ export class OfferingController {
             });
         }
 
-        return create(OfferingSchema, { ...offering });
+        return create(OfferingSchema, { ...offering, price: new Prisma.Decimal(offering.price.toString()) });
     }
 }

@@ -13,6 +13,7 @@ import { create } from '@bufbuild/protobuf';
 import { RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
+import { Prisma } from '../../generated/prisma/client';
 
 @Controller()
 export class PlanController {
@@ -54,7 +55,7 @@ export class PlanController {
         const newPlan = await this.prisma.membershipPlan.create({
             data: {
                 name: req.name,
-                price: req.price.toString(),
+                price: new Prisma.Decimal(req.price.toString()),
                 duration: req.duration,
                 tenantId: targetTenantId,
             },
@@ -183,7 +184,7 @@ export class PlanController {
         return create(PlanSchema, {
             id: p.id,
             name: p.name,
-            price: Number(p.price),
+            price: new Prisma.Decimal(p.price.toString()),
             duration: p.duration,
             tenantId: p.tenantId,
             tenant: p.tenant
