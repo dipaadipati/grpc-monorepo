@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { getRedisConnectionToken } from '@nestjs-modules/ioredis';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,6 +35,9 @@ async function bootstrap() {
     exposedHeaders: ['Connect-Content-Encoding', 'Connect-Accept-Encoding'],
     credentials: true,
   });
+
+  app.use(bodyParser.raw({ type: 'application/proto' }));
+  app.use(bodyParser.raw({ type: 'application/connect+proto' }));
 
   app.use(expressConnectMiddleware({
     routes: (router) => registerConnectRoutes(app, router),
