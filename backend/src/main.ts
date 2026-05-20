@@ -36,8 +36,8 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use(bodyParser.raw({ type: 'application/proto' }));
-  app.use(bodyParser.raw({ type: 'application/connect+proto' }));
+  // app.use(bodyParser.raw({ type: 'application/proto' }));
+  // app.use(bodyParser.raw({ type: 'application/connect+proto' }));
 
   app.use(expressConnectMiddleware({
     routes: (router) => registerConnectRoutes(app, router),
