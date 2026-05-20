@@ -9,7 +9,7 @@ services:
     container_name: gym-backend
     restart: always
     ports:
-      - "3000:3000" 
+      - "3001:3000" 
       - "50051:50051"
     env_file:
       - ./backend/.env
