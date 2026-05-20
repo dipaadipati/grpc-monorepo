@@ -33,5 +33,6 @@ jobs:
         script: |
           cd /var/www/grpc-monorepo
           echo "${{ secrets.ENV_FILE_CONTENT }}" > ./backend/.env
+          docker compose down
           docker compose up -d --build backend
           docker image prune -f
