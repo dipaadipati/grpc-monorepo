@@ -14,7 +14,7 @@ async function bootstrap() {
   const redis = app.get(getRedisConnectionToken());
   const configService = app.get(ConfigService);
   
-  const httpPort = configService.get('PORT') || 3000;
+  const httpPort = 3000;
   const grpcPort = 50051;
 
   app.enableCors({
