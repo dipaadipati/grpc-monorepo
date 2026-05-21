@@ -1,6 +1,6 @@
 import 'package:grpc/grpc.dart';
 import 'gen/app.pbgrpc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class GrpcService {
   static final GrpcService _instance = GrpcService._internal();
@@ -25,14 +25,14 @@ class GrpcService {
 
   Future<void> setToken(String token) async {
     _token = token;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('session_id', token);
+    final box = Hive.box('authBox');
+    await box.put('session_id', token);
   }
 
   Future<void> clearToken() async {
     _token = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('session_id');
+    final box = Hive.box('authBox');
+    await box.delete('session_id');
   }
 
   String? get token => _token;
@@ -54,13 +54,11 @@ class GrpcService {
       OfferingServiceClient(_channel, interceptors: _interceptors);
 
   Future<UserProfile> fetchProfileWithToken(String sessionId) async {
-    // Buat client sementara khusus yang ditempeli token pengecekan ini
     final temporaryClient = AuthServiceClient(
       _channel,
       interceptors: [GrpcAuthInterceptor(sessionId)],
     );
 
-    // Tembak RPC GetProfile untuk memastikan sesi Redis di backend masih hidup/berlaku
     return await temporaryClient.getProfile(Empty());
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/super-admin/super_navigation_holder.dart';
 import '../grpc_service.dart';
 import '../gen/app.pbgrpc.dart';
 import '../main.dart';
@@ -286,9 +287,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       color: Color(0xFF4F46E5),
                     ),
                     onTap: () {
-                      // Arahkan ke halaman manajemen super admin kamu
-                      // Navigator.push(context, MaterialPageRoute(builder: (_) => SuperAdminDashboard()));
-                      _showToast('Membuka Konsol Pusat Super Admin...');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => SuperAdminNavigationHolder(
+                            profile: widget.profile,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ],

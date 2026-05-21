@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/dashboard_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'grpc_service.dart';
 import 'pages/main_navigation_holder.dart';
 import 'gen/app.pbgrpc.dart';
@@ -8,31 +7,37 @@ import 'gen/app.pbgrpc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final prefs = await SharedPreferences.getInstance();
-  final String? savedSessionId = prefs.getString('session_id');
+  // 🚀 1. Inisialisasi awal channel gRPC global WAJIB di paling atas!
+  // Ini akan membuat variabel '_channel' aman terinisialisasi di memori.
+  GrpcService().init();
+
+  // 🚀 2. Inisialisasi Storage Hive
+  await Hive.initFlutter();
+  final authBox = await Hive.openBox('authBox');
+
+  final String? savedSessionId = authBox.get('session_id');
 
   bool isSessionValid = false;
   UserProfile? userProfile;
 
   if (savedSessionId != null && savedSessionId.isNotEmpty) {
     try {
+      // Sekarang ini dipanggil tanpa takut memicu LateInitializationError lagi!
       userProfile = await GrpcService().fetchProfileWithToken(savedSessionId);
-
       isSessionValid = true;
 
       GrpcService().setSessionIdToMetadata(savedSessionId);
     } catch (e) {
       debugPrint('Sesi expired atau Redis telah dihapus: $e');
-      await prefs.remove('session_id'); // bersihkan token usang
+      await authBox.delete('session_id');
     }
   }
 
-  // 3. Jalankan aplikasi dengan rute dinamis adaptif
   runApp(
     MyApp(
       initialScreen: isSessionValid && userProfile != null
-          ? DashboardPage(profile: userProfile) // Langsung masuk tanpa login!
-          : const GymLoginPage(), // Sesi kosong/habis, wajib login dulu
+          ? MainNavigationHolder(profile: userProfile)
+          : const GymLoginPage(),
     ),
   );
 }
