@@ -9,7 +9,7 @@ import {
     type UpdateMemberRequest,
     UserProfileSchema
 } from "@/gen/app_pb";
-import { kUser } from "../auth/auth.interceptor.js";
+import { extractUserSession, kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
@@ -20,46 +20,9 @@ import { serializeBigInt } from "@/utils/common.js";
 export class MemberController {
     constructor(private prisma: PrismaService, @InjectRedis() private readonly redis: Redis) { }
 
-    private async extractUserSession(request: any, context: any): Promise<any> {
-        if (context && context.values && typeof context.values.get === 'function') {
-            return context.values.get(kUser);
-        }
-
-        let metadata: grpc.Metadata | null = null;
-        if (context && typeof context.get === 'function') {
-            metadata = context;
-        } else if (request && typeof request.getArgByIndex === 'function') {
-            metadata = request.getArgByIndex(1);
-        }
-
-        if (metadata) {
-            const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
-            if (authHeader && authHeader.startsWith('Bearer ')) {
-                const token = authHeader.replace('Bearer ', '').trim();
-                const sessionStr = await this.redis.get(`token:${token}`);
-                if (sessionStr) {
-                    const sessionData = JSON.parse(sessionStr);
-                    // Sesuaikan struktur payload agar mirip dengan yang disimpan interceptor Svelte
-                    return {
-                        ...sessionData,
-                        tenantId: sessionData.tenantId,
-                        role: sessionData.role,
-                        tenantIsActive: sessionData.tenantIsActive ?? true,
-                        sub: sessionData.sub
-                    };
-                }
-            }
-        }
-
-        throw new RpcException({
-            code: grpc.status.UNAUTHENTICATED,
-            message: 'Sesi tidak valid atau telah kedaluwarsa.',
-        });
-    }
-
     @GrpcMethod('MemberService', 'RegisterMember')
     async createMember(data: RegisterMemberRequest, context: any) {
-        const user = await this.extractUserSession(data, context);
+        const user = await extractUserSession(data, context, this.redis);
         const { email, password, name } = data;
 
         if (!user.tenantIsActive) {
@@ -116,8 +79,8 @@ export class MemberController {
     }
 
     @GrpcMethod('MemberService', 'GetMembers')
-    async getMembers(request: any, context: any) { // 🚀 Hapus tanda bintang (*)
-        const user = await this.extractUserSession(request, context);
+    async getMembers(request: any, context: any) { 
+        const user = await extractUserSession(request, context, this.redis);
         const cacheKey = `gym:${user.tenantId}:members`;
 
         const isConnectRpc = context && context.values && typeof context.values.get === 'function';
@@ -175,7 +138,7 @@ export class MemberController {
 
     @GrpcMethod('MemberService', 'UpdateMember')
     async updateMember(req: UpdateMemberRequest, context: any) {
-        const user = await this.extractUserSession(req, context);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -221,7 +184,7 @@ export class MemberController {
 
     @GrpcMethod('MemberService', 'DeleteMember')
     async deleteMember(req: any, context: any) {
-        const user = await this.extractUserSession(req, context);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -250,7 +213,7 @@ export class MemberController {
 
     @GrpcMethod('MemberService', 'GetMemberProfile')
     async getMemberProfile(request: any, context: any) {
-        const curUser = await this.extractUserSession(request, context);
+        const curUser = await extractUserSession(request, context, this.redis);
 
         if (!curUser.tenantIsActive) {
             throw new RpcException({

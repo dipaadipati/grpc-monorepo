@@ -1,5 +1,6 @@
 import { Interceptor, ConnectError, Code, createContextKey } from "@connectrpc/connect";
 import * as grpc from "@grpc/grpc-js";
+import { RpcException } from "@nestjs/microservices";
 import Redis from "ioredis";
 
 export interface UserPayload {
@@ -75,3 +76,39 @@ export const createAuthInterceptor = (redis: Redis): Interceptor => {
         }
     };
 };
+
+export const extractUserSession = async (request: any, context: any, redis: Redis): Promise<any> => {
+        if (context && context.values && typeof context.values.get === 'function') {
+            return context.values.get(kUser);
+        }
+
+        let metadata: grpc.Metadata | null = null;
+        if (context && typeof context.get === 'function') {
+            metadata = context;
+        } else if (request && typeof request.getArgByIndex === 'function') {
+            metadata = request.getArgByIndex(1);
+        }
+
+        if (metadata) {
+            const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                const token = authHeader.replace('Bearer ', '').trim();
+                const sessionStr = await redis.get(`token:${token}`);
+                if (sessionStr) {
+                    const sessionData = JSON.parse(sessionStr);
+                    return {
+                        ...sessionData,
+                        tenantId: sessionData.tenantId,
+                        role: sessionData.role,
+                        tenantIsActive: sessionData.tenantIsActive ?? true,
+                        sub: sessionData.sub
+                    };
+                }
+            }
+        }
+
+        throw new RpcException({
+            code: grpc.status.UNAUTHENTICATED,
+            message: 'Sesi tidak valid atau telah kedaluwarsa.',
+        });
+    }

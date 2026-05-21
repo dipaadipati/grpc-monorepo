@@ -1,5 +1,6 @@
 import 'package:grpc/grpc.dart';
 import 'gen/app.pbgrpc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GrpcService {
   static final GrpcService _instance = GrpcService._internal();
@@ -12,13 +13,28 @@ class GrpcService {
   void init() {
     _channel = ClientChannel(
       'grpc-mobile.moora.web.id',
+      // '192.168.1.10',
       port: 50051,
       options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
     );
   }
 
-  void setToken(String token) => _token = token;
-  void clearToken() => _token = null;
+  void setSessionIdToMetadata(String token) {
+    _token = token;
+  }
+
+  Future<void> setToken(String token) async {
+    _token = token;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('session_id', token);
+  }
+
+  Future<void> clearToken() async {
+    _token = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('session_id');
+  }
+
   String? get token => _token;
 
   List<ClientInterceptor> get _interceptors =>
@@ -36,6 +52,17 @@ class GrpcService {
       TransactionServiceClient(_channel, interceptors: _interceptors);
   OfferingServiceClient get offeringClient =>
       OfferingServiceClient(_channel, interceptors: _interceptors);
+
+  Future<UserProfile> fetchProfileWithToken(String sessionId) async {
+    // Buat client sementara khusus yang ditempeli token pengecekan ini
+    final temporaryClient = AuthServiceClient(
+      _channel,
+      interceptors: [GrpcAuthInterceptor(sessionId)],
+    );
+
+    // Tembak RPC GetProfile untuk memastikan sesi Redis di backend masih hidup/berlaku
+    return await temporaryClient.getProfile(Empty());
+  }
 
   void close() => _channel.shutdown();
 }

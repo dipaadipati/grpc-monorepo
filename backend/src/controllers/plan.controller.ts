@@ -14,7 +14,7 @@ import {
 import { create } from '@bufbuild/protobuf';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
-import { kUser } from '../auth/auth.interceptor';
+import { extractUserSession, kUser } from '../auth/auth.interceptor';
 import { Prisma } from '../../generated/prisma/client';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 import { sanitizeNull } from '@/utils/prisma-sanitize';
@@ -33,7 +33,7 @@ export class PlanController {
 
     @GrpcMethod('PlanService', 'AddPlan')
     async addPlan(req: AddPlanRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -74,7 +74,7 @@ export class PlanController {
 
     @GrpcMethod('PlanService', 'UpdatePlan')
     async updatePlan(req: UpdatePlanRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -124,7 +124,7 @@ export class PlanController {
 
     @GrpcMethod('PlanService', 'DeletePlan')
     async deletePlan(req: GetPlanRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -146,36 +146,7 @@ export class PlanController {
 
     @GrpcMethod('PlanService', 'GetPlans')
     async getPlans(request: any, context: any) {
-        let user: any;
-        let isConnectRpc = false;
-
-        if (context && context.values && typeof context.values.get === 'function') {
-            isConnectRpc = true;
-            user = context.values.get(kUser);
-        }
-        else {
-            isConnectRpc = false;
-            let metadata: grpc.Metadata | null = null;
-
-            if (request && typeof request.get === 'function') {
-                metadata = request;
-            } else if (context && typeof context.get === 'function') {
-                metadata = context;
-            } else if (request && typeof request.getArgByIndex === 'function') {
-                metadata = request.getArgByIndex(1);
-            }
-
-            if (metadata) {
-                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
-                if (authHeader && authHeader.startsWith('Bearer ')) {
-                    const token = authHeader.replace('Bearer ', '').trim();
-                    const sessionStr = await this.redis.get(`token:${token}`);
-                    if (sessionStr) {
-                        user = JSON.parse(sessionStr);
-                    }
-                }
-            }
-        }
+        const user = await extractUserSession(request, context, this.redis);
 
         if (!user) {
             throw new RpcException({
@@ -185,14 +156,11 @@ export class PlanController {
         }
 
         const cacheKey = this.getCacheKey(user.tenantId);
-
-        if (isConnectRpc) {
-            const cached = await this.redis.get(cacheKey);
-            if (cached) {
-                console.log('⚡ [REDIS] Serving Plans from cache untuk Svelte Web');
-                const plansArray = JSON.parse(cached);
-                return { plans: plansArray };
-            }
+        const cached = await this.redis.get(cacheKey);
+        if (cached) {
+            console.log('⚡ [REDIS] Serving Plans from cache untuk Svelte Web');
+            const plansArray = JSON.parse(cached);
+            return { plans: plansArray };
         }
 
         console.log(`🐢 [DB] Menarik data plans dari PostgreSQL untuk cabang tenant: ${user.tenantId}`);
@@ -218,14 +186,8 @@ export class PlanController {
         const safeDbPlans = serializeBigInt(mappedPlans);
         await this.redis.set(cacheKey, JSON.stringify(safeDbPlans), 'EX', 3600);
 
-        if (isConnectRpc) {
-            console.log('🌐 [GetPlans] Return array format Connect RPC');
-            const connectPlans = mappedPlans.map(p => create(PlanSchema, sanitizeNull(p)));
-            return { plans: connectPlans };
-        } else {
-            console.log('📱 [GetPlans] Return array format Native gRPC Plain Object');
-            return { plans: mappedPlans };
-        }
+        const connectPlans = mappedPlans.map(p => create(PlanSchema, sanitizeNull(p)));
+        return { plans: connectPlans };
     }
 
     @GrpcMethod('PlanService', 'GetPlan')

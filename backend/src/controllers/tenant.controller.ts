@@ -14,7 +14,7 @@ import {
 import { create } from '@bufbuild/protobuf';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
-import { kUser } from '../auth/auth.interceptor';
+import { extractUserSession, kUser } from '../auth/auth.interceptor';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 import { sanitizeNull } from '@/utils/prisma-sanitize';
 import { serializeBigInt } from '@/utils/common';
@@ -30,7 +30,7 @@ export class TenantController {
 
     @GrpcMethod('TenantService', 'AddTenant')
     async addTenant(req: AddTenantRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (process.env.IS_DEMO === 'TRUE') {
             throw new RpcException({
@@ -62,7 +62,7 @@ export class TenantController {
 
     @GrpcMethod('TenantService', 'UpdateTenant')
     async updateTenant(req: UpdateTenantRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (process.env.IS_DEMO === 'TRUE') {
             throw new RpcException({
@@ -95,7 +95,7 @@ export class TenantController {
 
     @GrpcMethod('TenantService', 'DeleteTenant')
     async deleteTenant(req: GetTenantRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (process.env.IS_DEMO === 'TRUE') {
             throw new RpcException({
@@ -128,36 +128,7 @@ export class TenantController {
 
     @GrpcMethod('TenantService', 'GetTenants')
     async getTenants(request: any, context: any) {
-        let user: any;
-        let isConnectRpc = false;
-
-        if (context && context.values && typeof context.values.get === 'function') {
-            isConnectRpc = true;
-            user = context.values.get(kUser);
-        }
-        else {
-            isConnectRpc = false;
-            let metadata: grpc.Metadata | null = null;
-
-            if (request && typeof request.get === 'function') {
-                metadata = request;
-            } else if (context && typeof context.get === 'function') {
-                metadata = context;
-            } else if (request && typeof request.getArgByIndex === 'function') {
-                metadata = request.getArgByIndex(1);
-            }
-
-            if (metadata) {
-                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
-                if (authHeader && authHeader.startsWith('Bearer ')) {
-                    const token = authHeader.replace('Bearer ', '').trim();
-                    const sessionStr = await this.redis.get(`token:${token}`);
-                    if (sessionStr) {
-                        user = JSON.parse(sessionStr);
-                    }
-                }
-            }
-        }
+        const user = await extractUserSession(request, context, this.redis);
 
         if (!user) {
             throw new RpcException({
@@ -175,16 +146,14 @@ export class TenantController {
 
         console.log(`🔒 [GetTenants] Terautentikasi! User ${user.email || user.sub} berhasil masuk.`);
 
-        if (isConnectRpc) {
-            const cached = await this.redis.get(this.CACHE_KEY);
-            if (cached) {
-                console.log('⚡ [REDIS] Serving Tenants from cache untuk Svelte Web');
-                const tenantsArray = JSON.parse(cached);
-                return { tenants: tenantsArray };
-            }
+        const cached = await this.redis.get(this.CACHE_KEY);
+        if (cached) {
+            console.log('⚡ [REDIS] Serving Tenants from cache untuk Svelte Web');
+            const tenantsArray = JSON.parse(cached);
+            return { tenants: tenantsArray };
         }
 
-        console.log(`🐢 [DB] Menarik data tenants dari PostgreSQL untuk jalur: ${isConnectRpc ? 'Svelte Web' : 'Native gRPC Mobile'}`);
+        console.log(`🐢 [DB] Menarik data tenants dari PostgreSQL`);
         const dbTenants = await this.prisma.tenant.findMany({
             orderBy: { createdAt: 'desc' },
         });
@@ -203,14 +172,8 @@ export class TenantController {
         const safeDbTenants = serializeBigInt(formattedTenants);
         await this.redis.set(this.CACHE_KEY, JSON.stringify(safeDbTenants), 'EX', 3600);
 
-        if (isConnectRpc) {
-            console.log('🌐 [GetTenants] Return array format Connect RPC');
-            const connectTenants = formattedTenants.map(t => create(TenantSchema, sanitizeNull(t)));
-            return { tenants: connectTenants };
-        } else {
-            console.log('📱 [GetTenants] Return array format Native gRPC Plain Object');
-            return { tenants: formattedTenants };
-        }
+        const connectTenants = formattedTenants.map(t => create(TenantSchema, sanitizeNull(t)));
+        return { tenants: connectTenants };
     }
 
     @GrpcMethod('TenantService', 'GetTenant')

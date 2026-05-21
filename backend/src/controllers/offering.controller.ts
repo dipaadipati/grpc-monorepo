@@ -13,7 +13,7 @@ import {
     OfferingResponseSchema,
     OfferingSchema,
 } from "@/gen/app_pb";
-import { kUser } from "../auth/auth.interceptor.js";
+import { extractUserSession, kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { OfferingType } from "../../generated/prisma/enums.js";
@@ -29,7 +29,7 @@ export class OfferingController {
     async createOffering(data: AddOfferingRequest, context: any) {
         const { name, price, type, duration, stock, quota } = data;
 
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(data, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -92,36 +92,7 @@ export class OfferingController {
 
     @GrpcMethod('OfferingService', 'GetOfferings')
     async getOfferings(request: any, context: any) { // 🚀 Hapus tanda bintang (*)
-        let user: any;
-        let isConnectRpc = false;
-
-        if (context && context.values && typeof context.values.get === 'function') {
-            isConnectRpc = true;
-            user = context.values.get(kUser);
-        }
-        else {
-            isConnectRpc = false;
-            let metadata: grpc.Metadata | null = null;
-
-            if (request && typeof request.get === 'function') {
-                metadata = request;
-            } else if (context && typeof context.get === 'function') {
-                metadata = context;
-            } else if (request && typeof request.getArgByIndex === 'function') {
-                metadata = request.getArgByIndex(1);
-            }
-
-            if (metadata) {
-                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
-                if (authHeader && authHeader.startsWith('Bearer ')) {
-                    const token = authHeader.replace('Bearer ', '').trim();
-                    const sessionStr = await this.redis.get(`token:${token}`);
-                    if (sessionStr) {
-                        user = JSON.parse(sessionStr);
-                    }
-                }
-            }
-        }
+        const user = await extractUserSession(request, context, this.redis);
 
         if (!user) {
             throw new RpcException({
@@ -132,13 +103,11 @@ export class OfferingController {
 
         const cacheKey = `gym:${user.tenantId}:offerings`;
 
-        if (isConnectRpc) {
-            const cachedData = await this.redis.get(cacheKey);
-            if (cachedData) {
-                console.log("⚡ [REDIS] Mengambil data offerings dari Cache untuk Svelte Web");
-                const offeringsArray = JSON.parse(cachedData);
-                return { offerings: offeringsArray };
-            }
+        const cachedData = await this.redis.get(cacheKey);
+        if (cachedData) {
+            console.log("⚡ [REDIS] Mengambil data offerings dari Cache untuk Svelte Web");
+            const offeringsArray = JSON.parse(cachedData);
+            return { offerings: offeringsArray };
         }
 
         console.log(`🐢 [DB] Cache offerings kosong, menarik dari PostgreSQL untuk cabang: ${user.tenantId}`);
@@ -164,17 +133,13 @@ export class OfferingController {
         const safeDbOfferings = serializeBigInt(formattedOfferings);
         await this.redis.set(cacheKey, JSON.stringify(safeDbOfferings), 'EX', 300);
 
-        if (isConnectRpc) {
-            const connectOfferings = formattedOfferings.map(o => create(OfferingSchema, sanitizeNull(o)));
-            return { offerings: connectOfferings };
-        } else {
-            return { offerings: formattedOfferings };
-        }
+        const connectOfferings = formattedOfferings.map(o => create(OfferingSchema, sanitizeNull(o)));
+        return { offerings: connectOfferings };
     }
 
     @GrpcMethod('OfferingService', 'UpdateOffering')
     async updateOffering(req: UpdateOfferingRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -236,7 +201,7 @@ export class OfferingController {
 
     @GrpcMethod('OfferingService', 'DeleteOffering')
     async deleteOffering(req: GetOfferingRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user.tenantIsActive) {
             throw new RpcException({
@@ -268,7 +233,7 @@ export class OfferingController {
 
     @GrpcMethod('OfferingService', 'GetOffering')
     async getOffering(req: GetOfferingRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         if (user.tenantId !== user.tenantId || (user.role !== 'OWNER' && user.role !== 'ADMIN_STAFF' && user.role !== 'SUPER_ADMIN')) {
             throw new RpcException({

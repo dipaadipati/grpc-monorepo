@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MembershipService } from '../services/membership.service';
 import Redis from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
-import { kUser } from '../auth/auth.interceptor';
+import { extractUserSession, kUser } from '../auth/auth.interceptor';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
 import { sanitizeNull } from '@/utils/prisma-sanitize';
 
@@ -26,7 +26,7 @@ export class TransactionController {
 
     @GrpcMethod('TransactionService', 'CreateTransaction')
     async createTransaction(req: CreateTransactionRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         const generateOrderId = (isPlan: boolean) => {
             const now = new Date();
@@ -157,27 +157,7 @@ export class TransactionController {
 
     @GrpcMethod('TransactionService', 'GetTransactions')
     async getTransactions(req: any, context: any) {
-        let user: any;
-        let isConnectRpc = false;
-
-        if (context && context.values && typeof context.values.get === 'function') {
-            isConnectRpc = true;
-            user = context.values.get(kUser);
-        } else {
-            isConnectRpc = false;
-            let metadata: grpc.Metadata | null = context;
-
-            if (metadata && typeof metadata.get === 'function') {
-                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
-                if (authHeader && authHeader.startsWith('Bearer ')) {
-                    const token = authHeader.replace('Bearer ', '').trim();
-                    const sessionStr = await this.redis.get(`token:${token}`);
-                    if (sessionStr) {
-                        user = JSON.parse(sessionStr);
-                    }
-                }
-            }
-        }
+        const user = await extractUserSession(req, context, this.redis);
 
         if (!user) {
             throw new RpcException({
@@ -232,17 +212,13 @@ export class TransactionController {
             };
         });
 
-        if (isConnectRpc) {
-            const connectTransactions = formattedTransactions.map(trx => create(TransactionSchema, sanitizeNull(trx)));
-            return { transactions: connectTransactions };
-        } else {
-            return { transactions: formattedTransactions };
-        }
+        const connectTransactions = formattedTransactions.map(trx => create(TransactionSchema, sanitizeNull(trx)));
+        return { transactions: connectTransactions };
     }
 
     @GrpcMethod('TransactionService', 'GetFinanceSummary')
     async getFinanceSummary(req: GetTransactionsRequest, context: any) {
-        const user = context.values.get(kUser);
+        const user = await extractUserSession(req, context, this.redis);
 
         const tenantId = user?.tenantId;
         if (!tenantId) {

@@ -1,16 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/dashboard_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'grpc_service.dart';
-import 'services/transaction_service.dart';
+import 'pages/main_navigation_holder.dart';
 import 'gen/app.pbgrpc.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  GrpcService().init();
-  runApp(const MyApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final String? savedSessionId = prefs.getString('session_id');
+
+  bool isSessionValid = false;
+  UserProfile? userProfile;
+
+  if (savedSessionId != null && savedSessionId.isNotEmpty) {
+    try {
+      userProfile = await GrpcService().fetchProfileWithToken(savedSessionId);
+
+      isSessionValid = true;
+
+      GrpcService().setSessionIdToMetadata(savedSessionId);
+    } catch (e) {
+      debugPrint('Sesi expired atau Redis telah dihapus: $e');
+      await prefs.remove('session_id'); // bersihkan token usang
+    }
+  }
+
+  // 3. Jalankan aplikasi dengan rute dinamis adaptif
+  runApp(
+    MyApp(
+      initialScreen: isSessionValid && userProfile != null
+          ? DashboardPage(profile: userProfile) // Langsung masuk tanpa login!
+          : const GymLoginPage(), // Sesi kosong/habis, wajib login dulu
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Widget initialScreen;
+  const MyApp({super.key, required this.initialScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +49,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
         useMaterial3: true,
       ),
-      home: const GymLoginPage(),
+      home: initialScreen,
     );
   }
 }
@@ -47,14 +76,16 @@ class _GymLoginPageState extends State<GymLoginPage> {
 
       final res = await grpc.authClient.login(req);
 
-      grpc.setToken(res.token);
+      await grpc.setToken(res.token);
 
       final profile = await grpc.authClient.getProfile(Empty());
 
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => AdminDashboardPage(profile: profile)),
+        MaterialPageRoute(
+          builder: (_) => MainNavigationHolder(profile: profile),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(
@@ -117,121 +148,6 @@ class _GymLoginPageState extends State<GymLoginPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// 👑 HALAMAN UTAMA DASHBOARD SETELAH AUTHENTICATED
-class AdminDashboardPage extends StatelessWidget {
-  final UserProfile profile;
-  const AdminDashboardPage({super.key, required this.profile});
-
-  @override
-  Widget build(BuildContext context) {
-    final txService = TransactionDataService();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(profile.tenantName),
-        backgroundColor: Colors.purple[50],
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.power_settings_new, color: Colors.red),
-            onPressed: () {
-              GrpcService().clearToken();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const GymLoginPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: FutureBuilder<FinanceSummary>(
-        future: txService.fetchFinanceSummary(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Error data keuangan: ${snapshot.error}'),
-            );
-          }
-
-          final summary = snapshot.data!;
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Welcome, ${profile.name}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Card(
-                  color: Color(0xFFECFDF5),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        const Text(
-                          'TOTAL REVENUE CABANG',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFECFDF5),
-                          ),
-                        ),
-                        Text(
-                          'Rp ${summary.totalRevenue}',
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFFECFDF5),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            'Member Aktif\n${summary.totalMembers}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            'Transaksi\n${summary.totalTransactions}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
       ),
     );
   }

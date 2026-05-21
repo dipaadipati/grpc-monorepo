@@ -13,4 +13,10 @@ class OfferingDataService {
       rethrow;
     }
   }
+
+  Future<void> deleteOffering(int offeringId) async {
+    final request = GetOfferingRequest()..offeringId = offeringId;
+
+    await _grpc.offeringClient.deleteOffering(request);
+  }
 }

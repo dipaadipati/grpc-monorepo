@@ -29,4 +29,10 @@ class PlanDataService {
 
     await _grpc.planClient.addPlan(request);
   }
+
+  Future<void> deletePlan(int planId) async {
+    final request = GetPlanRequest()..planId = planId;
+
+    await _grpc.planClient.deletePlan(request);
+  }
 }
