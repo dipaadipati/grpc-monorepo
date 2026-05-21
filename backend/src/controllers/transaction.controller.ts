@@ -260,7 +260,7 @@ export class TransactionController {
             return JSON.parse(cachedData);
         }
 
-        const [totalMember, summary, totalTransactions, activeMemberships] = await Promise.all([
+        const [totalMembers, summary, totalTransactions, activeMemberships] = await Promise.all([
             this.prisma.user.count({
                 where: {
                     tenantId: Number(tenantId),
@@ -289,7 +289,7 @@ export class TransactionController {
         ]);
 
         const result = {
-            totalMember: totalMember,
+            totalMembers,
             totalRevenue: summary._sum.amount?.toString() || "0",
             totalTransactions: totalTransactions,
             activeMemberships: activeMemberships
