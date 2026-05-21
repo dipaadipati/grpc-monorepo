@@ -269,20 +269,20 @@ export class TransactionController {
             }),
             this.prisma.transaction.aggregate({
                 where: {
-                    user: { tenantId: tenantId },
+                    user: { tenantId: Number(tenantId) },
                     status: 'SETTLEMENT',
                 },
                 _sum: { amount: true }
             }),
             this.prisma.transaction.count({
                 where: {
-                    user: { tenantId: tenantId },
+                    user: { tenantId: Number(tenantId) },
                     status: 'SETTLEMENT',
                 }
             }),
             this.prisma.membership.count({
                 where: {
-                    user: { tenantId: tenantId },
+                    user: { tenantId: Number(tenantId) },
                     status: 'ACTIVE',
                 }
             })

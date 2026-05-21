@@ -678,6 +678,55 @@ class GetMemberProfileRequest extends $pb.GeneratedMessage {
   void clearMemberId() => $_clearField(1);
 }
 
+class GetMembersResponse extends $pb.GeneratedMessage {
+  factory GetMembersResponse({
+    $core.Iterable<UserProfile>? members,
+  }) {
+    final result = create();
+    if (members != null) result.members.addAll(members);
+    return result;
+  }
+
+  GetMembersResponse._();
+
+  factory GetMembersResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetMembersResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetMembersResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'app'),
+      createEmptyInstance: create)
+    ..pPM<UserProfile>(1, _omitFieldNames ? '' : 'members',
+        subBuilder: UserProfile.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetMembersResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetMembersResponse copyWith(void Function(GetMembersResponse) updates) =>
+      super.copyWith((message) => updates(message as GetMembersResponse))
+          as GetMembersResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetMembersResponse create() => GetMembersResponse._();
+  @$core.override
+  GetMembersResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static GetMembersResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetMembersResponse>(create);
+  static GetMembersResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<UserProfile> get members => $_getList(0);
+}
+
 class MembershipStatus extends $pb.GeneratedMessage {
   factory MembershipStatus({
     $core.bool? isActive,
@@ -1042,6 +1091,55 @@ class GetTenantRequest extends $pb.GeneratedMessage {
   $core.bool hasTenantId() => $_has(0);
   @$pb.TagNumber(1)
   void clearTenantId() => $_clearField(1);
+}
+
+class GetTenantsResponse extends $pb.GeneratedMessage {
+  factory GetTenantsResponse({
+    $core.Iterable<Tenant>? tenants,
+  }) {
+    final result = create();
+    if (tenants != null) result.tenants.addAll(tenants);
+    return result;
+  }
+
+  GetTenantsResponse._();
+
+  factory GetTenantsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetTenantsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetTenantsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'app'),
+      createEmptyInstance: create)
+    ..pPM<Tenant>(1, _omitFieldNames ? '' : 'tenants',
+        subBuilder: Tenant.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTenantsResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTenantsResponse copyWith(void Function(GetTenantsResponse) updates) =>
+      super.copyWith((message) => updates(message as GetTenantsResponse))
+          as GetTenantsResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTenantsResponse create() => GetTenantsResponse._();
+  @$core.override
+  GetTenantsResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static GetTenantsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetTenantsResponse>(create);
+  static GetTenantsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Tenant> get tenants => $_getList(0);
 }
 
 class Tenant extends $pb.GeneratedMessage {
@@ -1448,6 +1546,54 @@ class GetPlanRequest extends $pb.GeneratedMessage {
   void clearPlanId() => $_clearField(1);
 }
 
+class GetPlansResponse extends $pb.GeneratedMessage {
+  factory GetPlansResponse({
+    $core.Iterable<Plan>? plans,
+  }) {
+    final result = create();
+    if (plans != null) result.plans.addAll(plans);
+    return result;
+  }
+
+  GetPlansResponse._();
+
+  factory GetPlansResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetPlansResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetPlansResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'app'),
+      createEmptyInstance: create)
+    ..pPM<Plan>(1, _omitFieldNames ? '' : 'plans', subBuilder: Plan.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetPlansResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetPlansResponse copyWith(void Function(GetPlansResponse) updates) =>
+      super.copyWith((message) => updates(message as GetPlansResponse))
+          as GetPlansResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetPlansResponse create() => GetPlansResponse._();
+  @$core.override
+  GetPlansResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static GetPlansResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetPlansResponse>(create);
+  static GetPlansResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Plan> get plans => $_getList(0);
+}
+
 class Plan extends $pb.GeneratedMessage {
   factory Plan({
     $core.int? id,
@@ -1816,12 +1962,10 @@ class CreateTransactionRequest extends $pb.GeneratedMessage {
 
 class GetTransactionsRequest extends $pb.GeneratedMessage {
   factory GetTransactionsRequest({
-    $core.int? tenantId,
     $core.String? startDate,
     $core.String? endDate,
   }) {
     final result = create();
-    if (tenantId != null) result.tenantId = tenantId;
     if (startDate != null) result.startDate = startDate;
     if (endDate != null) result.endDate = endDate;
     return result;
@@ -1840,9 +1984,8 @@ class GetTransactionsRequest extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'GetTransactionsRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'app'),
       createEmptyInstance: create)
-    ..aI(1, _omitFieldNames ? '' : 'tenantId', protoName: 'tenantId')
-    ..aOS(2, _omitFieldNames ? '' : 'startDate', protoName: 'startDate')
-    ..aOS(3, _omitFieldNames ? '' : 'endDate', protoName: 'endDate')
+    ..aOS(1, _omitFieldNames ? '' : 'startDate', protoName: 'startDate')
+    ..aOS(2, _omitFieldNames ? '' : 'endDate', protoName: 'endDate')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1866,31 +2009,22 @@ class GetTransactionsRequest extends $pb.GeneratedMessage {
   static GetTransactionsRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get tenantId => $_getIZ(0);
+  $core.String get startDate => $_getSZ(0);
   @$pb.TagNumber(1)
-  set tenantId($core.int value) => $_setSignedInt32(0, value);
+  set startDate($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasTenantId() => $_has(0);
+  $core.bool hasStartDate() => $_has(0);
   @$pb.TagNumber(1)
-  void clearTenantId() => $_clearField(1);
+  void clearStartDate() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get startDate => $_getSZ(1);
+  $core.String get endDate => $_getSZ(1);
   @$pb.TagNumber(2)
-  set startDate($core.String value) => $_setString(1, value);
+  set endDate($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasStartDate() => $_has(1);
+  $core.bool hasEndDate() => $_has(1);
   @$pb.TagNumber(2)
-  void clearStartDate() => $_clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get endDate => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set endDate($core.String value) => $_setString(2, value);
-  @$pb.TagNumber(3)
-  $core.bool hasEndDate() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearEndDate() => $_clearField(3);
+  void clearEndDate() => $_clearField(2);
 }
 
 class GetTransactionRequest extends $pb.GeneratedMessage {
@@ -1948,13 +2082,65 @@ class GetTransactionRequest extends $pb.GeneratedMessage {
   void clearTransactionId() => $_clearField(1);
 }
 
+class GetTransactionsResponse extends $pb.GeneratedMessage {
+  factory GetTransactionsResponse({
+    $core.Iterable<Transaction>? transactions,
+  }) {
+    final result = create();
+    if (transactions != null) result.transactions.addAll(transactions);
+    return result;
+  }
+
+  GetTransactionsResponse._();
+
+  factory GetTransactionsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetTransactionsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetTransactionsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'app'),
+      createEmptyInstance: create)
+    ..pPM<Transaction>(1, _omitFieldNames ? '' : 'transactions',
+        subBuilder: Transaction.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTransactionsResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTransactionsResponse copyWith(
+          void Function(GetTransactionsResponse) updates) =>
+      super.copyWith((message) => updates(message as GetTransactionsResponse))
+          as GetTransactionsResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTransactionsResponse create() => GetTransactionsResponse._();
+  @$core.override
+  GetTransactionsResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static GetTransactionsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetTransactionsResponse>(create);
+  static GetTransactionsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Transaction> get transactions => $_getList(0);
+}
+
 class FinanceSummary extends $pb.GeneratedMessage {
   factory FinanceSummary({
+    $core.int? totalMembers,
     $fixnum.Int64? totalRevenue,
     $core.int? totalTransactions,
     $core.int? activeMemberships,
   }) {
     final result = create();
+    if (totalMembers != null) result.totalMembers = totalMembers;
     if (totalRevenue != null) result.totalRevenue = totalRevenue;
     if (totalTransactions != null) result.totalTransactions = totalTransactions;
     if (activeMemberships != null) result.activeMemberships = activeMemberships;
@@ -1974,11 +2160,12 @@ class FinanceSummary extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'FinanceSummary',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'app'),
       createEmptyInstance: create)
-    ..aInt64(1, _omitFieldNames ? '' : 'totalRevenue',
+    ..aI(1, _omitFieldNames ? '' : 'totalMembers', protoName: 'totalMembers')
+    ..aInt64(2, _omitFieldNames ? '' : 'totalRevenue',
         protoName: 'totalRevenue')
-    ..aI(2, _omitFieldNames ? '' : 'totalTransactions',
+    ..aI(3, _omitFieldNames ? '' : 'totalTransactions',
         protoName: 'totalTransactions')
-    ..aI(3, _omitFieldNames ? '' : 'activeMemberships',
+    ..aI(4, _omitFieldNames ? '' : 'activeMemberships',
         protoName: 'activeMemberships')
     ..hasRequiredFields = false;
 
@@ -2002,31 +2189,40 @@ class FinanceSummary extends $pb.GeneratedMessage {
   static FinanceSummary? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $fixnum.Int64 get totalRevenue => $_getI64(0);
+  $core.int get totalMembers => $_getIZ(0);
   @$pb.TagNumber(1)
-  set totalRevenue($fixnum.Int64 value) => $_setInt64(0, value);
+  set totalMembers($core.int value) => $_setSignedInt32(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasTotalRevenue() => $_has(0);
+  $core.bool hasTotalMembers() => $_has(0);
   @$pb.TagNumber(1)
-  void clearTotalRevenue() => $_clearField(1);
+  void clearTotalMembers() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.int get totalTransactions => $_getIZ(1);
+  $fixnum.Int64 get totalRevenue => $_getI64(1);
   @$pb.TagNumber(2)
-  set totalTransactions($core.int value) => $_setSignedInt32(1, value);
+  set totalRevenue($fixnum.Int64 value) => $_setInt64(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasTotalTransactions() => $_has(1);
+  $core.bool hasTotalRevenue() => $_has(1);
   @$pb.TagNumber(2)
-  void clearTotalTransactions() => $_clearField(2);
+  void clearTotalRevenue() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.int get activeMemberships => $_getIZ(2);
+  $core.int get totalTransactions => $_getIZ(2);
   @$pb.TagNumber(3)
-  set activeMemberships($core.int value) => $_setSignedInt32(2, value);
+  set totalTransactions($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasActiveMemberships() => $_has(2);
+  $core.bool hasTotalTransactions() => $_has(2);
   @$pb.TagNumber(3)
-  void clearActiveMemberships() => $_clearField(3);
+  void clearTotalTransactions() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get activeMemberships => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set activeMemberships($core.int value) => $_setSignedInt32(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasActiveMemberships() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearActiveMemberships() => $_clearField(4);
 }
 
 class Transaction extends $pb.GeneratedMessage {
@@ -2577,6 +2773,55 @@ class GetOfferingRequest extends $pb.GeneratedMessage {
   $core.bool hasOfferingId() => $_has(0);
   @$pb.TagNumber(1)
   void clearOfferingId() => $_clearField(1);
+}
+
+class GetOfferingsResponse extends $pb.GeneratedMessage {
+  factory GetOfferingsResponse({
+    $core.Iterable<Offering>? offerings,
+  }) {
+    final result = create();
+    if (offerings != null) result.offerings.addAll(offerings);
+    return result;
+  }
+
+  GetOfferingsResponse._();
+
+  factory GetOfferingsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetOfferingsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetOfferingsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'app'),
+      createEmptyInstance: create)
+    ..pPM<Offering>(1, _omitFieldNames ? '' : 'offerings',
+        subBuilder: Offering.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetOfferingsResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetOfferingsResponse copyWith(void Function(GetOfferingsResponse) updates) =>
+      super.copyWith((message) => updates(message as GetOfferingsResponse))
+          as GetOfferingsResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetOfferingsResponse create() => GetOfferingsResponse._();
+  @$core.override
+  GetOfferingsResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static GetOfferingsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetOfferingsResponse>(create);
+  static GetOfferingsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Offering> get offerings => $_getList(0);
 }
 
 class Offering extends $pb.GeneratedMessage {

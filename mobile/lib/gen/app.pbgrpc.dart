@@ -155,13 +155,11 @@ class MemberServiceClient extends $grpc.Client {
     return $createUnaryCall(_$deleteMember, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.UserProfile> getMembers(
+  $grpc.ResponseFuture<$0.GetMembersResponse> getMembers(
     $0.Empty request, {
     $grpc.CallOptions? options,
   }) {
-    return $createStreamingCall(
-        _$getMembers, $async.Stream.fromIterable([request]),
-        options: options);
+    return $createUnaryCall(_$getMembers, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.UserProfile> getMemberProfile(
@@ -188,10 +186,11 @@ class MemberServiceClient extends $grpc.Client {
           '/app.MemberService/DeleteMember',
           ($0.GetMemberProfileRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
-  static final _$getMembers = $grpc.ClientMethod<$0.Empty, $0.UserProfile>(
-      '/app.MemberService/GetMembers',
-      ($0.Empty value) => value.writeToBuffer(),
-      $0.UserProfile.fromBuffer);
+  static final _$getMembers =
+      $grpc.ClientMethod<$0.Empty, $0.GetMembersResponse>(
+          '/app.MemberService/GetMembers',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.GetMembersResponse.fromBuffer);
   static final _$getMemberProfile =
       $grpc.ClientMethod<$0.GetMemberProfileRequest, $0.UserProfile>(
           '/app.MemberService/GetMemberProfile',
@@ -228,13 +227,13 @@ abstract class MemberServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.GetMemberProfileRequest.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.Empty, $0.UserProfile>(
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.GetMembersResponse>(
         'GetMembers',
         getMembers_Pre,
         false,
-        true,
+        false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
-        ($0.UserProfile value) => value.writeToBuffer()));
+        ($0.GetMembersResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetMemberProfileRequest, $0.UserProfile>(
         'GetMemberProfile',
         getMemberProfile_Pre,
@@ -269,12 +268,12 @@ abstract class MemberServiceBase extends $grpc.Service {
   $async.Future<$0.Empty> deleteMember(
       $grpc.ServiceCall call, $0.GetMemberProfileRequest request);
 
-  $async.Stream<$0.UserProfile> getMembers_Pre(
-      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async* {
-    yield* getMembers($call, await $request);
+  $async.Future<$0.GetMembersResponse> getMembers_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getMembers($call, await $request);
   }
 
-  $async.Stream<$0.UserProfile> getMembers(
+  $async.Future<$0.GetMembersResponse> getMembers(
       $grpc.ServiceCall call, $0.Empty request);
 
   $async.Future<$0.UserProfile> getMemberProfile_Pre($grpc.ServiceCall $call,
@@ -319,13 +318,11 @@ class TenantServiceClient extends $grpc.Client {
     return $createUnaryCall(_$deleteTenant, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.Tenant> getTenants(
+  $grpc.ResponseFuture<$0.GetTenantsResponse> getTenants(
     $0.Empty request, {
     $grpc.CallOptions? options,
   }) {
-    return $createStreamingCall(
-        _$getTenants, $async.Stream.fromIterable([request]),
-        options: options);
+    return $createUnaryCall(_$getTenants, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Tenant> getTenant(
@@ -352,10 +349,11 @@ class TenantServiceClient extends $grpc.Client {
           '/app.TenantService/DeleteTenant',
           ($0.GetTenantRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
-  static final _$getTenants = $grpc.ClientMethod<$0.Empty, $0.Tenant>(
-      '/app.TenantService/GetTenants',
-      ($0.Empty value) => value.writeToBuffer(),
-      $0.Tenant.fromBuffer);
+  static final _$getTenants =
+      $grpc.ClientMethod<$0.Empty, $0.GetTenantsResponse>(
+          '/app.TenantService/GetTenants',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.GetTenantsResponse.fromBuffer);
   static final _$getTenant = $grpc.ClientMethod<$0.GetTenantRequest, $0.Tenant>(
       '/app.TenantService/GetTenant',
       ($0.GetTenantRequest value) => value.writeToBuffer(),
@@ -389,13 +387,13 @@ abstract class TenantServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetTenantRequest.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Tenant>(
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.GetTenantsResponse>(
         'GetTenants',
         getTenants_Pre,
         false,
-        true,
+        false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
-        ($0.Tenant value) => value.writeToBuffer()));
+        ($0.GetTenantsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetTenantRequest, $0.Tenant>(
         'GetTenant',
         getTenant_Pre,
@@ -429,12 +427,13 @@ abstract class TenantServiceBase extends $grpc.Service {
   $async.Future<$0.Empty> deleteTenant(
       $grpc.ServiceCall call, $0.GetTenantRequest request);
 
-  $async.Stream<$0.Tenant> getTenants_Pre(
-      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async* {
-    yield* getTenants($call, await $request);
+  $async.Future<$0.GetTenantsResponse> getTenants_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getTenants($call, await $request);
   }
 
-  $async.Stream<$0.Tenant> getTenants($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.GetTenantsResponse> getTenants(
+      $grpc.ServiceCall call, $0.Empty request);
 
   $async.Future<$0.Tenant> getTenant_Pre($grpc.ServiceCall $call,
       $async.Future<$0.GetTenantRequest> $request) async {
@@ -478,13 +477,11 @@ class PlanServiceClient extends $grpc.Client {
     return $createUnaryCall(_$deletePlan, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.Plan> getPlans(
+  $grpc.ResponseFuture<$0.GetPlansResponse> getPlans(
     $0.Empty request, {
     $grpc.CallOptions? options,
   }) {
-    return $createStreamingCall(
-        _$getPlans, $async.Stream.fromIterable([request]),
-        options: options);
+    return $createUnaryCall(_$getPlans, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Plan> getPlan(
@@ -510,10 +507,10 @@ class PlanServiceClient extends $grpc.Client {
       '/app.PlanService/DeletePlan',
       ($0.GetPlanRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
-  static final _$getPlans = $grpc.ClientMethod<$0.Empty, $0.Plan>(
+  static final _$getPlans = $grpc.ClientMethod<$0.Empty, $0.GetPlansResponse>(
       '/app.PlanService/GetPlans',
       ($0.Empty value) => value.writeToBuffer(),
-      $0.Plan.fromBuffer);
+      $0.GetPlansResponse.fromBuffer);
   static final _$getPlan = $grpc.ClientMethod<$0.GetPlanRequest, $0.Plan>(
       '/app.PlanService/GetPlan',
       ($0.GetPlanRequest value) => value.writeToBuffer(),
@@ -546,13 +543,13 @@ abstract class PlanServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.GetPlanRequest.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Plan>(
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.GetPlansResponse>(
         'GetPlans',
         getPlans_Pre,
         false,
-        true,
+        false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
-        ($0.Plan value) => value.writeToBuffer()));
+        ($0.GetPlansResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetPlanRequest, $0.Plan>(
         'GetPlan',
         getPlan_Pre,
@@ -586,12 +583,13 @@ abstract class PlanServiceBase extends $grpc.Service {
   $async.Future<$0.Empty> deletePlan(
       $grpc.ServiceCall call, $0.GetPlanRequest request);
 
-  $async.Stream<$0.Plan> getPlans_Pre(
-      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async* {
-    yield* getPlans($call, await $request);
+  $async.Future<$0.GetPlansResponse> getPlans_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getPlans($call, await $request);
   }
 
-  $async.Stream<$0.Plan> getPlans($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.GetPlansResponse> getPlans(
+      $grpc.ServiceCall call, $0.Empty request);
 
   $async.Future<$0.Plan> getPlan_Pre($grpc.ServiceCall $call,
       $async.Future<$0.GetPlanRequest> $request) async {
@@ -621,13 +619,11 @@ class TransactionServiceClient extends $grpc.Client {
     return $createUnaryCall(_$createTransaction, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.Transaction> getTransactions(
+  $grpc.ResponseFuture<$0.GetTransactionsResponse> getTransactions(
     $0.GetTransactionsRequest request, {
     $grpc.CallOptions? options,
   }) {
-    return $createStreamingCall(
-        _$getTransactions, $async.Stream.fromIterable([request]),
-        options: options);
+    return $createUnaryCall(_$getTransactions, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Transaction> checkTransactionStatus(
@@ -638,13 +634,11 @@ class TransactionServiceClient extends $grpc.Client {
         options: options);
   }
 
-  $grpc.ResponseStream<$0.Transaction> getMemberTransactions(
+  $grpc.ResponseFuture<$0.GetTransactionsResponse> getMemberTransactions(
     $0.GetMemberProfileRequest request, {
     $grpc.CallOptions? options,
   }) {
-    return $createStreamingCall(
-        _$getMemberTransactions, $async.Stream.fromIterable([request]),
-        options: options);
+    return $createUnaryCall(_$getMemberTransactions, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.FinanceSummary> getFinanceSummary(
@@ -662,20 +656,20 @@ class TransactionServiceClient extends $grpc.Client {
           ($0.CreateTransactionRequest value) => value.writeToBuffer(),
           $0.Transaction.fromBuffer);
   static final _$getTransactions =
-      $grpc.ClientMethod<$0.GetTransactionsRequest, $0.Transaction>(
+      $grpc.ClientMethod<$0.GetTransactionsRequest, $0.GetTransactionsResponse>(
           '/app.TransactionService/GetTransactions',
           ($0.GetTransactionsRequest value) => value.writeToBuffer(),
-          $0.Transaction.fromBuffer);
+          $0.GetTransactionsResponse.fromBuffer);
   static final _$checkTransactionStatus =
       $grpc.ClientMethod<$0.GetTransactionRequest, $0.Transaction>(
           '/app.TransactionService/CheckTransactionStatus',
           ($0.GetTransactionRequest value) => value.writeToBuffer(),
           $0.Transaction.fromBuffer);
-  static final _$getMemberTransactions =
-      $grpc.ClientMethod<$0.GetMemberProfileRequest, $0.Transaction>(
-          '/app.TransactionService/GetMemberTransactions',
-          ($0.GetMemberProfileRequest value) => value.writeToBuffer(),
-          $0.Transaction.fromBuffer);
+  static final _$getMemberTransactions = $grpc.ClientMethod<
+          $0.GetMemberProfileRequest, $0.GetTransactionsResponse>(
+      '/app.TransactionService/GetMemberTransactions',
+      ($0.GetMemberProfileRequest value) => value.writeToBuffer(),
+      $0.GetTransactionsResponse.fromBuffer);
   static final _$getFinanceSummary =
       $grpc.ClientMethod<$0.GetTransactionsRequest, $0.FinanceSummary>(
           '/app.TransactionService/GetFinanceSummary',
@@ -696,14 +690,15 @@ abstract class TransactionServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.CreateTransactionRequest.fromBuffer(value),
         ($0.Transaction value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.GetTransactionsRequest, $0.Transaction>(
+    $addMethod($grpc.ServiceMethod<$0.GetTransactionsRequest,
+            $0.GetTransactionsResponse>(
         'GetTransactions',
         getTransactions_Pre,
         false,
-        true,
+        false,
         ($core.List<$core.int> value) =>
             $0.GetTransactionsRequest.fromBuffer(value),
-        ($0.Transaction value) => value.writeToBuffer()));
+        ($0.GetTransactionsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetTransactionRequest, $0.Transaction>(
         'CheckTransactionStatus',
         checkTransactionStatus_Pre,
@@ -712,14 +707,15 @@ abstract class TransactionServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.GetTransactionRequest.fromBuffer(value),
         ($0.Transaction value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.GetMemberProfileRequest, $0.Transaction>(
+    $addMethod($grpc.ServiceMethod<$0.GetMemberProfileRequest,
+            $0.GetTransactionsResponse>(
         'GetMemberTransactions',
         getMemberTransactions_Pre,
         false,
-        true,
+        false,
         ($core.List<$core.int> value) =>
             $0.GetMemberProfileRequest.fromBuffer(value),
-        ($0.Transaction value) => value.writeToBuffer()));
+        ($0.GetTransactionsResponse value) => value.writeToBuffer()));
     $addMethod(
         $grpc.ServiceMethod<$0.GetTransactionsRequest, $0.FinanceSummary>(
             'GetFinanceSummary',
@@ -739,12 +735,13 @@ abstract class TransactionServiceBase extends $grpc.Service {
   $async.Future<$0.Transaction> createTransaction(
       $grpc.ServiceCall call, $0.CreateTransactionRequest request);
 
-  $async.Stream<$0.Transaction> getTransactions_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.GetTransactionsRequest> $request) async* {
-    yield* getTransactions($call, await $request);
+  $async.Future<$0.GetTransactionsResponse> getTransactions_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.GetTransactionsRequest> $request) async {
+    return getTransactions($call, await $request);
   }
 
-  $async.Stream<$0.Transaction> getTransactions(
+  $async.Future<$0.GetTransactionsResponse> getTransactions(
       $grpc.ServiceCall call, $0.GetTransactionsRequest request);
 
   $async.Future<$0.Transaction> checkTransactionStatus_Pre(
@@ -756,13 +753,13 @@ abstract class TransactionServiceBase extends $grpc.Service {
   $async.Future<$0.Transaction> checkTransactionStatus(
       $grpc.ServiceCall call, $0.GetTransactionRequest request);
 
-  $async.Stream<$0.Transaction> getMemberTransactions_Pre(
+  $async.Future<$0.GetTransactionsResponse> getMemberTransactions_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.GetMemberProfileRequest> $request) async* {
-    yield* getMemberTransactions($call, await $request);
+      $async.Future<$0.GetMemberProfileRequest> $request) async {
+    return getMemberTransactions($call, await $request);
   }
 
-  $async.Stream<$0.Transaction> getMemberTransactions(
+  $async.Future<$0.GetTransactionsResponse> getMemberTransactions(
       $grpc.ServiceCall call, $0.GetMemberProfileRequest request);
 
   $async.Future<$0.FinanceSummary> getFinanceSummary_Pre(
@@ -808,13 +805,11 @@ class OfferingServiceClient extends $grpc.Client {
     return $createUnaryCall(_$deleteOffering, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.Offering> getOfferings(
+  $grpc.ResponseFuture<$0.GetOfferingsResponse> getOfferings(
     $0.Empty request, {
     $grpc.CallOptions? options,
   }) {
-    return $createStreamingCall(
-        _$getOfferings, $async.Stream.fromIterable([request]),
-        options: options);
+    return $createUnaryCall(_$getOfferings, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Offering> getOffering(
@@ -841,10 +836,11 @@ class OfferingServiceClient extends $grpc.Client {
           '/app.OfferingService/DeleteOffering',
           ($0.GetOfferingRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
-  static final _$getOfferings = $grpc.ClientMethod<$0.Empty, $0.Offering>(
-      '/app.OfferingService/GetOfferings',
-      ($0.Empty value) => value.writeToBuffer(),
-      $0.Offering.fromBuffer);
+  static final _$getOfferings =
+      $grpc.ClientMethod<$0.Empty, $0.GetOfferingsResponse>(
+          '/app.OfferingService/GetOfferings',
+          ($0.Empty value) => value.writeToBuffer(),
+          $0.GetOfferingsResponse.fromBuffer);
   static final _$getOffering =
       $grpc.ClientMethod<$0.GetOfferingRequest, $0.Offering>(
           '/app.OfferingService/GetOffering',
@@ -882,13 +878,13 @@ abstract class OfferingServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.GetOfferingRequest.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Offering>(
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.GetOfferingsResponse>(
         'GetOfferings',
         getOfferings_Pre,
         false,
-        true,
+        false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
-        ($0.Offering value) => value.writeToBuffer()));
+        ($0.GetOfferingsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetOfferingRequest, $0.Offering>(
         'GetOffering',
         getOffering_Pre,
@@ -923,12 +919,12 @@ abstract class OfferingServiceBase extends $grpc.Service {
   $async.Future<$0.Empty> deleteOffering(
       $grpc.ServiceCall call, $0.GetOfferingRequest request);
 
-  $async.Stream<$0.Offering> getOfferings_Pre(
-      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async* {
-    yield* getOfferings($call, await $request);
+  $async.Future<$0.GetOfferingsResponse> getOfferings_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getOfferings($call, await $request);
   }
 
-  $async.Stream<$0.Offering> getOfferings(
+  $async.Future<$0.GetOfferingsResponse> getOfferings(
       $grpc.ServiceCall call, $0.Empty request);
 
   $async.Future<$0.Offering> getOffering_Pre($grpc.ServiceCall $call,

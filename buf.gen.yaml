@@ -17,3 +17,8 @@ plugins:
     out: frontend/src/gen
     opt:
       - target=ts
+
+  - local: protoc-gen-dart
+    out: mobile/lib/gen
+    opt:
+      - grpc

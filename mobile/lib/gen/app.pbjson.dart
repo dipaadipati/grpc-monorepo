@@ -165,6 +165,26 @@ final $typed_data.Uint8List getMemberProfileRequestDescriptor =
     $convert.base64Decode(
         'ChdHZXRNZW1iZXJQcm9maWxlUmVxdWVzdBIaCghtZW1iZXJJZBgBIAEoBVIIbWVtYmVySWQ=');
 
+@$core.Deprecated('Use getMembersResponseDescriptor instead')
+const GetMembersResponse$json = {
+  '1': 'GetMembersResponse',
+  '2': [
+    {
+      '1': 'members',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.app.UserProfile',
+      '10': 'members'
+    },
+  ],
+};
+
+/// Descriptor for `GetMembersResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getMembersResponseDescriptor = $convert.base64Decode(
+    'ChJHZXRNZW1iZXJzUmVzcG9uc2USKgoHbWVtYmVycxgBIAMoCzIQLmFwcC5Vc2VyUHJvZmlsZV'
+    'IHbWVtYmVycw==');
+
 @$core.Deprecated('Use membershipStatusDescriptor instead')
 const MembershipStatus$json = {
   '1': 'MembershipStatus',
@@ -237,6 +257,26 @@ const GetTenantRequest$json = {
 /// Descriptor for `GetTenantRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getTenantRequestDescriptor = $convert.base64Decode(
     'ChBHZXRUZW5hbnRSZXF1ZXN0EhoKCHRlbmFudElkGAEgASgFUgh0ZW5hbnRJZA==');
+
+@$core.Deprecated('Use getTenantsResponseDescriptor instead')
+const GetTenantsResponse$json = {
+  '1': 'GetTenantsResponse',
+  '2': [
+    {
+      '1': 'tenants',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.app.Tenant',
+      '10': 'tenants'
+    },
+  ],
+};
+
+/// Descriptor for `GetTenantsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTenantsResponseDescriptor = $convert.base64Decode(
+    'ChJHZXRUZW5hbnRzUmVzcG9uc2USJQoHdGVuYW50cxgBIAMoCzILLmFwcC5UZW5hbnRSB3Rlbm'
+    'FudHM=');
 
 @$core.Deprecated('Use tenantDescriptor instead')
 const Tenant$json = {
@@ -321,6 +361,18 @@ const GetPlanRequest$json = {
 /// Descriptor for `GetPlanRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getPlanRequestDescriptor = $convert
     .base64Decode('Cg5HZXRQbGFuUmVxdWVzdBIWCgZwbGFuSWQYASABKAVSBnBsYW5JZA==');
+
+@$core.Deprecated('Use getPlansResponseDescriptor instead')
+const GetPlansResponse$json = {
+  '1': 'GetPlansResponse',
+  '2': [
+    {'1': 'plans', '3': 1, '4': 3, '5': 11, '6': '.app.Plan', '10': 'plans'},
+  ],
+};
+
+/// Descriptor for `GetPlansResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPlansResponseDescriptor = $convert.base64Decode(
+    'ChBHZXRQbGFuc1Jlc3BvbnNlEh8KBXBsYW5zGAEgAygLMgkuYXBwLlBsYW5SBXBsYW5z');
 
 @$core.Deprecated('Use planDescriptor instead')
 const Plan$json = {
@@ -429,35 +481,25 @@ const GetTransactionsRequest$json = {
   '1': 'GetTransactionsRequest',
   '2': [
     {
-      '1': 'tenantId',
+      '1': 'startDate',
       '3': 1,
       '4': 1,
-      '5': 5,
-      '9': 0,
-      '10': 'tenantId',
-      '17': true
-    },
-    {
-      '1': 'startDate',
-      '3': 2,
-      '4': 1,
       '5': 9,
-      '9': 1,
+      '9': 0,
       '10': 'startDate',
       '17': true
     },
     {
       '1': 'endDate',
-      '3': 3,
+      '3': 2,
       '4': 1,
       '5': 9,
-      '9': 2,
+      '9': 1,
       '10': 'endDate',
       '17': true
     },
   ],
   '8': [
-    {'1': '_tenantId'},
     {'1': '_startDate'},
     {'1': '_endDate'},
   ],
@@ -465,9 +507,9 @@ const GetTransactionsRequest$json = {
 
 /// Descriptor for `GetTransactionsRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getTransactionsRequestDescriptor = $convert.base64Decode(
-    'ChZHZXRUcmFuc2FjdGlvbnNSZXF1ZXN0Eh8KCHRlbmFudElkGAEgASgFSABSCHRlbmFudElkiA'
-    'EBEiEKCXN0YXJ0RGF0ZRgCIAEoCUgBUglzdGFydERhdGWIAQESHQoHZW5kRGF0ZRgDIAEoCUgC'
-    'UgdlbmREYXRliAEBQgsKCV90ZW5hbnRJZEIMCgpfc3RhcnREYXRlQgoKCF9lbmREYXRl');
+    'ChZHZXRUcmFuc2FjdGlvbnNSZXF1ZXN0EiEKCXN0YXJ0RGF0ZRgBIAEoCUgAUglzdGFydERhdG'
+    'WIAQESHQoHZW5kRGF0ZRgCIAEoCUgBUgdlbmREYXRliAEBQgwKCl9zdGFydERhdGVCCgoIX2Vu'
+    'ZERhdGU=');
 
 @$core.Deprecated('Use getTransactionRequestDescriptor instead')
 const GetTransactionRequest$json = {
@@ -482,21 +524,43 @@ final $typed_data.Uint8List getTransactionRequestDescriptor = $convert.base64Dec
     'ChVHZXRUcmFuc2FjdGlvblJlcXVlc3QSJAoNdHJhbnNhY3Rpb25JZBgBIAEoCVINdHJhbnNhY3'
     'Rpb25JZA==');
 
+@$core.Deprecated('Use getTransactionsResponseDescriptor instead')
+const GetTransactionsResponse$json = {
+  '1': 'GetTransactionsResponse',
+  '2': [
+    {
+      '1': 'transactions',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.app.Transaction',
+      '10': 'transactions'
+    },
+  ],
+};
+
+/// Descriptor for `GetTransactionsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTransactionsResponseDescriptor =
+    $convert.base64Decode(
+        'ChdHZXRUcmFuc2FjdGlvbnNSZXNwb25zZRI0Cgx0cmFuc2FjdGlvbnMYASADKAsyEC5hcHAuVH'
+        'JhbnNhY3Rpb25SDHRyYW5zYWN0aW9ucw==');
+
 @$core.Deprecated('Use financeSummaryDescriptor instead')
 const FinanceSummary$json = {
   '1': 'FinanceSummary',
   '2': [
-    {'1': 'totalRevenue', '3': 1, '4': 1, '5': 3, '10': 'totalRevenue'},
+    {'1': 'totalMembers', '3': 1, '4': 1, '5': 5, '10': 'totalMembers'},
+    {'1': 'totalRevenue', '3': 2, '4': 1, '5': 3, '10': 'totalRevenue'},
     {
       '1': 'totalTransactions',
-      '3': 2,
+      '3': 3,
       '4': 1,
       '5': 5,
       '10': 'totalTransactions'
     },
     {
       '1': 'activeMemberships',
-      '3': 3,
+      '3': 4,
       '4': 1,
       '5': 5,
       '10': 'activeMemberships'
@@ -506,9 +570,10 @@ const FinanceSummary$json = {
 
 /// Descriptor for `FinanceSummary`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List financeSummaryDescriptor = $convert.base64Decode(
-    'Cg5GaW5hbmNlU3VtbWFyeRIiCgx0b3RhbFJldmVudWUYASABKANSDHRvdGFsUmV2ZW51ZRIsCh'
-    'F0b3RhbFRyYW5zYWN0aW9ucxgCIAEoBVIRdG90YWxUcmFuc2FjdGlvbnMSLAoRYWN0aXZlTWVt'
-    'YmVyc2hpcHMYAyABKAVSEWFjdGl2ZU1lbWJlcnNoaXBz');
+    'Cg5GaW5hbmNlU3VtbWFyeRIiCgx0b3RhbE1lbWJlcnMYASABKAVSDHRvdGFsTWVtYmVycxIiCg'
+    'x0b3RhbFJldmVudWUYAiABKANSDHRvdGFsUmV2ZW51ZRIsChF0b3RhbFRyYW5zYWN0aW9ucxgD'
+    'IAEoBVIRdG90YWxUcmFuc2FjdGlvbnMSLAoRYWN0aXZlTWVtYmVyc2hpcHMYBCABKAVSEWFjdG'
+    'l2ZU1lbWJlcnNoaXBz');
 
 @$core.Deprecated('Use transactionDescriptor instead')
 const Transaction$json = {
@@ -652,6 +717,26 @@ const GetOfferingRequest$json = {
 /// Descriptor for `GetOfferingRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getOfferingRequestDescriptor = $convert.base64Decode(
     'ChJHZXRPZmZlcmluZ1JlcXVlc3QSHgoKb2ZmZXJpbmdJZBgBIAEoBVIKb2ZmZXJpbmdJZA==');
+
+@$core.Deprecated('Use getOfferingsResponseDescriptor instead')
+const GetOfferingsResponse$json = {
+  '1': 'GetOfferingsResponse',
+  '2': [
+    {
+      '1': 'offerings',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.app.Offering',
+      '10': 'offerings'
+    },
+  ],
+};
+
+/// Descriptor for `GetOfferingsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getOfferingsResponseDescriptor = $convert.base64Decode(
+    'ChRHZXRPZmZlcmluZ3NSZXNwb25zZRIrCglvZmZlcmluZ3MYASADKAsyDS5hcHAuT2ZmZXJpbm'
+    'dSCW9mZmVyaW5ncw==');
 
 @$core.Deprecated('Use offeringDescriptor instead')
 const Offering$json = {
