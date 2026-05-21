@@ -1,9 +1,9 @@
 import { Controller, Headers } from "@nestjs/common";
-import { RpcException } from "@nestjs/microservices";
+import { GrpcMethod, RpcException } from "@nestjs/microservices";
 import * as grpc from "@grpc/grpc-js";
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from "../prisma.service.js";
-import { LoginRequest, AuthResponseSchema, UserProfileSchema } from "@/gen/app_pb";
+import { type LoginRequest, AuthResponseSchema, UserProfileSchema } from "@/gen/app_pb";
 import { create } from "@bufbuild/protobuf";
 import { v4 as uuidv4 } from 'uuid';
 import { InjectRedis } from "@nestjs-modules/ioredis";
@@ -19,6 +19,7 @@ export class AuthController {
         @InjectRedis() private readonly redis: Redis
     ) { }
 
+    @GrpcMethod('AuthService', 'Login')
     async login(data: LoginRequest) {
         const { email, password } = data;
         console.log(data)
@@ -67,6 +68,7 @@ export class AuthController {
         });
     }
 
+    @GrpcMethod('AuthService', 'GetProfile')
     async getProfile(context: any) {
         console.log("🔍 [GetProfile] Fetching user profile from context...");
         const data = context.values.get(kUser);
@@ -109,6 +111,7 @@ export class AuthController {
         });
     }
 
+    @GrpcMethod('AuthService', 'Logout')
     async logout(context: any) {
         const data = context.values.get(kUser);
         const sessionId = data?.token;

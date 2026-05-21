@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { create } from '@bufbuild/protobuf';
-import { CreateTransactionRequest, GetTransactionsRequest, TransactionSchema } from '@/gen/app_pb';
-import { RpcException } from '@nestjs/microservices';
+import { type CreateTransactionRequest, type GetTransactionsRequest, TransactionSchema } from '@/gen/app_pb';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { v4 as uuidv4 } from 'uuid';
 import { MembershipService } from '../services/membership.service';
@@ -24,6 +24,7 @@ export class TransactionController {
 
     constructor(private prisma: PrismaService, private membershipService: MembershipService, @InjectRedis() private readonly redis: Redis) { }
 
+    @GrpcMethod('TransactionService', 'CreateTransaction')
     async createTransaction(req: CreateTransactionRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -154,6 +155,7 @@ export class TransactionController {
         }
     }
 
+    @GrpcMethod('TransactionService', 'GetTransactions')
     async *getTransactions(req: GetTransactionsRequest, context: any) {
         const user = context.values.get(kUser);
         const adminTenantId = user?.tenantId;
@@ -204,6 +206,7 @@ export class TransactionController {
         }
     }
 
+    @GrpcMethod('TransactionService', 'GetFinanceSummary')
     async getFinanceSummary(req: GetTransactionsRequest, context: any) {
         const user = context.values.get(kUser);
 

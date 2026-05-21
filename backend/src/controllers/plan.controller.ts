@@ -2,15 +2,17 @@ import { Controller } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
-import {
+import type {
     AddPlanRequest,
     UpdatePlanRequest,
-    GetPlanRequest,
+    GetPlanRequest
+} from '@/gen/app_pb';
+import {
     PlanResponseSchema,
     PlanSchema
 } from '@/gen/app_pb';
 import { create } from '@bufbuild/protobuf';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
 import { Prisma } from '../../generated/prisma/client';
@@ -29,6 +31,7 @@ export class PlanController {
         return `gym:${tenantId}:plans`;
     }
 
+    @GrpcMethod('PlanService', 'AddPlan')
     async addPlan(req: AddPlanRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -69,6 +72,7 @@ export class PlanController {
         return create(PlanResponseSchema, { planId: newPlan.id.toString() });
     }
 
+    @GrpcMethod('PlanService', 'UpdatePlan')
     async updatePlan(req: UpdatePlanRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -118,6 +122,7 @@ export class PlanController {
         return create(PlanResponseSchema, { planId: updated.id.toString() });
     }
 
+    @GrpcMethod('PlanService', 'DeletePlan')
     async deletePlan(req: GetPlanRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -139,6 +144,7 @@ export class PlanController {
         return {};
     }
 
+    @GrpcMethod('PlanService', 'GetPlans')
     async *getPlans(context: any) {
         const user = context.values.get(kUser);
         const cacheKey = this.getCacheKey(user.tenantId);
@@ -177,6 +183,7 @@ export class PlanController {
         }
     }
 
+    @GrpcMethod('PlanService', 'GetPlan')
     async getPlan(req: GetPlanRequest) {
         const p = await this.prisma.membershipPlan.findUnique({
             where: { id: req.planId },

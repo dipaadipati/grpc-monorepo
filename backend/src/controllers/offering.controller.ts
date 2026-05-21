@@ -1,15 +1,17 @@
 import { Controller } from "@nestjs/common";
-import { RpcException } from "@nestjs/microservices";
+import { GrpcMethod, RpcException } from "@nestjs/microservices";
 import * as grpc from "@grpc/grpc-js";
 import * as bcrypt from 'bcrypt';
 import { create } from "@bufbuild/protobuf";
 import { PrismaService } from "../prisma.service.js";
-import {
+import type {
     AddOfferingRequest,
     GetOfferingRequest,
+    UpdateOfferingRequest,
+} from "@/gen/app_pb";
+import {
     OfferingResponseSchema,
     OfferingSchema,
-    UpdateOfferingRequest,
 } from "@/gen/app_pb";
 import { kUser } from "../auth/auth.interceptor.js";
 import { InjectRedis } from '@nestjs-modules/ioredis';
@@ -23,6 +25,7 @@ import { serializeBigInt } from "@/utils/common.js";
 export class OfferingController {
     constructor(private prisma: PrismaService, @InjectRedis() private readonly redis: Redis) { }
 
+    @GrpcMethod('OfferingService', 'CreateOffering')
     async createOffering(data: AddOfferingRequest, context: any) {
         const { name, price, type, duration, stock, quota } = data;
 
@@ -87,6 +90,7 @@ export class OfferingController {
         }));
     }
 
+    @GrpcMethod('OfferingService', 'GetOfferings')
     async *getOfferings(context: any) {
         const user = context.values.get(kUser);
         const cacheKey = `gym:${user.tenantId}:offerings`;
@@ -123,6 +127,7 @@ export class OfferingController {
         }
     }
 
+    @GrpcMethod('OfferingService', 'UpdateOffering')
     async updateOffering(req: UpdateOfferingRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -184,6 +189,7 @@ export class OfferingController {
         });
     }
 
+    @GrpcMethod('OfferingService', 'DeleteOffering')
     async deleteOffering(req: GetOfferingRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -215,6 +221,7 @@ export class OfferingController {
         return {};
     }
 
+    @GrpcMethod('OfferingService', 'GetOffering')
     async getOffering(req: GetOfferingRequest, context: any) {
         const user = context.values.get(kUser);
 

@@ -1,12 +1,12 @@
 import { Controller } from "@nestjs/common";
-import { RpcException } from "@nestjs/microservices";
+import { GrpcMethod, RpcException } from "@nestjs/microservices";
 import * as grpc from "@grpc/grpc-js";
 import * as bcrypt from 'bcrypt';
 import { create } from "@bufbuild/protobuf";
 import { PrismaService } from "../prisma.service.js";
 import {
-    RegisterMemberRequest,
-    UpdateMemberRequest,
+    type RegisterMemberRequest,
+    type UpdateMemberRequest,
     UserProfileSchema
 } from "@/gen/app_pb";
 import { kUser } from "../auth/auth.interceptor.js";
@@ -20,6 +20,7 @@ import { serializeBigInt } from "@/utils/common.js";
 export class MemberController {
     constructor(private prisma: PrismaService, @InjectRedis() private readonly redis: Redis) { }
 
+    @GrpcMethod('MemberService', 'RegisterMember')
     async createMember(data: RegisterMemberRequest, context: any) {
         const { email, password, name } = data;
 
@@ -99,6 +100,7 @@ export class MemberController {
         });
     }
 
+    @GrpcMethod('MemberService', 'GetMembers')
     async *getMembers(context: any) {
         const user = context.values.get(kUser);
         const cacheKey = `gym:${user.tenantId}:members`;
@@ -145,6 +147,7 @@ export class MemberController {
         }
     }
 
+    @GrpcMethod('MemberService', 'UpdateMember')
     async updateMember(req: UpdateMemberRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -199,6 +202,7 @@ export class MemberController {
         });
     }
 
+    @GrpcMethod('MemberService', 'DeleteMember')
     async deleteMember(req: any, context: any) {
         const user = context.values.get(kUser);
 
@@ -230,6 +234,7 @@ export class MemberController {
         return {};
     }
 
+    @GrpcMethod('MemberService', 'GetMemberProfile')
     async getMemberProfile(context: any) {
         const curUser = context.values.get(kUser);
 

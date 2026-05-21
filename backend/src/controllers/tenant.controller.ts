@@ -2,15 +2,17 @@ import { Controller } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
-import {
+import type {
     AddTenantRequest,
     UpdateTenantRequest,
     GetTenantRequest,
+} from '@/gen/app_pb';
+import {
     TenantResponseSchema,
     TenantSchema
 } from '@/gen/app_pb';
 import { create } from '@bufbuild/protobuf';
-import { RpcException } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import * as grpc from '@grpc/grpc-js';
 import { kUser } from '../auth/auth.interceptor';
 import { timestampFromDate } from '@bufbuild/protobuf/wkt';
@@ -26,6 +28,7 @@ export class TenantController {
 
     private readonly CACHE_KEY = 'global:tenants';
 
+    @GrpcMethod('TenantService', 'AddTenant')
     async addTenant(req: AddTenantRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -57,6 +60,7 @@ export class TenantController {
         return create(TenantResponseSchema, { tenantId: newTenant.id.toString() });
     }
 
+    @GrpcMethod('TenantService', 'UpdateTenant')
     async updateTenant(req: UpdateTenantRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -89,6 +93,7 @@ export class TenantController {
         return create(TenantResponseSchema, { tenantId: updated.id.toString() });
     }
 
+    @GrpcMethod('TenantService', 'DeleteTenant')
     async deleteTenant(req: GetTenantRequest, context: any) {
         const user = context.values.get(kUser);
 
@@ -121,6 +126,7 @@ export class TenantController {
         return {};
     }
 
+    @GrpcMethod('TenantService', 'GetTenants')
     async *getTenants(context: any) {
         const cached = await this.redis.get(this.CACHE_KEY);
         if (cached) {
@@ -145,6 +151,7 @@ export class TenantController {
         }
     }
 
+    @GrpcMethod('TenantService', 'GetTenant')
     async getTenant(req: GetTenantRequest, context: any) {
         const tenant = await this.prisma.tenant.findUnique({
             where: { id: req.tenantId },
