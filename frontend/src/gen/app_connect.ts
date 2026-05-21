@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AddOfferingRequest, AddPlanRequest, AddTenantRequest, AttendanceHistory, AuthResponse, CheckInRequest, CheckInResponse, CreateTransactionRequest, Empty, FinanceSummary, GetAttendanceHistoryRequest, GetMemberProfileRequest, GetOfferingRequest, GetPlanRequest, GetTenantRequest, GetTransactionRequest, GetTransactionsRequest, LoginRequest, LogoutResponse, MemberResponse, Offering, OfferingResponse, Plan, PlanResponse, RegisterMemberRequest, Tenant, TenantResponse, Transaction, UpdateMemberRequest, UpdateOfferingRequest, UpdatePlanRequest, UpdateTenantRequest, UserProfile } from "./app_pb.js";
+import { AddOfferingRequest, AddPlanRequest, AddTenantRequest, AttendanceHistory, AuthResponse, CheckInRequest, CheckInResponse, CreateTransactionRequest, Empty, FinanceSummary, GetAttendanceHistoryRequest, GetMemberProfileRequest, GetMembersResponse, GetOfferingRequest, GetOfferingsResponse, GetPlanRequest, GetPlansResponse, GetTenantRequest, GetTenantsResponse, GetTransactionRequest, GetTransactionsRequest, GetTransactionsResponse, LoginRequest, LogoutResponse, MemberResponse, Offering, OfferingResponse, Plan, PlanResponse, RegisterMemberRequest, Tenant, TenantResponse, Transaction, UpdateMemberRequest, UpdateOfferingRequest, UpdatePlanRequest, UpdateTenantRequest, UserProfile } from "./app_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -81,8 +81,8 @@ export const MemberService = {
     getMembers: {
       name: "GetMembers",
       I: Empty,
-      O: UserProfile,
-      kind: MethodKind.ServerStreaming,
+      O: GetMembersResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * @generated from rpc app.MemberService.GetMemberProfile
@@ -135,8 +135,8 @@ export const TenantService = {
     getTenants: {
       name: "GetTenants",
       I: Empty,
-      O: Tenant,
-      kind: MethodKind.ServerStreaming,
+      O: GetTenantsResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * @generated from rpc app.TenantService.GetTenant
@@ -189,8 +189,8 @@ export const PlanService = {
     getPlans: {
       name: "GetPlans",
       I: Empty,
-      O: Plan,
-      kind: MethodKind.ServerStreaming,
+      O: GetPlansResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * @generated from rpc app.PlanService.GetPlan
@@ -225,8 +225,8 @@ export const TransactionService = {
     getTransactions: {
       name: "GetTransactions",
       I: GetTransactionsRequest,
-      O: Transaction,
-      kind: MethodKind.ServerStreaming,
+      O: GetTransactionsResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * @generated from rpc app.TransactionService.CheckTransactionStatus
@@ -243,8 +243,8 @@ export const TransactionService = {
     getMemberTransactions: {
       name: "GetMemberTransactions",
       I: GetMemberProfileRequest,
-      O: Transaction,
-      kind: MethodKind.ServerStreaming,
+      O: GetTransactionsResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * @generated from rpc app.TransactionService.GetFinanceSummary
@@ -297,8 +297,8 @@ export const OfferingService = {
     getOfferings: {
       name: "GetOfferings",
       I: Empty,
-      O: Offering,
-      kind: MethodKind.ServerStreaming,
+      O: GetOfferingsResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * @generated from rpc app.OfferingService.GetOffering

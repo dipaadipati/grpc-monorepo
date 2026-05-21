@@ -67,11 +67,9 @@
 			stats[3].value = summary.activeMemberships.toString();
 
 			recentActivities = [];
-			const trxStream = transactionClient.getTransactions({});
-			let count = 0;
-			for await (const trx of trxStream) {
-				if (count >= 5) break;
-				recentActivities.push({
+			const getTransactions = await transactionClient.getTransactions({});
+			recentActivities = getTransactions.transactions.map((trx, i) => {
+				return {
 					id: trx.id,
 					user: trx.memberName,
 					action: `Membeli ${trx.planId ? `paket ${trx.planName}` : `penawaran ${trx.offeringName}`} via ${trx.method === 'CASH' ? 'Cash' : 'QRIS'}`,
@@ -80,9 +78,8 @@
 						minute: '2-digit'
 					}),
 					status: trx.status === 'SETTLEMENT' ? 'Success' : 'Pending'
-				});
-				count++;
-			}
+				};
+			});
 		} catch (err) {
 			console.error('Gagal memuat dashboard:', err);
 		} finally {

@@ -14,7 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const redis = app.get(getRedisConnectionToken());
   const configService = app.get(ConfigService);
-  
+
   const httpPort = 3000;
   const grpcPort = 50051;
 
@@ -58,8 +58,8 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-  await app.listen(httpPort);  
-  
+  await app.listen(httpPort);
+
   console.log(`🚀 [HTTP Connect Server] Ready on http://localhost:${httpPort}`);
   console.log(`🛡️ [Native gRPC Server] Ready on port ${grpcPort} (HTTP/2 Biner)`);
 }

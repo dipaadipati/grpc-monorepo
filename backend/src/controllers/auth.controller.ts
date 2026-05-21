@@ -57,7 +57,6 @@ export class AuthController {
             token: sessionId
         };
 
-        // Simpan token ke Redis dengan prefix token:
         await this.redis.set(
             `token:${sessionId}`,
             JSON.stringify(sessionData),
@@ -71,46 +70,47 @@ export class AuthController {
 
     @GrpcMethod('AuthService', 'GetProfile')
     async getProfile(request: any, context: any) {
-        console.log("🔍 [GetProfile] Menjalankan ekstraksi user session secara hybrid...");
-        
         let userId: number | undefined;
 
-        // 🛡️ STRATEGI 1: Cek apakah request datang dari Connect RPC (SvelteKit Web)
         if (context && context.values && typeof context.values.get === 'function') {
-            console.log("🌐 [GetProfile] Mendeteksi traffic dari Connect RPC (SvelteKit Web)");
             const data = context.values.get(kUser);
             userId = data?.sub;
-        } 
-        
-        // 📱 STRATEGI 2: Jika gagal, cek apakah dari Native gRPC (Flutter Mobile)
-        // Objek 'context' pada microservice NestJS gRPC murni memiliki method 'getArgByIndex'
-        else if (context && typeof context.getArgByIndex === 'function') {
-            console.log("📱 [GetProfile] Mendeteksi traffic dari Native gRPC (Flutter Mobile)");
-            
-            // Indeks 1 pada gRPC native NestJS berisi objek Metadata asli
-            const metadata: grpc.Metadata = context.getArgByIndex(1);
-            
-            // Ambil data header 'authorization' yang disuntikkan GrpcAuthInterceptor milik Flutter
-            const authHeader = metadata.get('authorization')?.[0] as string;
-            
+        }
+
+        else if (context && typeof context.get === 'function') {
+            const metadata: grpc.Metadata = context;
+            const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+
             if (authHeader && authHeader.startsWith('Bearer ')) {
-                const token = authHeader.replace('Bearer ', '');
-                
-                // Cari data session langsung ke Redis VPS
+                const token = authHeader.replace('Bearer ', '').trim();
+
                 const sessionStr = await this.redis.get(`token:${token}`);
                 if (sessionStr) {
                     const sessionData = JSON.parse(sessionStr);
                     userId = sessionData.sub;
                     console.log(`✅ [GetProfile] Sesi Redis ditemukan untuk user ID: ${userId}`);
                 } else {
-                    console.error("❌ [GetProfile] Token Flutter tidak ditemukan atau kedaluwarsa di Redis");
+                    console.error("❌ [GetProfile] Token Flutter/Kreya tidak ditemukan atau kedaluwarsa di Redis");
                 }
             } else {
                 console.error("❌ [GetProfile] Header Authorization gRPC kosong atau salah format");
             }
         }
 
-        // Jika kedua jalur gagal mendapatkan userId, lempar unauthenticated
+        else if (request && typeof request.getArgByIndex === 'function') {
+            const metadata: grpc.Metadata = request.getArgByIndex(1);
+            const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                const token = authHeader.replace('Bearer ', '').trim();
+                const sessionStr = await this.redis.get(`token:${token}`);
+                if (sessionStr) {
+                    const sessionData = JSON.parse(sessionStr);
+                    userId = sessionData.sub;
+                }
+            }
+        }
+
         if (!userId) {
             throw new RpcException({
                 code: grpc.status.UNAUTHENTICATED,
@@ -152,15 +152,26 @@ export class AuthController {
     async logout(request: any, context: any) {
         let sessionId: string | undefined;
 
-        // Penanganan Logout Hybrid
         if (context && context.values && typeof context.values.get === 'function') {
             const data = context.values.get(kUser);
             sessionId = data?.token;
-        } else if (context && typeof context.getArgByIndex === 'function') {
-            const metadata: grpc.Metadata = context.getArgByIndex(1);
-            const authHeader = metadata.get('authorization')?.[0] as string;
+        }
+
+        else if (context && typeof context.get === 'function') {
+            const metadata: grpc.Metadata = context;
+            const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+
             if (authHeader && authHeader.startsWith('Bearer ')) {
-                sessionId = authHeader.replace('Bearer ', '');
+                sessionId = authHeader.replace('Bearer ', '').trim();
+            }
+        }
+
+        else if (request && typeof request.getArgByIndex === 'function') {
+            const metadata: grpc.Metadata = request.getArgByIndex(1);
+            const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                sessionId = authHeader.replace('Bearer ', '').trim();
             }
         }
 
@@ -168,10 +179,12 @@ export class AuthController {
 
         if (sessionId) {
             console.log("🧹 [Logout] Menghapus token dari Redis:", sessionId);
-            // Sesuai dengan set di Login (`token:${sessionId}`), maka hapusnya juga menggunakan prefix token:
             await this.redis.del(`token:${sessionId}`);
+
+            return { success: true };
         }
 
-        return { success: true };
+        console.error("❌ [Logout] Gagal mengekstrak sessionId, token tidak ditemukan");
+        return { success: false };
     }
 }

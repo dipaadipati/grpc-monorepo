@@ -38,7 +38,7 @@ class _GymLoginPageState extends State<GymLoginPage> {
     super.initState();
     // Inisialisasi Jalur Pipa gRPC murni ke Subdomain Mobile
     _channel = ClientChannel(
-      'grpc-mobile.moora.web.id',
+      '127.0.0.1',
       port: 50051,
       options: const ChannelOptions(
         credentials:

@@ -25,9 +25,8 @@
 		plans = [];
 		isLoadingData = true;
 		try {
-			for await (const plan of planClient.getPlans({})) {
-				plans.push(plan);
-			}
+			const getPlans = await planClient.getPlans({});
+			plans = getPlans.plans;
 		} catch (err) {
 			console.error('Stream error:', err);
 		} finally {

@@ -33,10 +33,8 @@
 			};
 
 			allTransactions = [];
-			const stream = transactionClient.getTransactions({});
-			for await (const trx of stream) {
-				allTransactions.push(trx);
-			}
+			const getTransactions = await transactionClient.getTransactions({});
+			allTransactions = getTransactions.transactions;
 		} catch (err) {
 			console.error('Gagal memuat data keuangan:', err);
 		} finally {

@@ -36,9 +36,8 @@
 	async function openPayModal(member: UserProfile) {
 		selectedMember = member;
 		availablePlans = [];
-		for await (const plan of planClient.getPlans({})) {
-			availablePlans.push(plan);
-		}
+		const getPlans = await planClient.getPlans({});
+		availablePlans = getPlans.plans;
 		showPayModal = true;
 	}
 
@@ -94,9 +93,8 @@
 	async function loadMembers() {
 		members = [];
 		try {
-			for await (const member of memberClient.getMembers({})) {
-				members.push(member);
-			}
+			const getMembers = await memberClient.getMembers({});
+			members = getMembers.members;
 		} catch (err) {
 			console.error('Stream error:', err);
 		}
@@ -191,9 +189,8 @@
 		selectedMember = member;
 		availableOfferings = [];
 		try {
-			for await (const item of offeringClient.getOfferings({})) {
-				availableOfferings.push(item);
-			}
+			const getOfferings = await offeringClient.getOfferings({});
+			availableOfferings = getOfferings.offerings;
 			showOfferingModal = true;
 		} catch (err) {
 			console.error(err);

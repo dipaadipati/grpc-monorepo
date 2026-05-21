@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Tenant } from '$gen/app_pb';
+	import type { Tenant } from '@/gen/app_pb';
 	import { createAuthenticatedClients } from '$lib/grpc-client';
 	import { onMount } from 'svelte';
 
@@ -27,10 +27,8 @@
 		tenants = [];
 		isLoadingData = true;
 		try {
-			// Menggunakan stream untuk mendapatkan daftar tenant
-			for await (const tenant of tenantClient.getTenants({})) {
-				tenants.push(tenant);
-			}
+			const getTenants = await tenantClient.getTenants({});
+			tenants = getTenants.tenants;
 		} catch (err) {
 			console.error('Stream error:', err);
 		} finally {
@@ -42,7 +40,6 @@
 		loadTenants();
 	});
 
-	// Reaktif: Filter tenant berdasarkan pencarian dan status
 	let filteredTenants = $derived(
 		tenants.filter((t) => {
 			const matchSearch =
@@ -94,7 +91,7 @@
 			}
 
 			showModal = false;
-			loadTenants(); // Refresh data & clear Redis cache di backend
+			loadTenants();
 		} catch (err: any) {
 			await swal.fire('Error!', err.message, 'error');
 		} finally {

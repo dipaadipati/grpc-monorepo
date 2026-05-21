@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file app.proto.
  */
 export const file_app: GenFile = /*@__PURE__*/
-  fileDesc("CglhcHAucHJvdG8SA2FwcCIHCgVFbXB0eSIvCgxMb2dpblJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAki8QEKC1VzZXJQcm9maWxlEgoKAmlkGAEgASgFEg0KBWVtYWlsGAIgASgJEgwKBG5hbWUYAyABKAkSDAoEcm9sZRgEIAEoCRIQCgh0ZW5hbnRJZBgFIAEoBRISCgp0ZW5hbnROYW1lGAYgASgJEiMKCm1lbWJlcnNoaXAYByABKAsyDy5hcHAuTWVtYmVyc2hpcBItCgljcmVhdGVkQXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhkKEW1pZHRyYW5zQ2xpZW50S2V5GAkgASgJEhYKDnRlbmFudElzQWN0aXZlGAogASgIIh0KDEF1dGhSZXNwb25zZRINCgV0b2tlbhgBIAEoCSIhCg5Mb2dvdXRSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIkYKFVJlZ2lzdGVyTWVtYmVyUmVxdWVzdBINCgVlbWFpbBgBIAEoCRIMCgRuYW1lGAIgASgJEhAKCHBhc3N3b3JkGAMgASgJIlAKE1VwZGF0ZU1lbWJlclJlcXVlc3QSCgoCaWQYASABKAUSDQoFZW1haWwYAiABKAkSDAoEbmFtZRgDIAEoCRIQCghwYXNzd29yZBgEIAEoCSIiCg5NZW1iZXJSZXNwb25zZRIQCghtZW1iZXJJZBgBIAEoCSIrChdHZXRNZW1iZXJQcm9maWxlUmVxdWVzdBIQCghtZW1iZXJJZBgBIAEoBSI4ChBNZW1iZXJzaGlwU3RhdHVzEhAKCGlzQWN0aXZlGAEgASgIEhIKCmV4cGlyeURhdGUYAiABKAkiUQoQQWRkVGVuYW50UmVxdWVzdBIMCgRuYW1lGAEgASgJEgwKBHNsdWcYAiABKAkSDwoHYWRkcmVzcxgDIAEoCRIQCghpc0FjdGl2ZRgEIAEoCCJgChNVcGRhdGVUZW5hbnRSZXF1ZXN0EgoKAmlkGAEgASgFEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIPCgdhZGRyZXNzGAQgASgJEhAKCGlzQWN0aXZlGAUgASgIIiIKDlRlbmFudFJlc3BvbnNlEhAKCHRlbmFudElkGAEgASgJIiQKEEdldFRlbmFudFJlcXVlc3QSEAoIdGVuYW50SWQYASABKAUiggEKBlRlbmFudBIKCgJpZBgBIAEoBRIMCgRuYW1lGAIgASgJEgwKBHNsdWcYAyABKAkSDwoHYWRkcmVzcxgEIAEoCRIQCghpc0FjdGl2ZRgFIAEoCBItCgljcmVhdGVkQXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIlEKDkFkZFBsYW5SZXF1ZXN0EgwKBG5hbWUYASABKAkSDQoFcHJpY2UYAiABKAMSEAoIZHVyYXRpb24YAyABKAUSEAoIdGVuYW50SWQYBCABKAUiTgoRVXBkYXRlUGxhblJlcXVlc3QSCgoCaWQYASABKAUSDAoEbmFtZRgCIAEoCRINCgVwcmljZRgDIAEoAxIQCghkdXJhdGlvbhgEIAEoBSIeCgxQbGFuUmVzcG9uc2USDgoGcGxhbklkGAEgASgJIiAKDkdldFBsYW5SZXF1ZXN0Eg4KBnBsYW5JZBgBIAEoBSJwCgRQbGFuEgoKAmlkGAEgASgFEgwKBG5hbWUYAiABKAkSDQoFcHJpY2UYAyABKAMSEAoIZHVyYXRpb24YBCABKAUSEAoIdGVuYW50SWQYBSABKAUSGwoGdGVuYW50GAYgASgLMgsuYXBwLlRlbmFudCLyAQoKTWVtYmVyc2hpcBIKCgJpZBgBIAEoBRIOCgZ1c2VySWQYAiABKAUSFwoEcGxhbhgDIAEoCzIJLmFwcC5QbGFuEg4KBnN0YXR1cxgEIAEoCRItCglzdGFydERhdGUYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEisKB2VuZERhdGUYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEh8KCG9mZmVyaW5nGAcgASgLMg0uYXBwLk9mZmVyaW5nEg4KBnBsYW5JZBgIIAEoBRISCgpvZmZlcmluZ0lkGAkgASgFIoQBChhDcmVhdGVUcmFuc2FjdGlvblJlcXVlc3QSEAoIbWVtYmVySWQYASABKAUSEwoGcGxhbklkGAIgASgFSACIAQESFwoKb2ZmZXJpbmdJZBgDIAEoBUgBiAEBEg4KBm1ldGhvZBgEIAEoCUIJCgdfcGxhbklkQg0KC19vZmZlcmluZ0lkIoQBChZHZXRUcmFuc2FjdGlvbnNSZXF1ZXN0EhUKCHRlbmFudElkGAEgASgFSACIAQESFgoJc3RhcnREYXRlGAIgASgJSAGIAQESFAoHZW5kRGF0ZRgDIAEoCUgCiAEBQgsKCV90ZW5hbnRJZEIMCgpfc3RhcnREYXRlQgoKCF9lbmREYXRlIi4KFUdldFRyYW5zYWN0aW9uUmVxdWVzdBIVCg10cmFuc2FjdGlvbklkGAEgASgJIlwKDkZpbmFuY2VTdW1tYXJ5EhQKDHRvdGFsUmV2ZW51ZRgBIAEoAxIZChF0b3RhbFRyYW5zYWN0aW9ucxgCIAEoBRIZChFhY3RpdmVNZW1iZXJzaGlwcxgDIAEoBSLbAgoLVHJhbnNhY3Rpb24SCgoCaWQYASABKAkSEAoIbWVtYmVySWQYAiABKAUSEwoGcGxhbklkGAMgASgFSACIAQESDgoGYW1vdW50GAQgASgDEg4KBm1ldGhvZBgFIAEoCRIOCgZzdGF0dXMYBiABKAkSDwoHcXJpc1VybBgHIAEoCRItCgljcmVhdGVkQXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhcKCm1lbWJlck5hbWUYCSABKAlIAYgBARIVCghwbGFuTmFtZRgKIAEoCUgCiAEBEhcKCm9mZmVyaW5nSWQYCyABKAVIA4gBARIZCgxvZmZlcmluZ05hbWUYDCABKAlIBIgBAUIJCgdfcGxhbklkQg0KC19tZW1iZXJOYW1lQgsKCV9wbGFuTmFtZUINCgtfb2ZmZXJpbmdJZEIPCg1fb2ZmZXJpbmdOYW1lIoEBChJBZGRPZmZlcmluZ1JlcXVlc3QSDAoEbmFtZRgBIAEoCRINCgVwcmljZRgCIAEoAxIMCgR0eXBlGAMgASgJEhAKCGR1cmF0aW9uGAQgASgFEg0KBXN0b2NrGAUgASgFEg0KBXF1b3RhGAYgASgFEhAKCHRlbmFudElkGAcgASgFIn4KFVVwZGF0ZU9mZmVyaW5nUmVxdWVzdBIKCgJpZBgBIAEoBRIMCgRuYW1lGAIgASgJEg0KBXByaWNlGAMgASgDEgwKBHR5cGUYBCABKAkSEAoIZHVyYXRpb24YBSABKAUSDQoFc3RvY2sYBiABKAUSDQoFcXVvdGEYByABKAUiJgoQT2ZmZXJpbmdSZXNwb25zZRISCgpvZmZlcmluZ0lkGAEgASgFIigKEkdldE9mZmVyaW5nUmVxdWVzdBISCgpvZmZlcmluZ0lkGAEgASgFIoMBCghPZmZlcmluZxIKCgJpZBgBIAEoBRIMCgRuYW1lGAIgASgJEg0KBXByaWNlGAMgASgDEgwKBHR5cGUYBCABKAkSEAoIZHVyYXRpb24YBSABKAUSDQoFc3RvY2sYBiABKAUSDQoFcXVvdGEYByABKAUSEAoIdGVuYW50SWQYCCABKAUiIgoOQ2hlY2tJblJlcXVlc3QSEAoIbWVtYmVySWQYASABKAkiNwoPQ2hlY2tJblJlc3BvbnNlEhEKCWNoZWNrSW5JZBgBIAEoCRIRCgl0aW1lc3RhbXAYAiABKAkiLwobR2V0QXR0ZW5kYW5jZUhpc3RvcnlSZXF1ZXN0EhAKCG1lbWJlcklkGAEgASgJIjgKEEF0dGVuZGFuY2VSZWNvcmQSEQoJY2hlY2tJbklkGAEgASgJEhEKCXRpbWVzdGFtcBgCIAEoCSI7ChFBdHRlbmRhbmNlSGlzdG9yeRImCgdyZWNvcmRzGAEgAygLMhUuYXBwLkF0dGVuZGFuY2VSZWNvcmQykwEKC0F1dGhTZXJ2aWNlEi0KBUxvZ2luEhEuYXBwLkxvZ2luUmVxdWVzdBoRLmFwcC5BdXRoUmVzcG9uc2USKgoKR2V0UHJvZmlsZRIKLmFwcC5FbXB0eRoQLmFwcC5Vc2VyUHJvZmlsZRIpCgZMb2dvdXQSCi5hcHAuRW1wdHkaEy5hcHAuTG9nb3V0UmVzcG9uc2UyvQIKDU1lbWJlclNlcnZpY2USQQoOUmVnaXN0ZXJNZW1iZXISGi5hcHAuUmVnaXN0ZXJNZW1iZXJSZXF1ZXN0GhMuYXBwLk1lbWJlclJlc3BvbnNlEj0KDFVwZGF0ZU1lbWJlchIYLmFwcC5VcGRhdGVNZW1iZXJSZXF1ZXN0GhMuYXBwLk1lbWJlclJlc3BvbnNlEjgKDERlbGV0ZU1lbWJlchIcLmFwcC5HZXRNZW1iZXJQcm9maWxlUmVxdWVzdBoKLmFwcC5FbXB0eRIsCgpHZXRNZW1iZXJzEgouYXBwLkVtcHR5GhAuYXBwLlVzZXJQcm9maWxlMAESQgoQR2V0TWVtYmVyUHJvZmlsZRIcLmFwcC5HZXRNZW1iZXJQcm9maWxlUmVxdWVzdBoQLmFwcC5Vc2VyUHJvZmlsZTKUAgoNVGVuYW50U2VydmljZRI3CglBZGRUZW5hbnQSFS5hcHAuQWRkVGVuYW50UmVxdWVzdBoTLmFwcC5UZW5hbnRSZXNwb25zZRI9CgxVcGRhdGVUZW5hbnQSGC5hcHAuVXBkYXRlVGVuYW50UmVxdWVzdBoTLmFwcC5UZW5hbnRSZXNwb25zZRIxCgxEZWxldGVUZW5hbnQSFS5hcHAuR2V0VGVuYW50UmVxdWVzdBoKLmFwcC5FbXB0eRInCgpHZXRUZW5hbnRzEgouYXBwLkVtcHR5GgsuYXBwLlRlbmFudDABEi8KCUdldFRlbmFudBIVLmFwcC5HZXRUZW5hbnRSZXF1ZXN0GgsuYXBwLlRlbmFudDL4AQoLUGxhblNlcnZpY2USMQoHQWRkUGxhbhITLmFwcC5BZGRQbGFuUmVxdWVzdBoRLmFwcC5QbGFuUmVzcG9uc2USNwoKVXBkYXRlUGxhbhIWLmFwcC5VcGRhdGVQbGFuUmVxdWVzdBoRLmFwcC5QbGFuUmVzcG9uc2USLQoKRGVsZXRlUGxhbhITLmFwcC5HZXRQbGFuUmVxdWVzdBoKLmFwcC5FbXB0eRIjCghHZXRQbGFucxIKLmFwcC5FbXB0eRoJLmFwcC5QbGFuMAESKQoHR2V0UGxhbhITLmFwcC5HZXRQbGFuUmVxdWVzdBoJLmFwcC5QbGFuMvgCChJUcmFuc2FjdGlvblNlcnZpY2USRAoRQ3JlYXRlVHJhbnNhY3Rpb24SHS5hcHAuQ3JlYXRlVHJhbnNhY3Rpb25SZXF1ZXN0GhAuYXBwLlRyYW5zYWN0aW9uEkIKD0dldFRyYW5zYWN0aW9ucxIbLmFwcC5HZXRUcmFuc2FjdGlvbnNSZXF1ZXN0GhAuYXBwLlRyYW5zYWN0aW9uMAESRgoWQ2hlY2tUcmFuc2FjdGlvblN0YXR1cxIaLmFwcC5HZXRUcmFuc2FjdGlvblJlcXVlc3QaEC5hcHAuVHJhbnNhY3Rpb24SSQoVR2V0TWVtYmVyVHJhbnNhY3Rpb25zEhwuYXBwLkdldE1lbWJlclByb2ZpbGVSZXF1ZXN0GhAuYXBwLlRyYW5zYWN0aW9uMAESRQoRR2V0RmluYW5jZVN1bW1hcnkSGy5hcHAuR2V0VHJhbnNhY3Rpb25zUmVxdWVzdBoTLmFwcC5GaW5hbmNlU3VtbWFyeTKwAgoPT2ZmZXJpbmdTZXJ2aWNlEj0KC0FkZE9mZmVyaW5nEhcuYXBwLkFkZE9mZmVyaW5nUmVxdWVzdBoVLmFwcC5PZmZlcmluZ1Jlc3BvbnNlEkMKDlVwZGF0ZU9mZmVyaW5nEhouYXBwLlVwZGF0ZU9mZmVyaW5nUmVxdWVzdBoVLmFwcC5PZmZlcmluZ1Jlc3BvbnNlEjUKDkRlbGV0ZU9mZmVyaW5nEhcuYXBwLkdldE9mZmVyaW5nUmVxdWVzdBoKLmFwcC5FbXB0eRIrCgxHZXRPZmZlcmluZ3MSCi5hcHAuRW1wdHkaDS5hcHAuT2ZmZXJpbmcwARI1CgtHZXRPZmZlcmluZxIXLmFwcC5HZXRPZmZlcmluZ1JlcXVlc3QaDS5hcHAuT2ZmZXJpbmcymwEKEUF0dGVuZGFuY2VTZXJ2aWNlEjQKB0NoZWNrSW4SEy5hcHAuQ2hlY2tJblJlcXVlc3QaFC5hcHAuQ2hlY2tJblJlc3BvbnNlElAKFEdldEF0dGVuZGFuY2VIaXN0b3J5EiAuYXBwLkdldEF0dGVuZGFuY2VIaXN0b3J5UmVxdWVzdBoWLmFwcC5BdHRlbmRhbmNlSGlzdG9yeWIGcHJvdG8z", [file_google_protobuf_timestamp]);
+  fileDesc("CglhcHAucHJvdG8SA2FwcCIHCgVFbXB0eSIvCgxMb2dpblJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAki8QEKC1VzZXJQcm9maWxlEgoKAmlkGAEgASgFEg0KBWVtYWlsGAIgASgJEgwKBG5hbWUYAyABKAkSDAoEcm9sZRgEIAEoCRIQCgh0ZW5hbnRJZBgFIAEoBRISCgp0ZW5hbnROYW1lGAYgASgJEiMKCm1lbWJlcnNoaXAYByABKAsyDy5hcHAuTWVtYmVyc2hpcBItCgljcmVhdGVkQXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhkKEW1pZHRyYW5zQ2xpZW50S2V5GAkgASgJEhYKDnRlbmFudElzQWN0aXZlGAogASgIIh0KDEF1dGhSZXNwb25zZRINCgV0b2tlbhgBIAEoCSIhCg5Mb2dvdXRSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIIkYKFVJlZ2lzdGVyTWVtYmVyUmVxdWVzdBINCgVlbWFpbBgBIAEoCRIMCgRuYW1lGAIgASgJEhAKCHBhc3N3b3JkGAMgASgJIlAKE1VwZGF0ZU1lbWJlclJlcXVlc3QSCgoCaWQYASABKAUSDQoFZW1haWwYAiABKAkSDAoEbmFtZRgDIAEoCRIQCghwYXNzd29yZBgEIAEoCSIiCg5NZW1iZXJSZXNwb25zZRIQCghtZW1iZXJJZBgBIAEoCSIrChdHZXRNZW1iZXJQcm9maWxlUmVxdWVzdBIQCghtZW1iZXJJZBgBIAEoBSI3ChJHZXRNZW1iZXJzUmVzcG9uc2USIQoHbWVtYmVycxgBIAMoCzIQLmFwcC5Vc2VyUHJvZmlsZSI4ChBNZW1iZXJzaGlwU3RhdHVzEhAKCGlzQWN0aXZlGAEgASgIEhIKCmV4cGlyeURhdGUYAiABKAkiUQoQQWRkVGVuYW50UmVxdWVzdBIMCgRuYW1lGAEgASgJEgwKBHNsdWcYAiABKAkSDwoHYWRkcmVzcxgDIAEoCRIQCghpc0FjdGl2ZRgEIAEoCCJgChNVcGRhdGVUZW5hbnRSZXF1ZXN0EgoKAmlkGAEgASgFEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIPCgdhZGRyZXNzGAQgASgJEhAKCGlzQWN0aXZlGAUgASgIIiIKDlRlbmFudFJlc3BvbnNlEhAKCHRlbmFudElkGAEgASgJIiQKEEdldFRlbmFudFJlcXVlc3QSEAoIdGVuYW50SWQYASABKAUiMgoSR2V0VGVuYW50c1Jlc3BvbnNlEhwKB3RlbmFudHMYASADKAsyCy5hcHAuVGVuYW50IoIBCgZUZW5hbnQSCgoCaWQYASABKAUSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEg8KB2FkZHJlc3MYBCABKAkSEAoIaXNBY3RpdmUYBSABKAgSLQoJY3JlYXRlZEF0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJRCg5BZGRQbGFuUmVxdWVzdBIMCgRuYW1lGAEgASgJEg0KBXByaWNlGAIgASgDEhAKCGR1cmF0aW9uGAMgASgFEhAKCHRlbmFudElkGAQgASgFIk4KEVVwZGF0ZVBsYW5SZXF1ZXN0EgoKAmlkGAEgASgFEgwKBG5hbWUYAiABKAkSDQoFcHJpY2UYAyABKAMSEAoIZHVyYXRpb24YBCABKAUiHgoMUGxhblJlc3BvbnNlEg4KBnBsYW5JZBgBIAEoCSIgCg5HZXRQbGFuUmVxdWVzdBIOCgZwbGFuSWQYASABKAUiLAoQR2V0UGxhbnNSZXNwb25zZRIYCgVwbGFucxgBIAMoCzIJLmFwcC5QbGFuInAKBFBsYW4SCgoCaWQYASABKAUSDAoEbmFtZRgCIAEoCRINCgVwcmljZRgDIAEoAxIQCghkdXJhdGlvbhgEIAEoBRIQCgh0ZW5hbnRJZBgFIAEoBRIbCgZ0ZW5hbnQYBiABKAsyCy5hcHAuVGVuYW50IvIBCgpNZW1iZXJzaGlwEgoKAmlkGAEgASgFEg4KBnVzZXJJZBgCIAEoBRIXCgRwbGFuGAMgASgLMgkuYXBwLlBsYW4SDgoGc3RhdHVzGAQgASgJEi0KCXN0YXJ0RGF0ZRgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKwoHZW5kRGF0ZRgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASHwoIb2ZmZXJpbmcYByABKAsyDS5hcHAuT2ZmZXJpbmcSDgoGcGxhbklkGAggASgFEhIKCm9mZmVyaW5nSWQYCSABKAUihAEKGENyZWF0ZVRyYW5zYWN0aW9uUmVxdWVzdBIQCghtZW1iZXJJZBgBIAEoBRITCgZwbGFuSWQYAiABKAVIAIgBARIXCgpvZmZlcmluZ0lkGAMgASgFSAGIAQESDgoGbWV0aG9kGAQgASgJQgkKB19wbGFuSWRCDQoLX29mZmVyaW5nSWQiYAoWR2V0VHJhbnNhY3Rpb25zUmVxdWVzdBIWCglzdGFydERhdGUYASABKAlIAIgBARIUCgdlbmREYXRlGAIgASgJSAGIAQFCDAoKX3N0YXJ0RGF0ZUIKCghfZW5kRGF0ZSIuChVHZXRUcmFuc2FjdGlvblJlcXVlc3QSFQoNdHJhbnNhY3Rpb25JZBgBIAEoCSJBChdHZXRUcmFuc2FjdGlvbnNSZXNwb25zZRImCgx0cmFuc2FjdGlvbnMYASADKAsyEC5hcHAuVHJhbnNhY3Rpb24iXAoORmluYW5jZVN1bW1hcnkSFAoMdG90YWxSZXZlbnVlGAEgASgDEhkKEXRvdGFsVHJhbnNhY3Rpb25zGAIgASgFEhkKEWFjdGl2ZU1lbWJlcnNoaXBzGAMgASgFItsCCgtUcmFuc2FjdGlvbhIKCgJpZBgBIAEoCRIQCghtZW1iZXJJZBgCIAEoBRITCgZwbGFuSWQYAyABKAVIAIgBARIOCgZhbW91bnQYBCABKAMSDgoGbWV0aG9kGAUgASgJEg4KBnN0YXR1cxgGIAEoCRIPCgdxcmlzVXJsGAcgASgJEi0KCWNyZWF0ZWRBdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFwoKbWVtYmVyTmFtZRgJIAEoCUgBiAEBEhUKCHBsYW5OYW1lGAogASgJSAKIAQESFwoKb2ZmZXJpbmdJZBgLIAEoBUgDiAEBEhkKDG9mZmVyaW5nTmFtZRgMIAEoCUgEiAEBQgkKB19wbGFuSWRCDQoLX21lbWJlck5hbWVCCwoJX3BsYW5OYW1lQg0KC19vZmZlcmluZ0lkQg8KDV9vZmZlcmluZ05hbWUigQEKEkFkZE9mZmVyaW5nUmVxdWVzdBIMCgRuYW1lGAEgASgJEg0KBXByaWNlGAIgASgDEgwKBHR5cGUYAyABKAkSEAoIZHVyYXRpb24YBCABKAUSDQoFc3RvY2sYBSABKAUSDQoFcXVvdGEYBiABKAUSEAoIdGVuYW50SWQYByABKAUifgoVVXBkYXRlT2ZmZXJpbmdSZXF1ZXN0EgoKAmlkGAEgASgFEgwKBG5hbWUYAiABKAkSDQoFcHJpY2UYAyABKAMSDAoEdHlwZRgEIAEoCRIQCghkdXJhdGlvbhgFIAEoBRINCgVzdG9jaxgGIAEoBRINCgVxdW90YRgHIAEoBSImChBPZmZlcmluZ1Jlc3BvbnNlEhIKCm9mZmVyaW5nSWQYASABKAUiKAoSR2V0T2ZmZXJpbmdSZXF1ZXN0EhIKCm9mZmVyaW5nSWQYASABKAUiOAoUR2V0T2ZmZXJpbmdzUmVzcG9uc2USIAoJb2ZmZXJpbmdzGAEgAygLMg0uYXBwLk9mZmVyaW5nIoMBCghPZmZlcmluZxIKCgJpZBgBIAEoBRIMCgRuYW1lGAIgASgJEg0KBXByaWNlGAMgASgDEgwKBHR5cGUYBCABKAkSEAoIZHVyYXRpb24YBSABKAUSDQoFc3RvY2sYBiABKAUSDQoFcXVvdGEYByABKAUSEAoIdGVuYW50SWQYCCABKAUiIgoOQ2hlY2tJblJlcXVlc3QSEAoIbWVtYmVySWQYASABKAkiNwoPQ2hlY2tJblJlc3BvbnNlEhEKCWNoZWNrSW5JZBgBIAEoCRIRCgl0aW1lc3RhbXAYAiABKAkiLwobR2V0QXR0ZW5kYW5jZUhpc3RvcnlSZXF1ZXN0EhAKCG1lbWJlcklkGAEgASgJIjgKEEF0dGVuZGFuY2VSZWNvcmQSEQoJY2hlY2tJbklkGAEgASgJEhEKCXRpbWVzdGFtcBgCIAEoCSI7ChFBdHRlbmRhbmNlSGlzdG9yeRImCgdyZWNvcmRzGAEgAygLMhUuYXBwLkF0dGVuZGFuY2VSZWNvcmQykwEKC0F1dGhTZXJ2aWNlEi0KBUxvZ2luEhEuYXBwLkxvZ2luUmVxdWVzdBoRLmFwcC5BdXRoUmVzcG9uc2USKgoKR2V0UHJvZmlsZRIKLmFwcC5FbXB0eRoQLmFwcC5Vc2VyUHJvZmlsZRIpCgZMb2dvdXQSCi5hcHAuRW1wdHkaEy5hcHAuTG9nb3V0UmVzcG9uc2UywgIKDU1lbWJlclNlcnZpY2USQQoOUmVnaXN0ZXJNZW1iZXISGi5hcHAuUmVnaXN0ZXJNZW1iZXJSZXF1ZXN0GhMuYXBwLk1lbWJlclJlc3BvbnNlEj0KDFVwZGF0ZU1lbWJlchIYLmFwcC5VcGRhdGVNZW1iZXJSZXF1ZXN0GhMuYXBwLk1lbWJlclJlc3BvbnNlEjgKDERlbGV0ZU1lbWJlchIcLmFwcC5HZXRNZW1iZXJQcm9maWxlUmVxdWVzdBoKLmFwcC5FbXB0eRIxCgpHZXRNZW1iZXJzEgouYXBwLkVtcHR5GhcuYXBwLkdldE1lbWJlcnNSZXNwb25zZRJCChBHZXRNZW1iZXJQcm9maWxlEhwuYXBwLkdldE1lbWJlclByb2ZpbGVSZXF1ZXN0GhAuYXBwLlVzZXJQcm9maWxlMp4CCg1UZW5hbnRTZXJ2aWNlEjcKCUFkZFRlbmFudBIVLmFwcC5BZGRUZW5hbnRSZXF1ZXN0GhMuYXBwLlRlbmFudFJlc3BvbnNlEj0KDFVwZGF0ZVRlbmFudBIYLmFwcC5VcGRhdGVUZW5hbnRSZXF1ZXN0GhMuYXBwLlRlbmFudFJlc3BvbnNlEjEKDERlbGV0ZVRlbmFudBIVLmFwcC5HZXRUZW5hbnRSZXF1ZXN0GgouYXBwLkVtcHR5EjEKCkdldFRlbmFudHMSCi5hcHAuRW1wdHkaFy5hcHAuR2V0VGVuYW50c1Jlc3BvbnNlEi8KCUdldFRlbmFudBIVLmFwcC5HZXRUZW5hbnRSZXF1ZXN0GgsuYXBwLlRlbmFudDKCAgoLUGxhblNlcnZpY2USMQoHQWRkUGxhbhITLmFwcC5BZGRQbGFuUmVxdWVzdBoRLmFwcC5QbGFuUmVzcG9uc2USNwoKVXBkYXRlUGxhbhIWLmFwcC5VcGRhdGVQbGFuUmVxdWVzdBoRLmFwcC5QbGFuUmVzcG9uc2USLQoKRGVsZXRlUGxhbhITLmFwcC5HZXRQbGFuUmVxdWVzdBoKLmFwcC5FbXB0eRItCghHZXRQbGFucxIKLmFwcC5FbXB0eRoVLmFwcC5HZXRQbGFuc1Jlc3BvbnNlEikKB0dldFBsYW4SEy5hcHAuR2V0UGxhblJlcXVlc3QaCS5hcHAuUGxhbjKMAwoSVHJhbnNhY3Rpb25TZXJ2aWNlEkQKEUNyZWF0ZVRyYW5zYWN0aW9uEh0uYXBwLkNyZWF0ZVRyYW5zYWN0aW9uUmVxdWVzdBoQLmFwcC5UcmFuc2FjdGlvbhJMCg9HZXRUcmFuc2FjdGlvbnMSGy5hcHAuR2V0VHJhbnNhY3Rpb25zUmVxdWVzdBocLmFwcC5HZXRUcmFuc2FjdGlvbnNSZXNwb25zZRJGChZDaGVja1RyYW5zYWN0aW9uU3RhdHVzEhouYXBwLkdldFRyYW5zYWN0aW9uUmVxdWVzdBoQLmFwcC5UcmFuc2FjdGlvbhJTChVHZXRNZW1iZXJUcmFuc2FjdGlvbnMSHC5hcHAuR2V0TWVtYmVyUHJvZmlsZVJlcXVlc3QaHC5hcHAuR2V0VHJhbnNhY3Rpb25zUmVzcG9uc2USRQoRR2V0RmluYW5jZVN1bW1hcnkSGy5hcHAuR2V0VHJhbnNhY3Rpb25zUmVxdWVzdBoTLmFwcC5GaW5hbmNlU3VtbWFyeTK6AgoPT2ZmZXJpbmdTZXJ2aWNlEj0KC0FkZE9mZmVyaW5nEhcuYXBwLkFkZE9mZmVyaW5nUmVxdWVzdBoVLmFwcC5PZmZlcmluZ1Jlc3BvbnNlEkMKDlVwZGF0ZU9mZmVyaW5nEhouYXBwLlVwZGF0ZU9mZmVyaW5nUmVxdWVzdBoVLmFwcC5PZmZlcmluZ1Jlc3BvbnNlEjUKDkRlbGV0ZU9mZmVyaW5nEhcuYXBwLkdldE9mZmVyaW5nUmVxdWVzdBoKLmFwcC5FbXB0eRI1CgxHZXRPZmZlcmluZ3MSCi5hcHAuRW1wdHkaGS5hcHAuR2V0T2ZmZXJpbmdzUmVzcG9uc2USNQoLR2V0T2ZmZXJpbmcSFy5hcHAuR2V0T2ZmZXJpbmdSZXF1ZXN0Gg0uYXBwLk9mZmVyaW5nMpsBChFBdHRlbmRhbmNlU2VydmljZRI0CgdDaGVja0luEhMuYXBwLkNoZWNrSW5SZXF1ZXN0GhQuYXBwLkNoZWNrSW5SZXNwb25zZRJQChRHZXRBdHRlbmRhbmNlSGlzdG9yeRIgLmFwcC5HZXRBdHRlbmRhbmNlSGlzdG9yeVJlcXVlc3QaFi5hcHAuQXR0ZW5kYW5jZUhpc3RvcnliBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * @generated from message app.Empty
@@ -239,6 +239,23 @@ export const GetMemberProfileRequestSchema: GenMessage<GetMemberProfileRequest> 
   messageDesc(file_app, 8);
 
 /**
+ * @generated from message app.GetMembersResponse
+ */
+export type GetMembersResponse = Message<"app.GetMembersResponse"> & {
+  /**
+   * @generated from field: repeated app.UserProfile members = 1;
+   */
+  members: UserProfile[];
+};
+
+/**
+ * Describes the message app.GetMembersResponse.
+ * Use `create(GetMembersResponseSchema)` to create a new message.
+ */
+export const GetMembersResponseSchema: GenMessage<GetMembersResponse> = /*@__PURE__*/
+  messageDesc(file_app, 9);
+
+/**
  * @generated from message app.MembershipStatus
  */
 export type MembershipStatus = Message<"app.MembershipStatus"> & {
@@ -258,7 +275,7 @@ export type MembershipStatus = Message<"app.MembershipStatus"> & {
  * Use `create(MembershipStatusSchema)` to create a new message.
  */
 export const MembershipStatusSchema: GenMessage<MembershipStatus> = /*@__PURE__*/
-  messageDesc(file_app, 9);
+  messageDesc(file_app, 10);
 
 /**
  * @generated from message app.AddTenantRequest
@@ -290,7 +307,7 @@ export type AddTenantRequest = Message<"app.AddTenantRequest"> & {
  * Use `create(AddTenantRequestSchema)` to create a new message.
  */
 export const AddTenantRequestSchema: GenMessage<AddTenantRequest> = /*@__PURE__*/
-  messageDesc(file_app, 10);
+  messageDesc(file_app, 11);
 
 /**
  * @generated from message app.UpdateTenantRequest
@@ -327,7 +344,7 @@ export type UpdateTenantRequest = Message<"app.UpdateTenantRequest"> & {
  * Use `create(UpdateTenantRequestSchema)` to create a new message.
  */
 export const UpdateTenantRequestSchema: GenMessage<UpdateTenantRequest> = /*@__PURE__*/
-  messageDesc(file_app, 11);
+  messageDesc(file_app, 12);
 
 /**
  * @generated from message app.TenantResponse
@@ -344,7 +361,7 @@ export type TenantResponse = Message<"app.TenantResponse"> & {
  * Use `create(TenantResponseSchema)` to create a new message.
  */
 export const TenantResponseSchema: GenMessage<TenantResponse> = /*@__PURE__*/
-  messageDesc(file_app, 12);
+  messageDesc(file_app, 13);
 
 /**
  * @generated from message app.GetTenantRequest
@@ -361,7 +378,24 @@ export type GetTenantRequest = Message<"app.GetTenantRequest"> & {
  * Use `create(GetTenantRequestSchema)` to create a new message.
  */
 export const GetTenantRequestSchema: GenMessage<GetTenantRequest> = /*@__PURE__*/
-  messageDesc(file_app, 13);
+  messageDesc(file_app, 14);
+
+/**
+ * @generated from message app.GetTenantsResponse
+ */
+export type GetTenantsResponse = Message<"app.GetTenantsResponse"> & {
+  /**
+   * @generated from field: repeated app.Tenant tenants = 1;
+   */
+  tenants: Tenant[];
+};
+
+/**
+ * Describes the message app.GetTenantsResponse.
+ * Use `create(GetTenantsResponseSchema)` to create a new message.
+ */
+export const GetTenantsResponseSchema: GenMessage<GetTenantsResponse> = /*@__PURE__*/
+  messageDesc(file_app, 15);
 
 /**
  * @generated from message app.Tenant
@@ -403,7 +437,7 @@ export type Tenant = Message<"app.Tenant"> & {
  * Use `create(TenantSchema)` to create a new message.
  */
 export const TenantSchema: GenMessage<Tenant> = /*@__PURE__*/
-  messageDesc(file_app, 14);
+  messageDesc(file_app, 16);
 
 /**
  * @generated from message app.AddPlanRequest
@@ -437,7 +471,7 @@ export type AddPlanRequest = Message<"app.AddPlanRequest"> & {
  * Use `create(AddPlanRequestSchema)` to create a new message.
  */
 export const AddPlanRequestSchema: GenMessage<AddPlanRequest> = /*@__PURE__*/
-  messageDesc(file_app, 15);
+  messageDesc(file_app, 17);
 
 /**
  * @generated from message app.UpdatePlanRequest
@@ -471,7 +505,7 @@ export type UpdatePlanRequest = Message<"app.UpdatePlanRequest"> & {
  * Use `create(UpdatePlanRequestSchema)` to create a new message.
  */
 export const UpdatePlanRequestSchema: GenMessage<UpdatePlanRequest> = /*@__PURE__*/
-  messageDesc(file_app, 16);
+  messageDesc(file_app, 18);
 
 /**
  * @generated from message app.PlanResponse
@@ -488,7 +522,7 @@ export type PlanResponse = Message<"app.PlanResponse"> & {
  * Use `create(PlanResponseSchema)` to create a new message.
  */
 export const PlanResponseSchema: GenMessage<PlanResponse> = /*@__PURE__*/
-  messageDesc(file_app, 17);
+  messageDesc(file_app, 19);
 
 /**
  * @generated from message app.GetPlanRequest
@@ -505,7 +539,24 @@ export type GetPlanRequest = Message<"app.GetPlanRequest"> & {
  * Use `create(GetPlanRequestSchema)` to create a new message.
  */
 export const GetPlanRequestSchema: GenMessage<GetPlanRequest> = /*@__PURE__*/
-  messageDesc(file_app, 18);
+  messageDesc(file_app, 20);
+
+/**
+ * @generated from message app.GetPlansResponse
+ */
+export type GetPlansResponse = Message<"app.GetPlansResponse"> & {
+  /**
+   * @generated from field: repeated app.Plan plans = 1;
+   */
+  plans: Plan[];
+};
+
+/**
+ * Describes the message app.GetPlansResponse.
+ * Use `create(GetPlansResponseSchema)` to create a new message.
+ */
+export const GetPlansResponseSchema: GenMessage<GetPlansResponse> = /*@__PURE__*/
+  messageDesc(file_app, 21);
 
 /**
  * @generated from message app.Plan
@@ -549,7 +600,7 @@ export type Plan = Message<"app.Plan"> & {
  * Use `create(PlanSchema)` to create a new message.
  */
 export const PlanSchema: GenMessage<Plan> = /*@__PURE__*/
-  messageDesc(file_app, 19);
+  messageDesc(file_app, 22);
 
 /**
  * @generated from message app.Membership
@@ -608,7 +659,7 @@ export type Membership = Message<"app.Membership"> & {
  * Use `create(MembershipSchema)` to create a new message.
  */
 export const MembershipSchema: GenMessage<Membership> = /*@__PURE__*/
-  messageDesc(file_app, 20);
+  messageDesc(file_app, 23);
 
 /**
  * @generated from message app.CreateTransactionRequest
@@ -642,24 +693,19 @@ export type CreateTransactionRequest = Message<"app.CreateTransactionRequest"> &
  * Use `create(CreateTransactionRequestSchema)` to create a new message.
  */
 export const CreateTransactionRequestSchema: GenMessage<CreateTransactionRequest> = /*@__PURE__*/
-  messageDesc(file_app, 21);
+  messageDesc(file_app, 24);
 
 /**
  * @generated from message app.GetTransactionsRequest
  */
 export type GetTransactionsRequest = Message<"app.GetTransactionsRequest"> & {
   /**
-   * @generated from field: optional int32 tenantId = 1;
-   */
-  tenantId?: number | undefined;
-
-  /**
-   * @generated from field: optional string startDate = 2;
+   * @generated from field: optional string startDate = 1;
    */
   startDate?: string | undefined;
 
   /**
-   * @generated from field: optional string endDate = 3;
+   * @generated from field: optional string endDate = 2;
    */
   endDate?: string | undefined;
 };
@@ -669,7 +715,7 @@ export type GetTransactionsRequest = Message<"app.GetTransactionsRequest"> & {
  * Use `create(GetTransactionsRequestSchema)` to create a new message.
  */
 export const GetTransactionsRequestSchema: GenMessage<GetTransactionsRequest> = /*@__PURE__*/
-  messageDesc(file_app, 22);
+  messageDesc(file_app, 25);
 
 /**
  * @generated from message app.GetTransactionRequest
@@ -686,7 +732,24 @@ export type GetTransactionRequest = Message<"app.GetTransactionRequest"> & {
  * Use `create(GetTransactionRequestSchema)` to create a new message.
  */
 export const GetTransactionRequestSchema: GenMessage<GetTransactionRequest> = /*@__PURE__*/
-  messageDesc(file_app, 23);
+  messageDesc(file_app, 26);
+
+/**
+ * @generated from message app.GetTransactionsResponse
+ */
+export type GetTransactionsResponse = Message<"app.GetTransactionsResponse"> & {
+  /**
+   * @generated from field: repeated app.Transaction transactions = 1;
+   */
+  transactions: Transaction[];
+};
+
+/**
+ * Describes the message app.GetTransactionsResponse.
+ * Use `create(GetTransactionsResponseSchema)` to create a new message.
+ */
+export const GetTransactionsResponseSchema: GenMessage<GetTransactionsResponse> = /*@__PURE__*/
+  messageDesc(file_app, 27);
 
 /**
  * @generated from message app.FinanceSummary
@@ -713,7 +776,7 @@ export type FinanceSummary = Message<"app.FinanceSummary"> & {
  * Use `create(FinanceSummarySchema)` to create a new message.
  */
 export const FinanceSummarySchema: GenMessage<FinanceSummary> = /*@__PURE__*/
-  messageDesc(file_app, 24);
+  messageDesc(file_app, 28);
 
 /**
  * @generated from message app.Transaction
@@ -789,7 +852,7 @@ export type Transaction = Message<"app.Transaction"> & {
  * Use `create(TransactionSchema)` to create a new message.
  */
 export const TransactionSchema: GenMessage<Transaction> = /*@__PURE__*/
-  messageDesc(file_app, 25);
+  messageDesc(file_app, 29);
 
 /**
  * @generated from message app.AddOfferingRequest
@@ -844,7 +907,7 @@ export type AddOfferingRequest = Message<"app.AddOfferingRequest"> & {
  * Use `create(AddOfferingRequestSchema)` to create a new message.
  */
 export const AddOfferingRequestSchema: GenMessage<AddOfferingRequest> = /*@__PURE__*/
-  messageDesc(file_app, 26);
+  messageDesc(file_app, 30);
 
 /**
  * @generated from message app.UpdateOfferingRequest
@@ -899,7 +962,7 @@ export type UpdateOfferingRequest = Message<"app.UpdateOfferingRequest"> & {
  * Use `create(UpdateOfferingRequestSchema)` to create a new message.
  */
 export const UpdateOfferingRequestSchema: GenMessage<UpdateOfferingRequest> = /*@__PURE__*/
-  messageDesc(file_app, 27);
+  messageDesc(file_app, 31);
 
 /**
  * @generated from message app.OfferingResponse
@@ -916,7 +979,7 @@ export type OfferingResponse = Message<"app.OfferingResponse"> & {
  * Use `create(OfferingResponseSchema)` to create a new message.
  */
 export const OfferingResponseSchema: GenMessage<OfferingResponse> = /*@__PURE__*/
-  messageDesc(file_app, 28);
+  messageDesc(file_app, 32);
 
 /**
  * @generated from message app.GetOfferingRequest
@@ -933,7 +996,24 @@ export type GetOfferingRequest = Message<"app.GetOfferingRequest"> & {
  * Use `create(GetOfferingRequestSchema)` to create a new message.
  */
 export const GetOfferingRequestSchema: GenMessage<GetOfferingRequest> = /*@__PURE__*/
-  messageDesc(file_app, 29);
+  messageDesc(file_app, 33);
+
+/**
+ * @generated from message app.GetOfferingsResponse
+ */
+export type GetOfferingsResponse = Message<"app.GetOfferingsResponse"> & {
+  /**
+   * @generated from field: repeated app.Offering offerings = 1;
+   */
+  offerings: Offering[];
+};
+
+/**
+ * Describes the message app.GetOfferingsResponse.
+ * Use `create(GetOfferingsResponseSchema)` to create a new message.
+ */
+export const GetOfferingsResponseSchema: GenMessage<GetOfferingsResponse> = /*@__PURE__*/
+  messageDesc(file_app, 34);
 
 /**
  * @generated from message app.Offering
@@ -993,7 +1073,7 @@ export type Offering = Message<"app.Offering"> & {
  * Use `create(OfferingSchema)` to create a new message.
  */
 export const OfferingSchema: GenMessage<Offering> = /*@__PURE__*/
-  messageDesc(file_app, 30);
+  messageDesc(file_app, 35);
 
 /**
  * @generated from message app.CheckInRequest
@@ -1010,7 +1090,7 @@ export type CheckInRequest = Message<"app.CheckInRequest"> & {
  * Use `create(CheckInRequestSchema)` to create a new message.
  */
 export const CheckInRequestSchema: GenMessage<CheckInRequest> = /*@__PURE__*/
-  messageDesc(file_app, 31);
+  messageDesc(file_app, 36);
 
 /**
  * @generated from message app.CheckInResponse
@@ -1032,7 +1112,7 @@ export type CheckInResponse = Message<"app.CheckInResponse"> & {
  * Use `create(CheckInResponseSchema)` to create a new message.
  */
 export const CheckInResponseSchema: GenMessage<CheckInResponse> = /*@__PURE__*/
-  messageDesc(file_app, 32);
+  messageDesc(file_app, 37);
 
 /**
  * @generated from message app.GetAttendanceHistoryRequest
@@ -1049,7 +1129,7 @@ export type GetAttendanceHistoryRequest = Message<"app.GetAttendanceHistoryReque
  * Use `create(GetAttendanceHistoryRequestSchema)` to create a new message.
  */
 export const GetAttendanceHistoryRequestSchema: GenMessage<GetAttendanceHistoryRequest> = /*@__PURE__*/
-  messageDesc(file_app, 33);
+  messageDesc(file_app, 38);
 
 /**
  * @generated from message app.AttendanceRecord
@@ -1071,7 +1151,7 @@ export type AttendanceRecord = Message<"app.AttendanceRecord"> & {
  * Use `create(AttendanceRecordSchema)` to create a new message.
  */
 export const AttendanceRecordSchema: GenMessage<AttendanceRecord> = /*@__PURE__*/
-  messageDesc(file_app, 34);
+  messageDesc(file_app, 39);
 
 /**
  * @generated from message app.AttendanceHistory
@@ -1088,7 +1168,7 @@ export type AttendanceHistory = Message<"app.AttendanceHistory"> & {
  * Use `create(AttendanceHistorySchema)` to create a new message.
  */
 export const AttendanceHistorySchema: GenMessage<AttendanceHistory> = /*@__PURE__*/
-  messageDesc(file_app, 35);
+  messageDesc(file_app, 40);
 
 /**
  * @generated from service app.AuthService
@@ -1153,9 +1233,9 @@ export const MemberService: GenService<{
    * @generated from rpc app.MemberService.GetMembers
    */
   getMembers: {
-    methodKind: "server_streaming";
+    methodKind: "unary";
     input: typeof EmptySchema;
-    output: typeof UserProfileSchema;
+    output: typeof GetMembersResponseSchema;
   },
   /**
    * @generated from rpc app.MemberService.GetMemberProfile
@@ -1200,9 +1280,9 @@ export const TenantService: GenService<{
    * @generated from rpc app.TenantService.GetTenants
    */
   getTenants: {
-    methodKind: "server_streaming";
+    methodKind: "unary";
     input: typeof EmptySchema;
-    output: typeof TenantSchema;
+    output: typeof GetTenantsResponseSchema;
   },
   /**
    * @generated from rpc app.TenantService.GetTenant
@@ -1247,9 +1327,9 @@ export const PlanService: GenService<{
    * @generated from rpc app.PlanService.GetPlans
    */
   getPlans: {
-    methodKind: "server_streaming";
+    methodKind: "unary";
     input: typeof EmptySchema;
-    output: typeof PlanSchema;
+    output: typeof GetPlansResponseSchema;
   },
   /**
    * @generated from rpc app.PlanService.GetPlan
@@ -1278,9 +1358,9 @@ export const TransactionService: GenService<{
    * @generated from rpc app.TransactionService.GetTransactions
    */
   getTransactions: {
-    methodKind: "server_streaming";
+    methodKind: "unary";
     input: typeof GetTransactionsRequestSchema;
-    output: typeof TransactionSchema;
+    output: typeof GetTransactionsResponseSchema;
   },
   /**
    * @generated from rpc app.TransactionService.CheckTransactionStatus
@@ -1294,9 +1374,9 @@ export const TransactionService: GenService<{
    * @generated from rpc app.TransactionService.GetMemberTransactions
    */
   getMemberTransactions: {
-    methodKind: "server_streaming";
+    methodKind: "unary";
     input: typeof GetMemberProfileRequestSchema;
-    output: typeof TransactionSchema;
+    output: typeof GetTransactionsResponseSchema;
   },
   /**
    * @generated from rpc app.TransactionService.GetFinanceSummary
@@ -1341,9 +1421,9 @@ export const OfferingService: GenService<{
    * @generated from rpc app.OfferingService.GetOfferings
    */
   getOfferings: {
-    methodKind: "server_streaming";
+    methodKind: "unary";
     input: typeof EmptySchema;
-    output: typeof OfferingSchema;
+    output: typeof GetOfferingsResponseSchema;
   },
   /**
    * @generated from rpc app.OfferingService.GetOffering

@@ -23,8 +23,6 @@ import { OfferingController } from './controllers/offering.controller';
       useFactory: async (configService: ConfigService) => {
         const REDIS_URL = configService.get<string>('REDIS_URL');
 
-        console.log(`[Redis Debug] Mencoba connect ke ${REDIS_URL}`);
-
         return {
           type: 'single',
           url: `${REDIS_URL}`,
@@ -35,17 +33,15 @@ import { OfferingController } from './controllers/offering.controller';
             },
           },
           onClientReady: (client) => {
-            console.log('[Redis Debug] Jembatan onClientReady aktif.');
-
             client.on('error', (err) => {
-              console.error('[Redis Debug] TERDETEKSI ERROR ASLI:', {
+              console.error('[Redis] TERDETEKSI ERROR ASLI:', {
                 message: err.message,
                 stack: err.stack,
               });
             });
 
             client.on('connect', () => {
-              console.log('[Redis Debug] Berhasil terkoneksi ke server Redis!');
+              console.log('[Redis] Berhasil terkoneksi ke server Redis!');
             });
           },
         };

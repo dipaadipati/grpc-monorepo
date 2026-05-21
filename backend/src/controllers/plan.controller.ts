@@ -145,17 +145,57 @@ export class PlanController {
     }
 
     @GrpcMethod('PlanService', 'GetPlans')
-    async *getPlans(context: any) {
-        const user = context.values.get(kUser);
-        const cacheKey = this.getCacheKey(user.tenantId);
+    async getPlans(request: any, context: any) {
+        let user: any;
+        let isConnectRpc = false;
 
-        const cached = await this.redis.get(cacheKey);
-        if (cached) {
-            const plans = JSON.parse(cached);
-            for (const p of plans) yield create(PlanSchema, p);
-            return;
+        if (context && context.values && typeof context.values.get === 'function') {
+            isConnectRpc = true;
+            user = context.values.get(kUser);
+        }
+        else {
+            isConnectRpc = false;
+            let metadata: grpc.Metadata | null = null;
+
+            if (request && typeof request.get === 'function') {
+                metadata = request;
+            } else if (context && typeof context.get === 'function') {
+                metadata = context;
+            } else if (request && typeof request.getArgByIndex === 'function') {
+                metadata = request.getArgByIndex(1);
+            }
+
+            if (metadata) {
+                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+                if (authHeader && authHeader.startsWith('Bearer ')) {
+                    const token = authHeader.replace('Bearer ', '').trim();
+                    const sessionStr = await this.redis.get(`token:${token}`);
+                    if (sessionStr) {
+                        user = JSON.parse(sessionStr);
+                    }
+                }
+            }
         }
 
+        if (!user) {
+            throw new RpcException({
+                code: grpc.status.UNAUTHENTICATED,
+                message: 'Akses ditolak! Sesi tidak valid atau telah kedaluwarsa.',
+            });
+        }
+
+        const cacheKey = this.getCacheKey(user.tenantId);
+
+        if (isConnectRpc) {
+            const cached = await this.redis.get(cacheKey);
+            if (cached) {
+                console.log('⚡ [REDIS] Serving Plans from cache untuk Svelte Web');
+                const plansArray = JSON.parse(cached);
+                return { plans: plansArray };
+            }
+        }
+
+        console.log(`🐢 [DB] Menarik data plans dari PostgreSQL untuk cabang tenant: ${user.tenantId}`);
         const plans = await this.prisma.membershipPlan.findMany({
             where: { tenantId: user.tenantId },
             include: { tenant: true },
@@ -163,23 +203,28 @@ export class PlanController {
         });
 
         const mappedPlans = plans.map(p => ({
-            id: p.id,
-            name: p.name,
+            id: Number(p.id),
+            name: p.name || '',
             price: BigInt(Math.round(Number(p.price))),
-            duration: p.duration,
-            tenantId: p.tenantId,
+            duration: p.duration || 0,
+            tenantId: Number(p.tenantId),
             tenant: {
-                id: p.tenant.id,
-                name: p.tenant.name,
-                slug: p.tenant.slug
+                id: Number(p.tenant.id),
+                name: p.tenant.name || '',
+                slug: p.tenant.slug || ''
             }
         }));
 
         const safeDbPlans = serializeBigInt(mappedPlans);
         await this.redis.set(cacheKey, JSON.stringify(safeDbPlans), 'EX', 3600);
 
-        for (const p of mappedPlans) {
-            yield create(PlanSchema, p);
+        if (isConnectRpc) {
+            console.log('🌐 [GetPlans] Return array format Connect RPC');
+            const connectPlans = mappedPlans.map(p => create(PlanSchema, sanitizeNull(p)));
+            return { plans: connectPlans };
+        } else {
+            console.log('📱 [GetPlans] Return array format Native gRPC Plain Object');
+            return { plans: mappedPlans };
         }
     }
 

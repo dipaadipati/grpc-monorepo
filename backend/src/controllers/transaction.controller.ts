@@ -156,19 +156,46 @@ export class TransactionController {
     }
 
     @GrpcMethod('TransactionService', 'GetTransactions')
-    async *getTransactions(req: GetTransactionsRequest, context: any) {
-        const user = context.values.get(kUser);
-        const adminTenantId = user?.tenantId;
-        const adminRole = user?.role;
+    async getTransactions(req: any, context: any) {
+        let user: any;
+        let isConnectRpc = false;
+
+        if (context && context.values && typeof context.values.get === 'function') {
+            isConnectRpc = true;
+            user = context.values.get(kUser);
+        } else {
+            isConnectRpc = false;
+            let metadata: grpc.Metadata | null = context;
+
+            if (metadata && typeof metadata.get === 'function') {
+                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+                if (authHeader && authHeader.startsWith('Bearer ')) {
+                    const token = authHeader.replace('Bearer ', '').trim();
+                    const sessionStr = await this.redis.get(`token:${token}`);
+                    if (sessionStr) {
+                        user = JSON.parse(sessionStr);
+                    }
+                }
+            }
+        }
+
+        if (!user) {
+            throw new RpcException({
+                code: grpc.status.UNAUTHENTICATED,
+                message: 'Akses ditolak! Sesi tidak valid atau telah kedaluwarsa.',
+            });
+        }
+
+        const adminTenantId = user?.tenantId || user?.user?.tenantId;
+        const adminRole = user?.role || user?.user?.role;
 
         let tenantFilter = {};
-        if (adminRole === 'SUPER_ADMIN') {
-            if (req.tenantId) {
-                tenantFilter = { tenantId: req.tenantId };
-            }
-        } else {
-            tenantFilter = { user: { tenantId: adminTenantId } };
-        }
+
+        // if (adminRole === 'SUPER_ADMIN') {
+        // tenantFilter = {};
+        // } else {
+        tenantFilter = { user: { tenantId: Number(adminTenantId) } };
+        // }
 
         const transactions = await this.prisma.transaction.findMany({
             where: {
@@ -188,21 +215,28 @@ export class TransactionController {
             orderBy: { createdAt: 'desc' }
         });
 
-        for (const trx of transactions) {
-            yield create(TransactionSchema, sanitizeNull({
-                id: trx.id,
-                memberId: trx.userId,
-                memberName: trx.user.name,
-                planId: trx.plan?.id,
-                planName: trx.plan?.name,
-                offeringId: trx.offering?.id,
-                offeringName: trx.offering?.name,
+        const formattedTransactions = transactions.map((trx) => {
+            return {
+                id: String(trx.id),
+                memberId: Number(trx.userId),
+                memberName: trx.user?.name || '',
+                planId: trx.plan ? Number(trx.plan.id) : undefined,
+                planName: trx.plan?.name || '',
+                offeringId: trx.offering ? Number(trx.offering.id) : undefined,
+                offeringName: trx.offering?.name || '',
                 amount: BigInt(trx.amount.toString()),
-                method: trx.method,
-                status: trx.status,
+                method: trx.method || '',
+                status: trx.status || '',
                 qrisUrl: trx.qrisUrl ?? "",
                 createdAt: timestampFromDate(new Date(trx.createdAt)),
-            }));
+            };
+        });
+
+        if (isConnectRpc) {
+            const connectTransactions = formattedTransactions.map(trx => create(TransactionSchema, sanitizeNull(trx)));
+            return { transactions: connectTransactions };
+        } else {
+            return { transactions: formattedTransactions };
         }
     }
 

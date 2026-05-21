@@ -27,9 +27,8 @@
 		offerings = [];
 		isLoadingData = true;
 		try {
-			for await (const item of offeringClient.getOfferings({})) {
-				offerings.push(item);
-			}
+			const getOfferings = await offeringClient.getOfferings({});
+			offerings = getOfferings.offerings;
 		} catch (err) {
 			console.error('Stream error:', err);
 		} finally {

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { enhance } from '$app/forms';
 
 	let { data, children } = $props();
 	const user = $derived(data.user);
@@ -13,15 +12,26 @@
 		{ name: 'Pengaturan', path: '/superadmin/settings', icon: 'fa-cog' }
 	];
 
+	const userInitials = $derived(
+		user?.name
+			? user.name
+					.split(' ')
+					.map((n: string) => n[0])
+					.join('')
+					.toUpperCase()
+			: 'SA'
+	);
+
 	async function handleLogout() {
 		const result = await (window as any).Swal.fire({
 			title: 'Keluar',
 			text: 'Apakah Anda yakin ingin keluar?',
 			icon: 'warning',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Ya, keluar!'
+			confirmButtonColor: '#8b5cf6',
+			cancelButtonColor: '#ef4444',
+			confirmButtonText: 'Ya, keluar!',
+			cancelButtonText: 'Batal'
 		});
 
 		if (result.isConfirmed) {
@@ -33,65 +43,73 @@
 	}
 </script>
 
-<div class="flex h-screen bg-gray-50 font-sans text-gray-900">
+<div class="flex h-screen w-screen overflow-hidden bg-gray-50 font-sans text-gray-900">
 	<aside
-		class="flex flex-col border-r border-slate-800 bg-slate-900 text-white transition-all duration-300"
+		class="flex h-full shrink-0 flex-col border-r border-slate-800 bg-slate-900 text-white transition-all duration-300"
 		class:w-64={isSidebarOpen}
 		class:w-20={!isSidebarOpen}
 	>
-		<div class="flex h-20 items-center gap-4 border-b border-slate-800 px-6">
+		<div class="flex h-20 shrink-0 items-center gap-4 border-b border-slate-800 px-6">
 			<div
-				class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500 shadow-lg shadow-blue-500/20"
+				class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-600 shadow-lg shadow-purple-600/30"
 			>
-				<i class="fas fa-dumbbell text-xl"></i>
+				<i class="fas fa-crown text-lg text-white"></i>
 			</div>
 			{#if isSidebarOpen}
-				<span class="overflow-hidden text-xl font-bold tracking-tight whitespace-nowrap"
-					>GYM PRO</span
-				>
+				<div class="flex flex-col overflow-hidden">
+					<span class="text-base font-extrabold tracking-wider whitespace-nowrap text-slate-100"
+						>GYM PRO</span
+					>
+					<span class="text-[10px] font-bold tracking-widest text-purple-400 uppercase"
+						>Super Admin</span
+					>
+				</div>
 			{/if}
 		</div>
 
-		<nav class="flex-1 space-y-1 px-3 py-6">
+		<nav class="no-scrollbar flex-1 space-y-1 overflow-y-auto px-3 py-6">
 			<a
 				href="/dashboard"
-				class="group flex items-center gap-4 rounded-xl bg-slate-600 px-4 py-3 text-white! transition-all duration-200 hover:bg-slate-700!"
-				class:bg-blue-600={page.url.pathname === '/dashboard'}
-				class:text-white={page.url.pathname === '/dashboard'}
-				class:text-slate-400={page.url.pathname !== '/dashboard'}
-				class:hover:bg-slate-800={page.url.pathname !== '/dashboard'}
+				class="flex items-center gap-4 rounded-xl bg-slate-800 px-4 py-3 text-slate-200 transition-colors hover:bg-slate-700 hover:text-white"
 			>
-				<i class="fas fa-building shrink-0 text-lg transition-transform group-hover:scale-110"></i>
+				<i class="fas fa-building shrink-0 text-lg text-purple-400"></i>
 				{#if isSidebarOpen}
-					<span class="font-medium"> Tenant Dashboard </span>
+					<span class="text-sm font-medium">Tenant Dashboard</span>
 				{/if}
 			</a>
+
+			<div class="mx-2 my-4 h-px bg-slate-800"></div>
+
 			{#each menuItems as item}
 				<a
 					href={item.path}
-					class="group flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-200"
-					class:bg-blue-600={page.url.pathname === item.path}
+					class="relative flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-150"
+					class:bg-purple-600={page.url.pathname === item.path}
 					class:text-white={page.url.pathname === item.path}
 					class:text-slate-400={page.url.pathname !== item.path}
 					class:hover:bg-slate-800={page.url.pathname !== item.path}
+					class:hover:text-slate-200={page.url.pathname !== item.path}
 				>
-					<i class="fas {item.icon} shrink-0 text-lg transition-transform group-hover:scale-110"
-					></i>
+					{#if page.url.pathname === item.path}
+						<div class="absolute left-0 h-5 w-1 rounded-r-md bg-white"></div>
+					{/if}
+
+					<i class="fas {item.icon} shrink-0 text-lg"></i>
 					{#if isSidebarOpen}
-						<span class="font-medium">{item.name}</span>
+						<span class="text-sm font-medium">{item.name}</span>
 					{/if}
 				</a>
 			{/each}
 		</nav>
 
-		<div class="border-t border-slate-800 p-4">
+		<div class="shrink-0 border-t border-slate-800 p-4">
 			<button
 				onclick={handleLogout}
 				class="flex w-full items-center gap-4 rounded-xl px-4 py-3 text-red-400 transition-colors hover:bg-red-500/10"
 			>
 				<i class="fas fa-sign-out-alt text-lg"></i>
 				{#if isSidebarOpen}
-					<span class="font-medium">Keluar</span>
+					<span class="text-sm font-medium">Keluar</span>
 				{/if}
 			</button>
 		</div>
@@ -99,62 +117,73 @@
 
 	<div class="flex min-w-0 flex-1 flex-col overflow-hidden">
 		<header
-			class="flex h-20 shrink-0 items-center justify-between border-b border-gray-200 bg-purple-200 px-8"
+			class="flex h-20 shrink-0 items-center justify-between border-b border-purple-100 bg-linear-to-r from-purple-50 via-white to-white px-8"
 		>
 			<div class="flex items-center gap-4">
 				<button
 					onclick={() => (isSidebarOpen = !isSidebarOpen)}
 					aria-label="Toggle sidebar"
-					class="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100"
+					class="rounded-xl border border-slate-200 bg-white p-2 text-slate-500 shadow-xs transition-colors hover:bg-gray-50 hover:text-slate-800"
 				>
-					<i class="fas fa-bars text-lg"></i>
+					<i class="fas fa-bars text-base"></i>
 				</button>
-				<h1 class="text-xl font-semibold text-gray-800">
-					{menuItems.find((i) => i.path === page.url.pathname)?.name || 'Admin Panel'}
-				</h1>
+				<div class="flex flex-col">
+					<h1 class="text-base leading-none font-bold tracking-tight text-gray-800">
+						{menuItems.find((i) => i.path === page.url.pathname)?.name || 'Super Admin Panel'}
+					</h1>
+					<span class="mt-1 text-[10px] font-bold tracking-wider text-purple-500 uppercase"
+						>Console Master</span
+					>
+				</div>
 			</div>
 
 			<div class="flex items-center gap-6">
 				<button
-					class="relative p-2 text-gray-400 transition-colors hover:text-gray-600"
+					class="relative p-2 text-gray-400 transition-colors hover:text-gray-600 focus:outline-none"
 					aria-label="Notifications"
 				>
 					<i class="fas fa-bell text-xl"></i>
-					<span class="absolute top-1 right-1 h-2 w-2 rounded-full border-2 border-white bg-red-500"
+					<span
+						class="absolute top-1 right-1 h-2 w-2 rounded-full border-2 border-white bg-purple-500"
 					></span>
 				</button>
 
 				<div class="flex items-center gap-3 border-l border-gray-200 pl-6">
 					<div class="hidden text-right sm:block">
-						<p class="text-sm leading-none font-bold text-gray-900">{user?.name}</p>
-						<p class="mt-1 text-xs tracking-wider text-gray-500 uppercase">{user?.tenantName}</p>
+						<p class="text-sm leading-none font-bold text-gray-900">{user?.name || 'Root'}</p>
+						<span
+							class="mt-1 inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 text-[9px] font-extrabold tracking-widest text-purple-700 uppercase ring-1 ring-purple-700/10"
+						>
+							SUPER ADMIN
+						</span>
 					</div>
 					<div
-						class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-linear-to-tr from-blue-600 to-indigo-600 font-bold text-white shadow-sm"
+						class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-linear-to-tr from-purple-600 to-indigo-600 font-bold text-white shadow-sm"
 					>
-						{user?.name
-							.split(' ')
-							.map((n) => n[0])
-							.join('')
-							.toUpperCase()}
+						{userInitials}
 					</div>
 				</div>
 			</div>
 		</header>
 
-		<main class="flex-1 overflow-y-auto p-8">
-			<div class="mx-auto max-w-7xl">
-				{@render children()}
+		<main class="flex-1 overflow-y-auto bg-gray-50/50 p-8">
+			<div class="mx-auto h-full max-w-7xl">
+				{#key page.url.pathname}
+					{@render children()}
+				{/key}
 			</div>
 		</main>
 	</div>
 
-	<form id="logoutForm" method="POST" action="/logout" use:enhance></form>
+	<form id="logoutForm" method="POST" action="/logout" class="hidden" use:enhance></form>
 </div>
 
 <style>
-	/* Menghilangkan scrollbar default untuk sidebar agar lebih clean */
-	aside::-webkit-scrollbar {
+	:global(.no-scrollbar::-webkit-scrollbar) {
 		display: none;
+	}
+	:global(.no-scrollbar) {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
 	}
 </style>

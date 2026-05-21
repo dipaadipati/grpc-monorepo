@@ -91,39 +91,84 @@ export class OfferingController {
     }
 
     @GrpcMethod('OfferingService', 'GetOfferings')
-    async *getOfferings(context: any) {
-        const user = context.values.get(kUser);
-        const cacheKey = `gym:${user.tenantId}:offerings`;
+    async getOfferings(request: any, context: any) { // 🚀 Hapus tanda bintang (*)
+        let user: any;
+        let isConnectRpc = false;
 
-        const cachedData = await this.redis.get(cacheKey);
+        if (context && context.values && typeof context.values.get === 'function') {
+            isConnectRpc = true;
+            user = context.values.get(kUser);
+        }
+        else {
+            isConnectRpc = false;
+            let metadata: grpc.Metadata | null = null;
 
-        if (cachedData) {
-            console.log("⚡ [REDIS] Mengambil data offerings dari Cache");
-            const offerings = JSON.parse(cachedData);
-            for (const o of offerings) yield o;
-            return;
+            if (request && typeof request.get === 'function') {
+                metadata = request;
+            } else if (context && typeof context.get === 'function') {
+                metadata = context;
+            } else if (request && typeof request.getArgByIndex === 'function') {
+                metadata = request.getArgByIndex(1);
+            }
+
+            if (metadata) {
+                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+                if (authHeader && authHeader.startsWith('Bearer ')) {
+                    const token = authHeader.replace('Bearer ', '').trim();
+                    const sessionStr = await this.redis.get(`token:${token}`);
+                    if (sessionStr) {
+                        user = JSON.parse(sessionStr);
+                    }
+                }
+            }
         }
 
-        console.log("🐢 [DB] Cache offerings kosong, ambil dari PostgreSQL");
-        const offerings = await this.prisma.offering.findMany({
+        if (!user) {
+            throw new RpcException({
+                code: grpc.status.UNAUTHENTICATED,
+                message: 'Akses ditolak! Sesi tidak valid atau telah kedaluwarsa.',
+            });
+        }
+
+        const cacheKey = `gym:${user.tenantId}:offerings`;
+
+        if (isConnectRpc) {
+            const cachedData = await this.redis.get(cacheKey);
+            if (cachedData) {
+                console.log("⚡ [REDIS] Mengambil data offerings dari Cache untuk Svelte Web");
+                const offeringsArray = JSON.parse(cachedData);
+                return { offerings: offeringsArray };
+            }
+        }
+
+        console.log(`🐢 [DB] Cache offerings kosong, menarik dari PostgreSQL untuk cabang: ${user.tenantId}`);
+        const dbOfferings = await this.prisma.offering.findMany({
             where: { tenantId: user.tenantId },
             include: { tenant: true },
             orderBy: { name: 'asc' }
         });
 
-        const safeDbOfferings = serializeBigInt(offerings.map((o, i) => {
-            return sanitizeNull({
-                ...o,
-                price: BigInt(Math.round(Number(o.price)))
-            })
-        }));
+        const formattedOfferings = dbOfferings.map((o) => {
+            return {
+                id: Number(o.id),
+                name: o.name || '',
+                price: BigInt(Math.round(Number(o.price))),
+                type: o.type || '',
+                duration: o.duration || 0,
+                stock: o.stock || 0,
+                quota: o.quota || 0,
+                tenantId: Number(o.tenantId),
+            };
+        });
+
+        const safeDbOfferings = serializeBigInt(formattedOfferings);
         await this.redis.set(cacheKey, JSON.stringify(safeDbOfferings), 'EX', 300);
 
-        for (const o of offerings) {
-            yield create(OfferingSchema, sanitizeNull({
-                ...o,
-                price: BigInt(Math.round(Number(o.price)))
-            }));
+        if (isConnectRpc) {
+            const connectOfferings = formattedOfferings.map(o => create(OfferingSchema, sanitizeNull(o)));
+            return { offerings: connectOfferings };
+        } else {
+            return { offerings: formattedOfferings };
         }
     }
 

@@ -40,7 +40,7 @@ service MemberService {
   rpc RegisterMember (RegisterMemberRequest) returns (MemberResponse);
   rpc UpdateMember (UpdateMemberRequest) returns (MemberResponse);
   rpc DeleteMember (GetMemberProfileRequest) returns (Empty);
-  rpc GetMembers (Empty) returns (stream UserProfile);
+  rpc GetMembers (Empty) returns (GetMembersResponse);
   rpc GetMemberProfile (GetMemberProfileRequest) returns (UserProfile);
 }
 
@@ -61,6 +61,10 @@ message MemberResponse { string memberId = 1; }
 
 message GetMemberProfileRequest { int32 memberId = 1; }
 
+message GetMembersResponse {
+  repeated UserProfile members = 1;
+}
+
 message MembershipStatus {
   bool isActive = 1;
   string expiryDate = 2;
@@ -71,7 +75,7 @@ service TenantService {
   rpc AddTenant (AddTenantRequest) returns (TenantResponse);
   rpc UpdateTenant (UpdateTenantRequest) returns (TenantResponse);
   rpc DeleteTenant (GetTenantRequest) returns (Empty);
-  rpc GetTenants (Empty) returns (stream Tenant);
+  rpc GetTenants (Empty) returns (GetTenantsResponse);
   rpc GetTenant (GetTenantRequest) returns (Tenant);
 }
 
@@ -94,6 +98,10 @@ message TenantResponse { string tenantId = 1; }
 
 message GetTenantRequest { int32 tenantId = 1; }
 
+message GetTenantsResponse {
+  repeated Tenant tenants = 1;
+}
+
 message Tenant {
   int32 id = 1;
   string name = 2;
@@ -108,7 +116,7 @@ service PlanService {
   rpc AddPlan (AddPlanRequest) returns (PlanResponse);
   rpc UpdatePlan (UpdatePlanRequest) returns (PlanResponse);
   rpc DeletePlan (GetPlanRequest) returns (Empty);
-  rpc GetPlans (Empty) returns (stream Plan);
+  rpc GetPlans (Empty) returns (GetPlansResponse);
   rpc GetPlan (GetPlanRequest) returns (Plan);
 }
 
@@ -129,6 +137,10 @@ message UpdatePlanRequest {
 message PlanResponse { string planId = 1; }
 
 message GetPlanRequest { int32 planId = 1; }
+
+message GetPlansResponse {
+  repeated Plan plans = 1;
+}
 
 message Plan {
   int32 id = 1;
@@ -155,9 +167,9 @@ message Membership {
 
 service TransactionService {
   rpc CreateTransaction (CreateTransactionRequest) returns (Transaction);
-  rpc GetTransactions (GetTransactionsRequest) returns (stream Transaction);
+  rpc GetTransactions (GetTransactionsRequest) returns (GetTransactionsResponse);
   rpc CheckTransactionStatus (GetTransactionRequest) returns (Transaction);
-  rpc GetMemberTransactions (GetMemberProfileRequest) returns (stream Transaction);
+  rpc GetMemberTransactions (GetMemberProfileRequest) returns (GetTransactionsResponse);
   rpc GetFinanceSummary (GetTransactionsRequest) returns (FinanceSummary);
 }
 
@@ -169,13 +181,16 @@ message CreateTransactionRequest {
 }
 
 message GetTransactionsRequest {
-  optional int32 tenantId = 1; 
-  optional string startDate = 2; 
-  optional string endDate = 3;
+  optional string startDate = 1; 
+  optional string endDate = 2;
 }
 
 message GetTransactionRequest {
   string transactionId = 1;
+}
+
+message GetTransactionsResponse {
+  repeated Transaction transactions = 1;
 }
 
 message FinanceSummary {
@@ -206,7 +221,7 @@ service OfferingService {
   rpc AddOffering (AddOfferingRequest) returns (OfferingResponse);
   rpc UpdateOffering (UpdateOfferingRequest) returns (OfferingResponse);
   rpc DeleteOffering (GetOfferingRequest) returns (Empty);
-  rpc GetOfferings (Empty) returns (stream Offering);
+  rpc GetOfferings (Empty) returns (GetOfferingsResponse);
   rpc GetOffering (GetOfferingRequest) returns (Offering);
 }
 
@@ -233,6 +248,10 @@ message UpdateOfferingRequest {
 message OfferingResponse { int32 offeringId = 1; }
 
 message GetOfferingRequest { int32 offeringId = 1; }
+
+message GetOfferingsResponse {
+  repeated Offering offerings = 1;
+}
 
 message Offering {
   int32 id = 1;

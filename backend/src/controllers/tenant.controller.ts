@@ -127,27 +127,89 @@ export class TenantController {
     }
 
     @GrpcMethod('TenantService', 'GetTenants')
-    async *getTenants(context: any) {
-        const cached = await this.redis.get(this.CACHE_KEY);
-        if (cached) {
-            console.log('⚡ [REDIS] Serving Tenants from cache');
-            const tenants = JSON.parse(cached);
-            for (const t of tenants) yield create(TenantSchema, t);
-            return;
+    async getTenants(request: any, context: any) {
+        let user: any;
+        let isConnectRpc = false;
+
+        if (context && context.values && typeof context.values.get === 'function') {
+            isConnectRpc = true;
+            user = context.values.get(kUser);
+        }
+        else {
+            isConnectRpc = false;
+            let metadata: grpc.Metadata | null = null;
+
+            if (request && typeof request.get === 'function') {
+                metadata = request;
+            } else if (context && typeof context.get === 'function') {
+                metadata = context;
+            } else if (request && typeof request.getArgByIndex === 'function') {
+                metadata = request.getArgByIndex(1);
+            }
+
+            if (metadata) {
+                const authHeader = (metadata.get('authorization')?.[0] || metadata.get('Authorization')?.[0]) as string;
+                if (authHeader && authHeader.startsWith('Bearer ')) {
+                    const token = authHeader.replace('Bearer ', '').trim();
+                    const sessionStr = await this.redis.get(`token:${token}`);
+                    if (sessionStr) {
+                        user = JSON.parse(sessionStr);
+                    }
+                }
+            }
         }
 
-        const tenants = await this.prisma.tenant.findMany({
+        if (!user) {
+            throw new RpcException({
+                code: grpc.status.UNAUTHENTICATED,
+                message: 'Akses ditolak! Sesi tidak valid atau telah kedaluwarsa.',
+            });
+        }
+
+        if (user.role !== 'SUPER_ADMIN') {
+            throw new RpcException({
+                code: grpc.status.PERMISSION_DENIED,
+                message: 'Anda tidak memiliki izin untuk menghapus tenant.',
+            });
+        }
+
+        console.log(`🔒 [GetTenants] Terautentikasi! User ${user.email || user.sub} berhasil masuk.`);
+
+        if (isConnectRpc) {
+            const cached = await this.redis.get(this.CACHE_KEY);
+            if (cached) {
+                console.log('⚡ [REDIS] Serving Tenants from cache untuk Svelte Web');
+                const tenantsArray = JSON.parse(cached);
+                return { tenants: tenantsArray };
+            }
+        }
+
+        console.log(`🐢 [DB] Menarik data tenants dari PostgreSQL untuk jalur: ${isConnectRpc ? 'Svelte Web' : 'Native gRPC Mobile'}`);
+        const dbTenants = await this.prisma.tenant.findMany({
             orderBy: { createdAt: 'desc' },
         });
 
-        const safeDbTenants = serializeBigInt(tenants);
+        const formattedTenants = dbTenants.map((t) => {
+            return {
+                id: Number(t.id),
+                name: t.name || '',
+                slug: t.slug || '',
+                address: t.address || '',
+                isActive: t.isActive ?? false,
+                createdAt: timestampFromDate(new Date(t.createdAt)),
+            };
+        });
+
+        const safeDbTenants = serializeBigInt(formattedTenants);
         await this.redis.set(this.CACHE_KEY, JSON.stringify(safeDbTenants), 'EX', 3600);
 
-        for (const t of tenants) {
-            yield create(TenantSchema, sanitizeNull({
-                ...t,
-                createdAt: timestampFromDate(new Date(t.createdAt)),
-            }));
+        if (isConnectRpc) {
+            console.log('🌐 [GetTenants] Return array format Connect RPC');
+            const connectTenants = formattedTenants.map(t => create(TenantSchema, sanitizeNull(t)));
+            return { tenants: connectTenants };
+        } else {
+            console.log('📱 [GetTenants] Return array format Native gRPC Plain Object');
+            return { tenants: formattedTenants };
         }
     }
 
