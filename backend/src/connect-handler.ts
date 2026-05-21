@@ -56,8 +56,8 @@ export const registerConnectRoutes = (app: INestApplication, router: ConnectRout
 
     router.service(AuthService, {
         login: wrap((req: LoginRequest) => auth.login(req)),
-        getProfile: wrap((_: any, context: any) => auth.getProfile(context)),
-        logout: wrap((_: any, context: any) => auth.logout(context)),
+        getProfile: wrap((_: any, context: any) => auth.getProfile(_, context)),
+        logout: wrap((_: any, context: any) => auth.logout(_, context)),
     });
 
     router.service(MemberService, {
