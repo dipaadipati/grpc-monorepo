@@ -111,7 +111,6 @@
 		}
 	}
 
-	// Helper format Rupiah
 	const formatIDR = (amount: number) => {
 		return new Intl.NumberFormat('id-ID', {
 			style: 'currency',

@@ -260,7 +260,13 @@ export class TransactionController {
             return JSON.parse(cachedData);
         }
 
-        const [summary, totalTransactions, activeMemberships] = await Promise.all([
+        const [totalMember, summary, totalTransactions, activeMemberships] = await Promise.all([
+            this.prisma.user.count({
+                where: {
+                    tenantId: Number(tenantId),
+                    role: 'MEMBER'
+                },
+            }),
             this.prisma.transaction.aggregate({
                 where: {
                     user: { tenantId: tenantId },
@@ -283,6 +289,7 @@ export class TransactionController {
         ]);
 
         const result = {
+            totalMember: totalMember,
             totalRevenue: summary._sum.amount?.toString() || "0",
             totalTransactions: totalTransactions,
             activeMemberships: activeMemberships

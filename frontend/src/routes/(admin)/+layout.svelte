@@ -8,7 +8,8 @@
 	const user = $derived(data.user);
 	const MIDTRANS_CLIENT_KEY = $derived(user?.MIDTRANS_CLIENT_KEY || '');
 
-	let isSidebarOpen = $state(true);
+	// 📱 Di mobile default-nya tertutup, di desktop default-nya terbuka
+	let isSidebarOpen = $state(false);
 
 	const menuItems = [
 		{ name: 'Dashboard', path: '/dashboard', icon: 'fa-chart-pie' },
@@ -29,7 +30,12 @@
 			: '??'
 	);
 
+	// Otomatis sesuaikan sidebar saat pertama kali dimuat berdasarkan ukuran layar
 	onMount(() => {
+		if (window.innerWidth >= 1024) {
+			isSidebarOpen = true;
+		}
+
 		if (MIDTRANS_CLIENT_KEY && !document.querySelector('script[src*="snap.js"]')) {
 			const script = document.createElement('script');
 			script.type = 'text/javascript';
@@ -40,7 +46,14 @@
 		}
 	});
 
-	// 🚪 Logika Aksi Logout Terproteksi SweetAlert2
+	function handleMenuClick(event: MouseEvent) {
+		if (window.innerWidth < 1024) {
+			setTimeout(() => {
+				isSidebarOpen = false;
+			}, 50);
+		}
+	}
+
 	async function handleLogout() {
 		const result = await (window as any).Swal.fire({
 			title: 'Keluar',
@@ -65,10 +78,21 @@
 <div
 	class="relative flex h-screen w-screen overflow-hidden bg-gray-50 font-sans text-gray-900 select-none"
 >
+	{#if isSidebarOpen}
+		<button
+			onclick={() => (isSidebarOpen = false)}
+			class="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-xs transition-opacity lg:hidden"
+			aria-label="Close sidebar"
+		></button>
+	{/if}
+
 	<aside
-		class="relative z-20 flex h-full flex-col border-r border-slate-800 bg-slate-900 text-white transition-all duration-300 ease-in-out"
+		class="fixed inset-y-0 left-0 z-40 flex h-full flex-col border-r border-slate-800 bg-slate-900 text-white transition-all duration-300 ease-in-out
+        lg:static lg:translate-x-0"
 		class:w-64={isSidebarOpen}
 		class:w-20={!isSidebarOpen}
+		class:translate-x-0={isSidebarOpen}
+		class:-translate-x-full={!isSidebarOpen}
 	>
 		<div class="flex h-20 shrink-0 items-center gap-4 border-b border-slate-800 px-5">
 			<div
@@ -77,7 +101,8 @@
 				<i class="fas fa-dumbbell text-lg text-white"></i>
 			</div>
 			{#if isSidebarOpen}
-				<span class="text-lg font-extrabold tracking-wider whitespace-nowrap text-slate-100"
+				<span
+					class="text-lg font-extrabold tracking-wider whitespace-nowrap text-slate-100 lg:block"
 					>GYM PRO</span
 				>
 			{/if}
@@ -87,6 +112,7 @@
 			{#if user?.role === 'SUPER_ADMIN'}
 				<a
 					href="/superadmin/dashboard"
+					onclick={handleMenuClick}
 					class="flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-150"
 					class:bg-purple-600={page.url.pathname === '/superadmin/dashboard'}
 					class:text-white={page.url.pathname === '/superadmin/dashboard'}
@@ -104,6 +130,7 @@
 			{#each menuItems as item}
 				<a
 					href={item.path}
+					onclick={handleMenuClick}
 					class="group flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-200"
 					class:bg-blue-600={page.url.pathname === item.path}
 					class:text-white={page.url.pathname === item.path}
@@ -135,9 +162,9 @@
 
 	<div class="relative z-10 flex h-full min-w-0 flex-1 flex-col">
 		<header
-			class="flex h-20 shrink-0 items-center justify-between border-b border-gray-200 bg-white px-8 shadow-xs"
+			class="flex h-20 shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 shadow-xs sm:px-8"
 		>
-			<div class="flex items-center gap-4">
+			<div class="flex items-center gap-3 sm:gap-4">
 				<button
 					onclick={() => (isSidebarOpen = !isSidebarOpen)}
 					aria-label="Toggle sidebar"
@@ -145,12 +172,14 @@
 				>
 					<i class="fas fa-bars text-lg"></i>
 				</button>
-				<h1 class="text-lg font-bold tracking-tight text-gray-800">
+				<h1
+					class="max-w-40 truncate text-base font-bold tracking-tight text-gray-800 sm:max-w-none sm:text-lg"
+				>
 					{menuItems.find((i) => i.path === page.url.pathname)?.name || 'Admin Panel'}
 				</h1>
 			</div>
 
-			<div class="flex items-center gap-6">
+			<div class="flex items-center gap-3 sm:gap-6">
 				<button
 					class="relative p-2 text-gray-400 transition-colors hover:text-gray-600 focus:outline-hidden"
 					aria-label="Notifications"
@@ -161,15 +190,15 @@
 					></span>
 				</button>
 
-				<div class="flex items-center gap-3 border-l border-gray-100 pl-6">
-					<div class="hidden text-right sm:block">
+				<div class="flex items-center gap-2 border-l border-gray-100 pl-3 sm:gap-3 sm:pl-6">
+					<div class="hidden text-right md:block">
 						<p class="text-sm leading-none font-bold text-gray-800">{user?.name || 'User Gym'}</p>
 						<p class="mt-1 text-xs font-semibold tracking-wider text-gray-400 uppercase">
-							{user?.tenantName || 'Cabang Aktif'}
+							{user?.tenantName || 'Cabang Gym'}
 						</p>
 					</div>
 					<div
-						class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-100 bg-linear-to-tr from-blue-600 to-indigo-600 font-bold tracking-wide text-white shadow-sm"
+						class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-100 bg-linear-to-tr from-blue-600 to-indigo-600 text-sm font-bold tracking-wide text-white shadow-sm sm:h-10 sm:w-10 sm:text-base"
 					>
 						{userInitials}
 					</div>
@@ -177,7 +206,7 @@
 			</div>
 		</header>
 
-		<main class="flex-1 overflow-y-auto bg-gray-50/50 p-8">
+		<main class="flex-1 overflow-y-auto bg-gray-50/50 p-4 sm:p-8">
 			<div class="mx-auto h-full max-w-7xl">
 				{#key page.url.pathname}
 					{@render children()}

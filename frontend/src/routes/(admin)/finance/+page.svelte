@@ -140,12 +140,12 @@
 				type="text"
 				placeholder="Cari Order ID, Nama Member, atau Paket..."
 				bind:value={searchQuery}
-				class="w-full rounded-2xl border-none bg-gray-50 py-4 pr-6 pl-14 font-medium transition-all outline-none focus:ring-2 focus:ring-emerald-500"
+				class="w-full rounded-2xl border-0 bg-gray-50 py-4 pr-6 pl-14 font-medium transition-all outline-none focus:ring-2 focus:ring-emerald-500"
 			/>
 		</div>
 		<select
 			bind:value={filterMethod}
-			class="rounded-2xl border-none bg-gray-50 px-6 py-4 font-bold text-gray-600 outline-none focus:ring-2 focus:ring-emerald-500"
+			class="rounded-2xl border-0 bg-gray-50 px-6 py-4 font-bold text-gray-600 outline-none focus:ring-2 focus:ring-emerald-500"
 		>
 			<option value="All">Semua Metode</option>
 			<option value="CASH">Cash</option>
@@ -153,7 +153,7 @@
 		</select>
 		<select
 			bind:value={filterStatus}
-			class="rounded-2xl border-none bg-gray-50 px-6 py-4 font-bold text-gray-600 outline-none focus:ring-2 focus:ring-emerald-500"
+			class="rounded-2xl border-0 bg-gray-50 px-6 py-4 font-bold text-gray-600 outline-none focus:ring-2 focus:ring-emerald-500"
 		>
 			<option value="All">Semua Status</option>
 			<option value="SETTLEMENT">Lunas</option>
@@ -174,7 +174,7 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-50">
-					{#each paginatedTransactions as trx}
+					{#each paginatedTransactions as trx (trx.id)}
 						<tr class="group transition-colors hover:bg-gray-50/80">
 							<td class="px-8 py-5">
 								<span
@@ -191,7 +191,7 @@
 							</td>
 							<td class="px-8 py-5">
 								<p
-									class={`text-sm font-semibold ${trx.planId ? 'text-purple-700' : 'text-slate-700'}`}
+									class="text-sm font-semibold {trx.planId ? 'text-purple-700' : 'text-slate-700'}"
 								>
 									{trx.planId ? trx.planName : trx.offeringName}
 								</p>
@@ -242,65 +242,73 @@
 			</div>
 		{/if}
 
-		<!-- Pagination Controls -->
 		{#if filteredTransactions.length > 0}
-			<div class="flex items-center justify-between border-t border-gray-100 px-8 py-6">
-				<div class="flex items-center gap-4">
-					<span class="text-sm font-medium text-gray-600">
-						Tampilkan
-						<select
-							bind:value={itemsPerPage}
-							onchange={() => (currentPage = 1)}
-							class="mx-2 rounded border border-gray-300 bg-white px-3 py-1 font-semibold text-gray-900 outline-none focus:ring-2 focus:ring-emerald-500"
-						>
-							<option value={5}>5</option>
-							<option value={10}>10</option>
-							<option value={25}>25</option>
-							<option value={50}>50</option>
-						</select>
-						dari {filteredTransactions.length} transaksi
-					</span>
-				</div>
-
-				<div class="flex items-center gap-2">
-					<button
-						onclick={() => (currentPage = Math.max(1, currentPage - 1))}
-						disabled={currentPage === 1}
-						aria-label="Previous Page"
-						class="rounded-lg border border-gray-300 bg-white px-4 py-2 font-semibold text-gray-700 transition-all hover:enabled:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-					>
-						<i class="fas fa-chevron-left"></i>
-					</button>
-
-					<div class="flex gap-1">
-						{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-							<button
-								onclick={() => (currentPage = page)}
-								class={`rounded-lg px-3 py-2 font-semibold transition-all ${
-									currentPage === page
-										? 'bg-emerald-500 text-white shadow-md shadow-emerald-200'
-										: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-								}`}
+			{#key [itemsPerPage, currentPage, totalPages]}
+				<div
+					class="flex flex-col items-center justify-between gap-4 border-t border-gray-100 px-4 py-6 sm:px-8 lg:flex-row lg:gap-0"
+				>
+					<div class="order-1 flex items-center gap-4 lg:order-0">
+						<span class="text-sm font-medium text-gray-600">
+							Tampilkan
+							<select
+								bind:value={itemsPerPage}
+								onchange={() => (currentPage = 1)}
+								class="mx-2 rounded border border-gray-300 bg-white px-3 py-1 font-semibold text-gray-900 outline-none focus:ring-2 focus:ring-emerald-500"
 							>
-								{page}
-							</button>
-						{/each}
+								<option value={5}>5</option>
+								<option value={10}>10</option>
+								<option value={25}>25</option>
+								<option value={50}>50</option>
+							</select>
+							dari {filteredTransactions.length} transaksi
+						</span>
 					</div>
 
-					<button
-						onclick={() => (currentPage = Math.min(totalPages, currentPage + 1))}
-						disabled={currentPage === totalPages}
-						aria-label="Next Page"
-						class="rounded-lg border border-gray-300 bg-white px-4 py-2 font-semibold text-gray-700 transition-all hover:enabled:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-					>
-						<i class="fas fa-chevron-right"></i>
-					</button>
-				</div>
+					<div class="order-2 flex items-center gap-2 lg:order-0">
+						<button
+							onclick={() => (currentPage = Math.max(1, currentPage - 1))}
+							disabled={currentPage === 1}
+							aria-label="Previous Page"
+							class="rounded-lg border border-gray-300 bg-white px-3 py-2 font-semibold text-gray-700 transition-all hover:enabled:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4"
+						>
+							<i class="fas fa-chevron-left text-sm"></i>
+						</button>
 
-				<span class="text-sm font-medium text-gray-600">
-					Halaman {currentPage} dari {totalPages}
-				</span>
-			</div>
+						<div class="hidden gap-1 sm:flex">
+							{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNumber}
+								<button
+									onclick={() => (currentPage = pageNumber)}
+									class="rounded-lg px-3 py-2 font-semibold transition-all {currentPage ===
+									pageNumber
+										? 'bg-emerald-500 text-white shadow-md shadow-emerald-200'
+										: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}"
+								>
+									{pageNumber}
+								</button>
+							{/each}
+						</div>
+
+						<div
+							class="block rounded-lg border border-gray-300 bg-white px-3 py-2 font-semibold text-gray-700 sm:hidden"
+						>
+							{currentPage} / {totalPages}
+						</div>
+
+						<button
+							onclick={() => (currentPage = Math.min(totalPages, currentPage + 1))}
+							disabled={currentPage === totalPages}
+							aria-label="Next Page"
+							class="rounded-lg border border-gray-300 bg-white px-3 py-2 font-semibold text-gray-700 transition-all hover:enabled:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4"
+						>
+							<i class="fas fa-chevron-right text-sm"></i>
+						</button>
+					</div>
+
+					<div class="order-3 text-sm font-medium text-gray-600 lg:order-0">
+						<span>Halaman {currentPage} dari {totalPages}</span>
+					</div>
+				</div>
+			{/key}
 		{/if}
 	</div>
 </div>

@@ -194,9 +194,10 @@ message GetTransactionsResponse {
 }
 
 message FinanceSummary {
-  int64 totalRevenue = 1;
-  int32 totalTransactions = 2;
-  int32 activeMemberships = 3;
+  int32 totalMembers = 1;
+  int64 totalRevenue = 2;
+  int32 totalTransactions = 3;
+  int32 activeMemberships = 4;
 }
 
 message Transaction {

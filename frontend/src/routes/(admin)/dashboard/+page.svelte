@@ -61,7 +61,7 @@
 		try {
 			const summary = await transactionClient.getFinanceSummary({});
 
-			stats[0].value = summary.totalTransactions.toString();
+			stats[0].value = summary.totalMembers.toString();
 			stats[1].value = formatIDR(String(summary.totalRevenue));
 			stats[2].value = summary.totalTransactions.toString();
 			stats[3].value = summary.activeMemberships.toString();
@@ -95,8 +95,10 @@
 <div class="space-y-8 p-6">
 	<div class="flex items-center justify-between">
 		<div>
-			<h2 class="text-2xl font-bold tracking-tight text-gray-900">Halo, {user?.name} 👋</h2>
-			<p class="text-sm font-medium text-gray-500">
+			<h2 class="text-xl font-bold tracking-tight text-gray-900 md:text-2xl">
+				Halo, {user?.name} 👋
+			</h2>
+			<p class="text-xs font-medium text-gray-500 md:text-sm">
 				Berikut adalah performa {user?.tenantName} hari ini.
 			</p>
 		</div>
@@ -112,16 +114,16 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
 		{#each stats as stat}
 			<div
-				class="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md"
+				class="flex flex-row gap-3 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md"
 			>
 				<div class="flex items-center justify-between">
-					<div class="rounded-2xl p-3 {stat.bg} {stat.color}">
+					<div class="rounded-2xl p-3 {stat.bg} {stat.color} w-13 text-center">
 						<i class="fas {stat.icon} text-xl"></i>
 					</div>
 				</div>
-				<div class="mt-4">
+				<div>
 					<p class="text-xs font-bold tracking-wider text-gray-400 uppercase">{stat.name}</p>
-					<h3 class="mt-1 text-2xl font-black text-gray-900">
+					<h3 class="text-md mt-1 font-black text-gray-900 md:text-2xl">
 						{isLoading ? '...' : stat.value}
 					</h3>
 				</div>
